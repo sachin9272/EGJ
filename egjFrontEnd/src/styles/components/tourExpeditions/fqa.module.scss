@@ -1,0 +1,162 @@
+@use "../../variables.scss" as *;
+
+.container {
+  grid-column: 3 / -3;
+  grid-row: 14 / 21;
+  margin-top: 2rem;
+
+  background: radial-gradient(
+    ellipse at center,
+
+    rgb(0, 0, 0, 0.4),
+    transparent
+  );
+  // background: linear-gradient(
+  //   to bottom,
+  //   transparent,
+  //   rgb(0, 0, 0, 0.5),
+  //   rgb(0, 0, 0, 0.8),
+  //   transparent
+  // );
+
+  @media (max-width: $screen-medium) {
+    grid-column: 2 / -2;
+  }
+  @media (max-width: $screen-small) {
+    grid-row: 14 / 21;
+  }
+}
+
+.text {
+  &_title {
+    // color: var(--Secondary-colour);
+    background: linear-gradient(to top, #b38705, #f0c02d, #f7e27a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text; /* for Firefox */
+    color: transparent;
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+
+    @media (max-width: $screen-medium) {
+      font-size: 2.2rem;
+    }
+
+    @media (max-width: $screen-small) {
+      font-size: 1.7rem;
+    }
+  }
+
+  &_description {
+    margin-top: 0.3rem;
+    font-size: 1.7rem;
+    color: var(--Secondary-colour);
+    text-align: center;
+    @media (min-width: $screen-xl) {
+      font-size: 1.9rem;
+    }
+    @media (max-width: $screen-medium) {
+      font-size: 1.5rem;
+    }
+
+    @media (max-width: $screen-small) {
+      font-size: 1.3rem;
+    }
+  }
+}
+
+.question {
+  &_container {
+    //Glassmorphism effect
+    background: rgba(20, 20, 20, 0.05);
+    background: linear-gradient(
+      135deg,
+      rgba(20, 20, 20, 0.05) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+    backdrop-filter: blur(2px);
+
+    box-shadow: 8px 8px 15px 0 rgba(0, 0, 0, 0.4),
+      inset 0 0 5px 3px rgba(255, 255, 255, 0.1);
+
+    padding: 1rem;
+    border-radius: 1rem;
+    position: relative;
+    border: solid 1px var(--Secondary-colour);
+
+    transition: $transition-duration;
+    &:first-child {
+      margin-top: 4rem; // only the first question
+    }
+
+    margin-top: 1rem;
+    &:hover {
+      cursor: pointer;
+      box-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.3),
+        inset 0 0 10px 5px rgba(255, 255, 255, 0.2);
+    }
+  }
+
+  color: var(--Secondary-colour);
+
+  &_closed {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &_title {
+    font-weight: 500;
+
+    @media (max-width: $screen-small) {
+      font-size: 1.1rem;
+    }
+  }
+
+  &_open {
+    margin-top: 1rem;
+  }
+
+  &_hr {
+    height: 1px;
+    border: none;
+    background-color: var(--Secondary-colour);
+    width: 95%;
+    margin: 0 auto;
+    margin-bottom: 1rem;
+  }
+
+  &_arrow {
+    background: linear-gradient(to top, #1e9146, #79a81c, #7ea15b);
+    border-radius: 50%;
+    padding: 0.2rem;
+    @media (max-width: $screen-small) {
+      font-size: 1.3rem;
+    }
+  }
+
+  &_text {
+    background: radial-gradient(
+      ellipse at center,
+      rgb(0, 0, 0, 0.5),
+      transparent
+    );
+    padding: 0.3rem;
+    @media (max-width: $screen-small) {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+.hr {
+  border: none;
+  height: 5px; /* thickness of the line */
+  background: linear-gradient(to right, transparent, white, transparent);
+  width: 75%; /* or 100% */
+  margin: 1.3rem auto 0 auto; /* center it */
+  @media (max-width: $screen-small) {
+    width: 75%;
+  }
+}

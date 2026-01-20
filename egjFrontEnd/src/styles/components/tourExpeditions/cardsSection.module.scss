@@ -1,0 +1,218 @@
+@use "../../variables.scss" as *;
+.cards {
+  &_section {
+    &_container {
+      grid-column: 2 / -2;
+      grid-row: 7 / 14;
+      padding-top: 1rem;
+      z-index: 500;
+
+      @media (max-width: $screen-medium-large) {
+        grid-template-columns: repeat(2, minmax(20rem, 1fr));
+        gap: 1.5rem;
+      }
+
+      @media (max-width: $screen-medium) {
+        grid-row: 6 / 14;
+      }
+
+      @media (max-width: $screen-small) {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        grid-row: 5 / 14;
+      }
+    }
+
+    &_text_container {
+      grid-column: 1 / -1;
+      grid-row: 1 / 2;
+      background: linear-gradient(to bottom, transparent, black),
+        linear-gradient(to top, transparent, black);
+      background-size: 100% 50%;
+      background-position: top, bottom;
+      background-repeat: no-repeat;
+      @media (max-width: $screen-small) {
+        grid-row: 1;
+      }
+    }
+
+    &_title {
+      background: linear-gradient(to top, #1e9146, #79a81c, #7ea15b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text; /* for Firefox */
+      color: transparent;
+      text-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.25);
+      font-family: chivo, sans-serif;
+      display: flex;
+      justify-content: center;
+      margin-top: 0rem;
+      font-size: 2.5rem;
+      font-weight: 600;
+      letter-spacing: 0.5rem;
+
+      @media (max-width: $screen-small) {
+        font-size: 2.3rem;
+        letter-spacing: 0.3rem;
+      }
+      @media (max-width: $screen-small-414) {
+        font-size: 2.1rem;
+        letter-spacing: 0.2rem;
+      }
+      @media (max-width: $screen-small-375) {
+        font-size: 2rem;
+        letter-spacing: 0.1rem;
+      }
+
+      @media (max-width: $screen-small) {
+        text-align: center;
+        font-size: 1.9rem;
+      }
+    }
+
+    &_description {
+      font-size: 1.4rem;
+      color: var(--Secondary-colour);
+      line-height: 1.5;
+      font-weight: 500;
+      font-family: "Karla", sans-serif;
+      text-align: center;
+      @media (max-width: $screen-small) {
+        font-size: 1.2rem;
+        padding: 0 1rem;
+      }
+
+      @media (max-width: $screen-small-360) {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+.cards {
+  &_container {
+    grid-column: 1 / -1;
+    grid-row: 2 / -1;
+    margin-top: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    gap: 1.9rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: $screen-small) {
+    margin-top: 1rem;
+  }
+}
+
+.card {
+  &_individual_container {
+    // width: 25rem;
+    width: 20rem;
+    background: rgba(20, 20, 20, 0.05);
+    background: linear-gradient(
+      135deg,
+      rgba(20, 20, 20, 0.05) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+    backdrop-filter: blur(10px);
+
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2),
+      inset 0 0 5px 3px rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 1rem;
+
+    transition: $transition-duration;
+
+    &:hover {
+      box-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.3),
+        inset 0 0 10px 5px rgba(255, 255, 255, 0.2);
+    }
+
+    @media (max-width: $screen-medium-large) {
+      width: 18rem;
+    }
+
+    @media (max-width: $screen-small) {
+      width: 30rem;
+    }
+  }
+
+  &_image {
+    &_container {
+      width: 100%;
+      height: 15rem;
+      border-radius: 1rem;
+      overflow: hidden;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+
+  &_text_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &_title {
+    font-size: 1.5rem;
+    color: var(--Secondary-colour);
+    font-weight: 800;
+    text-transform: uppercase;
+    @media (max-width: $screen-medium-large) {
+      font-size: 1.3rem;
+    }
+  }
+
+  &_description {
+    font-size: 1rem;
+    color: var(--Secondary-colour);
+    line-height: 1.5;
+    font-weight: 500;
+    font-family: "Karla", sans-serif;
+    text-align: center;
+    // background: linear-gradient(to top, rgb(0, 0, 0), rgb(0, 0, 0));
+    // padding: 0.5rem 1rem;
+    // border-radius: 1rem;
+    @media (max-width: $screen-medium-large) {
+      font-size: 0.8rem;
+    }
+    @media (max-width: $screen-small) {
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: $screen-small-360) {
+      font-size: 0.9rem;
+    }
+  }
+
+  &_button {
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--Secondary-colour);
+
+    background: linear-gradient(to right, #1e9146, #79a81c, #7ea15b);
+
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background: linear-gradient(to right, var(--Secondary-colour));
+      color: var(--Primary-colour);
+    }
+  }
+}

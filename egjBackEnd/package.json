@@ -1,0 +1,28 @@
+{
+  "name": "egjbackend",
+  "version": "1.0.0",
+  "description": "Expeditions George of The Jungle BackEnd",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "server": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "author": "Guillermo Eguizabal",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "@clerk/express": "^1.7.12",
+    "cloudinary": "^2.7.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.4",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.5",
+    "stripe": "^18.4.0",
+    "svix": "^1.69.0"
+  }
+}

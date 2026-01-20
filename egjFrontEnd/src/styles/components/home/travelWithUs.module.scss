@@ -1,0 +1,340 @@
+@use "../../variables.scss" as *;
+
+.travel {
+  &_container {
+    grid-row: 12 / 16;
+    grid-column: 2 / -2;
+  }
+
+  &_title {
+    background: linear-gradient(to top, #1e9146, #79a81c, #7ea15b);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text; /* for Firefox */
+    color: transparent;
+    text-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.25);
+    font-family: chivo, sans-serif;
+    display: flex;
+    justify-content: center;
+    margin-top: 0rem;
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: 0.5rem;
+
+    @media (max-width: 628px) {
+      font-size: 2.1rem;
+      letter-spacing: 0.1rem;
+    }
+    @media (max-width: $screen-small) {
+      font-size: 2rem;
+      letter-spacing: 0.3rem;
+    }
+    @media (max-width: $screen-small-414) {
+      font-size: 2.1rem;
+      letter-spacing: 0.2rem;
+    }
+    @media (max-width: $screen-small-375) {
+      font-size: 2rem;
+      letter-spacing: 0.1rem;
+    }
+  }
+}
+
+.cards {
+  // display: flex;
+
+  // justify-content: space-between;
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  :global(.swiper) {
+    width: 100%;
+  }
+
+  // .swiper-wrapper {
+  //   display: flex; // center all slides inside Swiper
+  //   justify-content: center;
+  // }
+
+  // Target Swiper global classes using :global
+  :global(.swiper-slide) {
+    display: flex;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition-property: transform;
+  }
+}
+
+.card {
+  &_container {
+    perspective: 1000px;
+    margin-top: 4rem;
+    width: 100%;
+    max-width: 20rem;
+    height: 25rem;
+
+    font-family: Karla, sans-serif;
+    border-radius: 2rem;
+
+    box-shadow: 2px 4px 15px 0 rgba(0, 0, 0, 0.521);
+    padding: 1rem;
+
+    position: relative;
+
+    background: rgba(20, 20, 20, 0.05);
+    background: linear-gradient(
+      135deg,
+      rgba(20, 20, 20, 0.05) 0%,
+      rgba(255, 255, 255, 0.05) 100%
+    );
+    backdrop-filter: blur(2px);
+
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2),
+      inset 0 0 5px 3px rgba(255, 255, 255, 0.1);
+  }
+
+  &_inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+
+  &_title {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    z-index: 2;
+    color: var(--Secondary-colour);
+    font-size: 1.6rem;
+    font-weight: 600;
+
+    backface-visibility: hidden;
+    transform: translateZ(1px);
+  }
+
+  &_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 1.5rem;
+  }
+  transition: $transition-duration;
+
+  &_container:hover .card_inner {
+    cursor: pointer;
+    transform: rotateY(180deg) scale(110%);
+  }
+
+  &_front,
+  &_back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 1.5rem;
+    backface-visibility: hidden; // hides back side when flipped
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  }
+
+  &_front {
+    background: white;
+  }
+
+  &_back {
+    background-image: url("../../../assets/images/CardBackground.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 40%;
+
+    color: var(--Secondary-colour);
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    padding: 0.8rem;
+    transform: rotateY(180deg);
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0; // fill entire back
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000000ab;
+
+      backdrop-filter: blur(6px);
+      z-index: 1;
+      border-radius: 1.5rem;
+    }
+
+    &_text {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      z-index: 5;
+    }
+
+    &_icon {
+      font-size: 2rem;
+      z-index: 5;
+    }
+  }
+}
+
+.card_media {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 1.5rem;
+  overflow: hidden;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    border-radius: 1.5rem;
+
+    width: 100%;
+    height: 100%; // full card height
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.74) 0%,
+      rgba(0, 0, 0, 0.384) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); // glass effect
+
+    -webkit-mask-image: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.9) 35%,
+      rgba(0, 0, 0, 0.35) 55%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    mask-image: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 0.9) 35%,
+      rgba(0, 0, 0, 0.35) 55%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    backface-visibility: hidden;
+    transform: translateZ(1px);
+    z-index: 1;
+  }
+}
+
+.hr {
+  border: none;
+  height: 4px;
+  background: linear-gradient(to right, transparent, white, transparent);
+  width: 50%;
+  margin: 1rem auto;
+  @media (max-width: $screen-small) {
+    width: 75%;
+  }
+}
+
+.button {
+  &_container {
+    display: flex;
+    justify-content: center;
+  }
+
+  background: linear-gradient(to right, #1e9146, #79a81c, #7ea15b);
+  padding: 0.417rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 1.8rem;
+  color: var(--Secondary-colour);
+  box-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.25);
+  margin-top: 1rem;
+
+  transition: $transition-duration;
+
+  &:hover {
+    cursor: pointer;
+    background: linear-gradient(
+      to right,
+      var(--Primary-colour),
+      var(--Primary-colour)
+    );
+    transform: scale(1.1);
+  }
+}
+
+.customprev,
+.customnext {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  z-index: 10;
+  width: 3rem;
+  height: 3rem;
+  background: rgba(20, 20, 20, 0.05);
+  background: linear-gradient(
+    135deg,
+    rgba(20, 20, 20, 0.05) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  backdrop-filter: blur(2px);
+
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2),
+    inset 0 0 5px 3px rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: var(--Primary-colour);
+    transform: translateY(-1.5rem) scale(110%);
+  }
+}
+
+.customprev {
+  left: -4rem; // adjust as needed
+
+  @media (max-width: $screen-small) {
+    left: 0rem; // adjust as needed
+  }
+}
+
+.customnext {
+  right: -4rem;
+  @media (max-width: $screen-small) {
+    right: 0rem; // adjust as needed
+  }
+}
+
+.cards :global(.swiper-pagination) {
+  bottom: -2rem; // move below slides
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.cards :global(.swiper-pagination-bullet) {
+  background: var(--Primary-colour); // green bullets
+  opacity: 1;
+}
+
+.cards :global(.swiper-pagination-bullet-active) {
+  background: var(--Tertiary-colour); // active bullet color
+}

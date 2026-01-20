@@ -1,0 +1,93 @@
+@use "../../variables.scss" as *;
+.hero_section {
+  grid-column: 2 / -2;
+  grid-row: 2 / 4;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  color: var(--Secondary-colour);
+
+  font-size: 3.8rem;
+  font-weight: 700;
+  text-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.25);
+  font-family: chivo, sans-serif;
+  letter-spacing: 0.5rem;
+  @media (max-width: $screen-medium-large) {
+    text-align: center;
+  }
+  @media (max-width: $screen-small-375) {
+    font-size: 3rem;
+  }
+}
+
+.highlight {
+  background: linear-gradient(to top, #1e9146, #79a81c, #7ea15b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text; /* for Firefox */
+  color: transparent;
+  text-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.25);
+  font-family: chivo, sans-serif;
+
+  &_2 {
+    color: var(--Tertiary-colour);
+    margin-left: 1rem;
+  }
+}
+
+.subtitle {
+  color: var(--Secondary-colour);
+  text-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.25);
+
+  font-size: 1.8rem;
+  font-weight: 500;
+
+  text-align: center;
+  max-width: 600px;
+  @media (max-width: $screen-small) {
+    font-size: 1.6rem;
+  }
+
+  @media (max-width: $screen-small-414) {
+    font-size: 1.8rem;
+  }
+}
+
+.hr {
+  border: none;
+  height: 5px; /* thickness of the line */
+  background: linear-gradient(to right, transparent, white, transparent);
+  width: 50%; /* or 100% */
+  margin: 1rem auto; /* center it */
+  @media (max-width: $screen-small) {
+    width: 75%;
+  }
+}
+
+.button {
+  background: linear-gradient(to right, #1e9146, #79a81c, #7ea15b);
+  padding: 0.417rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 1.4rem;
+  color: var(--Secondary-colour);
+  box-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.25);
+  margin-top: 1rem;
+  font-weight: 500;
+
+  transition: $transition-duration;
+
+  &:hover {
+    cursor: pointer;
+    background: linear-gradient(
+      to right,
+      var(--Primary-colour),
+      var(--Primary-colour)
+    );
+    transform: scale(1.1);
+  }
+}

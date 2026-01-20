@@ -1,0 +1,4 @@
+.cl-rootBox {
+  transform: scale(1.14); /* scale everything up */
+  transform-origin: center; /* keep it centered */
+}

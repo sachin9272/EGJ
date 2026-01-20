@@ -1,0 +1,35 @@
+@use "../variables.scss" as *;
+.home {
+  &_container {
+    background-image: url("../../assets/images/Background-Desktop.png");
+    background-size: cover;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 25%;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 2), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+  }
+
+  @media (min-width: $screen-xl) {
+    &_container {
+      background-image: url("../../assets/images/Background-LargeScreen-1920.png");
+    }
+  }
+}
+
+.navbar {
+  grid-column: 1 / 5;
+  z-index: 10;
+}
