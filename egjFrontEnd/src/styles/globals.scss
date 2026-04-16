@@ -18,6 +18,7 @@ html {
   font-size: 85%; /* 16px × 0.85 = 13.6px */ // So Clerk's UI isn't affected much
 
   min-height: 100vh;
+  overflow-x: hidden;
 
   @media (max-width: $screen-medium) {
     font-size: 80%; /* 16px × 0.75 = 12px */
@@ -33,6 +34,12 @@ body {
   font-size: 1.6rem;
 
   min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .grid-container {

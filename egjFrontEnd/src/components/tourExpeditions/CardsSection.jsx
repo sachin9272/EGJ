@@ -3,6 +3,56 @@ import { getTours } from "../../assets/API/Services/ToursService";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 
+const normalizeTourName = (name = "") =>
+  name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\|/g, "")
+    .replace(/&/g, "AND")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toUpperCase();
+
+const orderedTourMatchers = [
+  {
+    order: 0,
+    matches: ["AYAHUASCA"],
+  },
+  {
+    order: 1,
+    matches: ["PUERTO NARINO"],
+  },
+  {
+    order: 2,
+    matches: ["GAMBOA", "SACAMBU"],
+  },
+  {
+    order: 3,
+    matches: ["2 DAYS", "1 NIGHT"],
+  },
+  {
+    order: 4,
+    matches: ["3 DAYS", "2 NIGHTS"],
+  },
+  {
+    order: 5,
+    matches: ["4 DAYS", "3 NIGHTS"],
+  },
+  {
+    order: 6,
+    matches: ["5 DAYS", "4 NIGHTS"],
+  },
+];
+
+const getTourOrder = (name = "") => {
+  const normalizedName = normalizeTourName(name);
+  const matchedTour = orderedTourMatchers.find(({ matches }) =>
+    matches.every((part) => normalizedName.includes(part))
+  );
+
+  return matchedTour ? matchedTour.order : orderedTourMatchers.length;
+};
+
 function CardsSection() {
   const [tours, setTours] = useState([]);
 
@@ -10,8 +60,11 @@ function CardsSection() {
     const fetchTours = async () => {
       try {
         const data = await getTours();
-        console.log("Fetched Tours:", tours);
-        setTours(data);
+        const sortedTours = [...data].sort((firstTour, secondTour) => {
+          return getTourOrder(firstTour.name) - getTourOrder(secondTour.name);
+        });
+
+        setTours(sortedTours);
       } catch (error) {
         console.error("Error fetching tours:", error);
       }
@@ -52,7 +105,7 @@ function CardsSection() {
               opacity: { duration: 1.2, ease: "easeOut" },
             }}
             className={Cards.card_individual_container}
-            key={tours._id}
+            key={tour._id || `${tour.name}-${index}`}
           >
             <figure className={Cards.card_image_container}>
               <img

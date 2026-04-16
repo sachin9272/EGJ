@@ -54,7 +54,9 @@ function Footer() {
             <ul className={footer.quick_links}>
               <li>Refund Policy</li>
               <li>Privacy Policy</li>
-              <li>About</li>
+              <li>
+                <a href="/#why-travel-with-us">About</a>
+              </li>
             </ul>
           </div>
         </div>

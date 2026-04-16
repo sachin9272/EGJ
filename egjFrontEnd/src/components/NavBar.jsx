@@ -1,4 +1,4 @@
-import { useClerk, useUser, UserButton, useSession } from "@clerk/clerk-react";
+import { useUser, UserButton, useSession } from "@clerk/clerk-react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaBook } from "react-icons/fa";
@@ -12,17 +12,15 @@ const Navbar = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
 
   const navLinks = [
-    { name: "Home", path: "/" },
+    { name: "About", path: "/#why-travel-with-us" },
     { name: "Tour Expeditions", path: "/tour" },
     { name: "Experiences", path: "/experiences" },
-    { name: "About", path: "/" },
     { name: "Contact", path: "/" },
   ];
 
   // const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { openSignIn } = useClerk();
   const { user } = useUser();
 
   const navigate = useNavigate();
@@ -73,11 +71,7 @@ const Navbar = () => {
                 ></UserButton.Action>
               </UserButton.MenuItems>
             </UserButton>
-          ) : (
-            <button className={navBar.button_login} onClick={openSignIn}>
-              Login
-            </button>
-          )}
+          ) : null}
         </div>
       </nav>
       {/* Hamburguer menu for mobile */}
@@ -142,14 +136,7 @@ const Navbar = () => {
                       ></UserButton.Action>
                     </UserButton.MenuItems>
                   </UserButton>
-                ) : (
-                  <button
-                    className={navBar.hamburguer_button_login}
-                    onClick={openSignIn}
-                  >
-                    Login
-                  </button>
-                )}
+                ) : null}
               </div>
             </motion.div>
           )}
