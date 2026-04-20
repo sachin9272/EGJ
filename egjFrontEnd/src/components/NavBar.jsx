@@ -12,7 +12,7 @@ const Navbar = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
 
   const navLinks = [
-    { name: "About", path: "/#why-travel-with-us" },
+    { name: "About", path: "/" },
     { name: "Tour Expeditions", path: "/tour" },
     { name: "Experiences", path: "/experiences" },
     { name: "Contact", path: "/" },
@@ -26,6 +26,52 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const handleBookNowClick = () => {
+    if (location.pathname === "/tour") {
+      const targetSection = document.getElementById("pick-your-tour");
+
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    } else {
+      navigate("/tour", { state: { scrollToSection: "pick-your-tour" } });
+    }
+
+    setIsMenuOpen(false);
+  };
+
+  const handleLogoClick = (event) => {
+    setIsMenuOpen(false);
+
+    if (location.pathname === "/") {
+      event.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    event.preventDefault();
+    navigate("/", { state: { scrollToTop: true } });
+  };
+
+  const handleNavLinkClick = (event, link) => {
+    if (link.name !== "About") {
+      setIsMenuOpen(false);
+      return;
+    }
+
+    setIsMenuOpen(false);
+    event.preventDefault();
+
+    if (location.pathname === "/") {
+      document
+        .getElementById("why-travel-with-us")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    navigate("/", { state: { scrollToSection: "why-travel-with-us" } });
+  };
+
   // React.useEffect(() => {
   //   const handleScroll = () => {
   //     setIsScrolled(window.screenY > 10);
@@ -38,7 +84,7 @@ const Navbar = () => {
     <div className={navBar.navbar_container}>
       <nav className={navBar.navbar}>
         {/** Logo*/}
-        <Link to="/" className={navBar.logo}>
+        <Link to="/" className={navBar.logo} onClick={handleLogoClick}>
           <img src="Logo.png" alt="Logo" className={navBar.logo_Image} />
         </Link>
 
@@ -47,7 +93,11 @@ const Navbar = () => {
           <ul>
             {navLinks.map((link, i) => (
               <li key={i}>
-                <a className={navBar.nav_link} href={link.path}>
+                <a
+                  className={navBar.nav_link}
+                  href={link.path}
+                  onClick={(event) => handleNavLinkClick(event, link)}
+                >
                   {link.name}
                 </a>
               </li>
@@ -60,7 +110,9 @@ const Navbar = () => {
           {currentUser?.role === "Admin" && (
             <button className={navBar.button_dashboard}>Dashboard</button>
           )}
-          <button className={navBar.button_book}>Book Now</button>
+          <button className={navBar.button_book} onClick={handleBookNowClick}>
+            Book Now
+          </button>
           {user ? (
             <UserButton>
               <UserButton.MenuItems>
@@ -76,7 +128,7 @@ const Navbar = () => {
       </nav>
       {/* Hamburguer menu for mobile */}
       <nav className={navBar.navbar_mobile}>
-        <Link to="/" className={navBar.logo}>
+        <Link to="/" className={navBar.logo} onClick={handleLogoClick}>
           <img src="Logo.png" alt="Logo" className={navBar.logo_Image} />
         </Link>
 
@@ -112,7 +164,11 @@ const Navbar = () => {
                 <ul>
                   {navLinks.map((link, i) => (
                     <li key={i}>
-                      <a className={navBar.nav_link} href={link.path}>
+                      <a
+                        className={navBar.nav_link}
+                        href={link.path}
+                        onClick={(event) => handleNavLinkClick(event, link)}
+                      >
                         {link.name}
                       </a>
                     </li>
@@ -125,6 +181,12 @@ const Navbar = () => {
                     Dashboard
                   </button>
                 )}
+                <button
+                  className={navBar.button_book}
+                  onClick={handleBookNowClick}
+                >
+                  Book Now
+                </button>
 
                 {user ? (
                   <UserButton>

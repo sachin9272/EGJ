@@ -2,6 +2,7 @@ import Cards from "../../styles/components/tourExpeditions/cardsSection.module.s
 import { getTours } from "../../assets/API/Services/ToursService";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const normalizeTourName = (name = "") =>
   name
@@ -55,6 +56,8 @@ const getTourOrder = (name = "") => {
 
 function CardsSection() {
   const [tours, setTours] = useState([]);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTours = async () => {
@@ -71,8 +74,27 @@ function CardsSection() {
     };
     fetchTours();
   }, []);
+
+  useEffect(() => {
+    if (location.state?.scrollToSection !== "pick-your-tour") return;
+
+    const scrollToSection = () => {
+      document
+        .getElementById("pick-your-tour")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      navigate(location.pathname, { replace: true, state: null });
+    };
+
+    const timeoutId = window.setTimeout(scrollToSection, 0);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [location.pathname, location.state, navigate]);
   return (
-    <section className={Cards.cards_section_container}>
+    <section
+      id="pick-your-tour"
+      className={Cards.cards_section_container}
+    >
       <motion.header
         initial={{ opacity: 0, y: 100 }}
         whileInView={{ opacity: 1, y: 0 }}
