@@ -66,21 +66,22 @@ export const createOrder = async (req, res) => {
   }
 };
 
-// ─── 1b. CREATE DIRECT ORDER (no booking document required) ──────────────
+// ─── 1b. CREATE DIRECT ORDER (no booking document required previously) ──────────────
 /**
  * POST /api/v1/paypal/create-direct-order
- * Body: { amount, currency?, description? }
+ * Body: { amount, currency?, description?, formData, fullPrice }
  *
- * Creates a PayPal order for a fixed amount (e.g. $150 deposit for the
- * Gamboa-Sacambu tour) without requiring a Booking document.
- * Use this for quick-pay flows on individual tour pages.
+ * Creates a Booking document with the collected form data, then creates a 
+ * PayPal order for a fixed amount (deposit). 
  */
 export const createDirectOrder = async (req, res) => {
   try {
     const {
       amount,
+      fullPrice,
       currency = process.env.PAYPAL_CURRENCY || "USD",
       description = "Tour deposit",
+      formData
     } = req.body;
 
     if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
@@ -89,11 +90,42 @@ export const createDirectOrder = async (req, res) => {
         .json({ error: "A valid positive amount is required" });
     }
 
+    const expireAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours TTL
+    const balance = fullPrice - amount;
+
+    // Create a Booking document from the form data
+    const newBooking = new Booking({
+      totalCost: fullPrice,
+      bookingPayment: amount,
+      balance: balance,
+      totalTourists: formData?.totalTourists || 1,
+      tourPackage: formData?.tourPackage || "Direct Booking",
+      comments: formData?.message || "",
+      checkIn: formData?.dates || null,
+      mainTourist: {
+        firstName: formData?.firstName || "Unknown",
+        surname: formData?.lastName || "Unknown",
+        email: formData?.email || "no-email@provided.com",
+        phoneNumber: formData?.phone || "0000000000",
+        nacionality: formData?.nationality || "Unknown",
+      },
+      expireAt,
+      isPaid: false,
+    });
+
+    await newBooking.save();
+
     const order = await createPayPalOrder({
-      bookingId: "direct", // no booking — custom_id won't match any doc
+      bookingId: newBooking._id.toString(), 
       depositAmount: parseFloat(amount),
       currency,
       description,
+    });
+
+    // Persist PayPal order ID back to the newly created booking
+    await Booking.findByIdAndUpdate(newBooking._id, {
+      "paypal.orderId": order.id,
+      "paypal.status": "CREATED",
     });
 
     const approvalUrl = order.links?.find((l) => l.rel === "payer-action")?.href;
@@ -102,7 +134,7 @@ export const createDirectOrder = async (req, res) => {
       throw new Error("PayPal did not return an approval URL");
     }
 
-    return res.status(200).json({ orderId: order.id, approvalUrl });
+    return res.status(200).json({ orderId: order.id, approvalUrl, bookingId: newBooking._id });
   } catch (error) {
     console.error("PayPal Direct Order Error:", error.message);
     return res.status(500).json({ error: "Failed to create PayPal order" });

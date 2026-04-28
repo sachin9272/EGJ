@@ -32,12 +32,14 @@ export const capturePaypalOrder = async (orderId, bookingId) => {
  * @param {string} [params.currency]   - ISO code, defaults to USD
  * @param {string} [params.description]
  */
-export const createDirectPaypalOrder = async ({ amount, currency = "USD", description }) => {
+export const createDirectPaypalOrder = async ({ amount, fullPrice, formData, currency = "USD", description }) => {
   const response = await apiPost("paypal/create-direct-order", {
     amount,
+    fullPrice,
+    formData,
     currency,
     description,
   });
-  return response.data; // { orderId, approvalUrl }
+  return response.data; // { orderId, approvalUrl, bookingId }
 };
 

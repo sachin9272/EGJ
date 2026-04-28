@@ -27,7 +27,6 @@ const bookingSchema = new mongoose.Schema(
       },
       passportNumber: {
         type: String,
-        required: [true, "Please provide your passport number"],
       },
       nacionality: {
         type: String,
@@ -41,9 +40,10 @@ const bookingSchema = new mongoose.Schema(
       hotel: { type: String },
       pickup: {
         type: Boolean,
-        required: [true, "Please let us know if you require airport pickup"],
+        default: false,
       },
     },
+    tourPackage: { type: String },
     additionalTourist: [
       {
         firstName: { type: String },
