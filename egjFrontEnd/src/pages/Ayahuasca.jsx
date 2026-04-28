@@ -1,83 +1,37 @@
-import { motion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import {
-  FiArrowDown,
-  FiCompass,
-  FiHeart,
-  FiMail,
-  FiMapPin,
-  FiMoon,
-  FiShield,
-  FiUsers,
+  FiArrowDown, FiCompass, FiHeart, FiMail, FiMapPin,
+  FiMoon, FiShield, FiUsers, FiX,
 } from "react-icons/fi";
 import { GiMeditation, GiPotionBall, GiTribalMask } from "react-icons/gi";
+import BookingModal from "../components/BookingModal";
 import Navbar from "../components/NavBar";
 import page from "../styles/pages/gamboaSacambu.module.scss";
 
+const TOUR_PRICE = 300;
+const DEPOSIT_RATE = 0.3;
+const DEPOSIT_AMOUNT = TOUR_PRICE * DEPOSIT_RATE;
+
 const socialLinks = {
   whatsapp: "https://wa.me/573175299539",
-  email:
-    "https://mail.google.com/mail/?view=cm&fs=1&to=expeditionsgeorgeofthejungle@gmail.com",
+  email: "https://mail.google.com/mail/?view=cm&fs=1&to=expeditionsgeorgeofthejungle@gmail.com",
 };
 
 const highlights = [
-  {
-    icon: GiPotionBall,
-    title: "Sacred Amazonian medicine",
-    description:
-      "Ayahuasca is a traditional plant brew used for spiritual, emotional, and physical healing.",
-  },
-  {
-    icon: GiTribalMask,
-    title: "Shaman-guided ceremony",
-    description:
-      "The experience is led by an experienced shaman in a setting that respects ancestral traditions and cultural practices.",
-  },
-  {
-    icon: GiMeditation,
-    title: "Deep inner process",
-    description:
-      "Participants may move through introspection, emotional release, personal insight, and a stronger sense of connection.",
-  },
-  {
-    icon: FiShield,
-    title: "Safe and controlled setting",
-    description:
-      "The ceremony is conducted with trained professionals, clear guidance, and attention to participant safety.",
-  },
+  { icon: GiPotionBall, title: "Sacred Amazonian medicine", description: "Ayahuasca is a traditional plant brew used for spiritual, emotional, and physical healing." },
+  { icon: GiTribalMask, title: "Shaman-guided ceremony", description: "The experience is led by an experienced shaman in a setting that respects ancestral traditions and cultural practices." },
+  { icon: GiMeditation, title: "Deep inner process", description: "Participants may move through introspection, emotional release, personal insight, and a stronger sense of connection." },
+  { icon: FiShield, title: "Safe and controlled setting", description: "The ceremony is conducted with trained professionals, clear guidance, and attention to participant safety." },
 ];
 
 const overview = [
-  {
-    time: "STEP 1",
-    title: "Arrival and introduction",
-    description:
-      "Participants arrive at the location and receive an introduction to the ceremony, its purpose, and the guidelines to follow.",
-  },
-  {
-    time: "STEP 2",
-    title: "Preparation phase",
-    description:
-      "Preparation includes dietary recommendations and mental readiness before the ceremony begins.",
-  },
-  {
-    time: "STEP 3",
-    title: "Night ceremony",
-    description:
-      "The Ayahuasca ceremony takes place at night under the supervision of the shaman.",
-  },
-  {
-    time: "STEP 4",
-    title: "Rest and recovery",
-    description:
-      "After the ceremony, participants are given time to rest and recover in a controlled environment.",
-  },
-  {
-    time: "STEP 5",
-    title: "Reflection and integration",
-    description:
-      "The following day is dedicated to reflection, integration, and sharing experiences.",
-  },
+  { time: "STEP 1", title: "Arrival and introduction", description: "Participants arrive at the location and receive an introduction to the ceremony, its purpose, and the guidelines to follow." },
+  { time: "STEP 2", title: "Preparation phase", description: "Preparation includes dietary recommendations and mental readiness before the ceremony begins." },
+  { time: "STEP 3", title: "Night ceremony", description: "The Ayahuasca ceremony takes place at night under the supervision of the shaman." },
+  { time: "STEP 4", title: "Rest and recovery", description: "After the ceremony, participants are given time to rest and recover in a controlled environment." },
+  { time: "STEP 5", title: "Reflection and integration", description: "The following day is dedicated to reflection, integration, and sharing experiences." },
 ];
 
 const guidelines = [
@@ -100,13 +54,7 @@ const safety = [
   "The experience is not recommended for individuals with certain health conditions or psychological disorders",
 ];
 
-const toBring = [
-  "Comfortable clothing",
-  "Personal items",
-  "Water bottle",
-  "Insect repellent",
-  "Flashlight",
-];
+const toBring = ["Comfortable clothing", "Personal items", "Water bottle", "Insect repellent", "Flashlight"];
 
 const infoItems = [
   { icon: FiMoon, label: "Format", value: "Night ceremony" },
@@ -115,63 +63,41 @@ const infoItems = [
   { icon: FiCompass, label: "Focus", value: "Healing & reflection" },
 ];
 
+
+
 function Ayahuasca() {
+  const [showModal, setShowModal] = useState(false);
+  const openModal = () => setShowModal(true);
+  const closeModal = () => setShowModal(false);
+
   return (
     <div className={page.page_shell}>
       <Navbar />
-
       <main className={page.page}>
-        <motion.section
-          className={page.hero}
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-        >
+        <motion.section className={page.hero} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: "easeOut" }}>
           <p className={page.eyebrow}>AMAZONAS . LETICIA . SPIRITUAL EXPERIENCE</p>
           <h1 className={page.title}>
             <span>AYAHUASCA</span>
             <span className={page.title_highlight}>EXPERIENCE</span>
           </h1>
           <p className={page.description}>
-            A traditional Amazonian healing ceremony guided by an experienced
-            shaman, created for spiritual, emotional, and personal reflection in
-            a safe and respectful setting.
+            A traditional Amazonian healing ceremony guided by an experienced shaman, created for spiritual, emotional, and personal reflection in a safe and respectful setting.
           </p>
-
           <div className={page.info_row}>
             {infoItems.map(({ icon: Icon, label, value }) => (
               <div className={page.info_item} key={label}>
-                <div className={page.info_label}>
-                  <Icon className={page.info_icon} />
-                  <span>{label}</span>
-                </div>
+                <div className={page.info_label}><Icon className={page.info_icon} /><span>{label}</span></div>
                 <p className={page.info_value}>{value}</p>
               </div>
             ))}
           </div>
-
           <div className={page.hero_actions}>
-            <a
-              className={page.primary_button}
-              href={socialLinks.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Book Your Registration
-            </a>
-            <a className={page.secondary_button} href="#overview">
-              See overview <FiArrowDown />
-            </a>
+            <button className={page.primary_button} onClick={openModal}>Book Your Registration</button>
+            <a className={page.secondary_button} href="#overview">See overview <FiArrowDown /></a>
           </div>
         </motion.section>
 
-        <motion.section
-          className={page.section}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
+        <motion.section className={page.section} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <p className={page.section_label}>ABOUT THE EXPERIENCE</p>
           <div className={page.highlights_grid}>
             {highlights.map(({ icon: Icon, title, description }) => (
@@ -184,157 +110,83 @@ function Ayahuasca() {
           </div>
         </motion.section>
 
-        <motion.section
-          className={page.section}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
+        <motion.section className={page.section} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <p className={page.section_label}>WHAT IS AYAHUASCA?</p>
           <article className={page.highlight_card}>
             <FiHeart className={page.highlight_icon} />
             <h2>A sacred Amazonian brew</h2>
-            <p>
-              Ayahuasca is a natural plant brew from the Amazon rainforest,
-              used for centuries by indigenous communities for healing,
-              self-discovery, and connection with nature and the spiritual
-              world. The experience may involve visions, emotional release, and
-              personal insight.
-            </p>
+            <p>Ayahuasca is a natural plant brew from the Amazon rainforest, used for centuries by indigenous communities for healing, self-discovery, and connection with nature and the spiritual world. The experience may involve visions, emotional release, and personal insight.</p>
           </article>
         </motion.section>
 
-        <motion.section
-          id="overview"
-          className={page.section}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
+        <motion.section id="overview" className={page.section} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <p className={page.section_label}>PROGRAM OVERVIEW</p>
           <div className={page.timeline}>
             {overview.map(({ time, title, description }) => (
               <article className={page.timeline_item} key={`${time}-${title}`}>
                 <p className={page.timeline_time}>{time}</p>
-                <div className={page.timeline_content}>
-                  <h3>{title}</h3>
-                  <p>{description}</p>
-                </div>
+                <div className={page.timeline_content}><h3>{title}</h3><p>{description}</p></div>
               </article>
             ))}
           </div>
         </motion.section>
 
-        <motion.section
-          className={page.section}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
+        <motion.section className={page.section} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <div className={page.checklists}>
             <article className={page.checklist_card}>
               <p className={page.section_label}>IMPORTANT GUIDELINES</p>
               <ul className={page.list}>
-                {guidelines.map((item) => (
-                  <li key={item}>
-                    <FaCheck className={page.list_icon} />
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {guidelines.map((item) => (<li key={item}><FaCheck className={page.list_icon} /><span>{item}</span></li>))}
               </ul>
             </article>
-
             <article className={page.checklist_card}>
               <p className={page.section_label}>POTENTIAL EFFECTS</p>
               <ul className={page.list}>
-                {effects.map((item) => (
-                  <li key={item}>
-                    <FaCheck className={page.list_icon} />
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {effects.map((item) => (<li key={item}><FaCheck className={page.list_icon} /><span>{item}</span></li>))}
               </ul>
-              <p className={page.note}>
-                These effects are considered part of the cleansing and healing
-                process.
-              </p>
+              <p className={page.note}>These effects are considered part of the cleansing and healing process.</p>
             </article>
           </div>
         </motion.section>
 
-        <motion.section
-          className={page.section}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
+        <motion.section className={page.section} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <div className={page.checklists}>
             <article className={page.checklist_card}>
               <p className={page.section_label}>SAFETY INFORMATION</p>
               <ul className={page.list}>
-                {safety.map((item) => (
-                  <li key={item}>
-                    <FaCheck className={page.list_icon} />
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {safety.map((item) => (<li key={item}><FaCheck className={page.list_icon} /><span>{item}</span></li>))}
               </ul>
             </article>
-
             <article className={page.checklist_card}>
               <p className={page.section_label}>WHAT TO BRING</p>
               <ul className={page.list}>
-                {toBring.map((item) => (
-                  <li key={item}>
-                    <FaCheck className={page.list_icon} />
-                    <span>{item}</span>
-                  </li>
-                ))}
+                {toBring.map((item) => (<li key={item}><FaCheck className={page.list_icon} /><span>{item}</span></li>))}
               </ul>
             </article>
           </div>
         </motion.section>
 
-        <motion.section
-          className={page.cta_section}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
-          transition={{ duration: 0.6, ease: "easeOut" }}
-        >
+        <motion.section className={page.cta_section} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <p className={page.section_label}>CONTACT DETAILS</p>
-          <h2>
-            Expeditions George of the Jungle
-            <span>Leticia, Amazonas, Colombia.</span>
-          </h2>
-          <p className={page.cta_copy}>
-            Reach out directly for guidance, availability, preparation details,
-            and any medical or practical questions before the ceremony.
-          </p>
+          <h2>Expeditions George of the Jungle<span>Leticia, Amazonas, Colombia.</span></h2>
+          <p className={page.cta_copy}>Secure your place with a 30% deposit today. The remaining balance is payable on arrival in Leticia.</p>
           <div className={page.hero_actions}>
-            <a
-              className={page.primary_button}
-              href={socialLinks.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Book Your Registration
-            </a>
-            <a
-              className={page.secondary_button}
-              href={socialLinks.email}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FiMail /> Email us
-            </a>
+            <button className={page.primary_button} onClick={openModal}>Book Your Registration</button>
+            <a className={page.secondary_button} href={socialLinks.email} target="_blank" rel="noopener noreferrer"><FiMail /> Email us</a>
           </div>
         </motion.section>
       </main>
+
+      <AnimatePresence>
+        {showModal && (
+          <BookingModal
+            tourTitle="Ayahuasca Experience"
+            tourPrice={TOUR_PRICE}
+            depositAmount={DEPOSIT_AMOUNT}
+            onClose={closeModal}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
