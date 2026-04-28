@@ -1,0 +1,294 @@
+@use "../variables.scss" as *;
+
+.modal_backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.modal_card {
+  width: min(540px, 100%);
+  background: rgba(244, 246, 239, 0.96);
+  border: 1px solid rgba(212, 170, 61, 0.28);
+  border-radius: 14px;
+  padding: 2.4rem;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+  color: #1f291e;
+  max-height: 90vh;
+  overflow-y: auto;
+
+  @media (max-width: $screen-small) {
+    padding: 1.8rem 1.4rem;
+  }
+}
+
+.modal_header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.modal_eyebrow {
+  font-family: chivo, sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.2rem;
+  color: #556b2f;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.modal_title {
+  font-family: chivo, sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #111509;
+}
+
+.modal_close {
+  flex-shrink: 0;
+  width: 2.8rem;
+  height: 2.8rem;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: transparent;
+  color: #1f291e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.2);
+  }
+}
+
+// ── Form Styles ────────────────────────────────────────────────────────────
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+
+.form_row {
+  display: flex;
+  gap: 1.5rem;
+  
+  @media (max-width: $screen-small) {
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+}
+
+.form_group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  label {
+    font-size: 0.85rem;
+    color: #1f291e;
+    margin-bottom: 0.5rem;
+  }
+
+  input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #1f291e;
+    padding: 0.5rem 0;
+    font-size: 1rem;
+    color: #111509;
+    outline: none;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      border-bottom-color: #556b2f;
+    }
+  }
+}
+
+.name_group {
+  display: flex;
+  gap: 1rem;
+  
+  input {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.form_submit {
+  margin-top: 1rem;
+  align-self: flex-start;
+  padding: 0.8rem 2.5rem;
+  border-radius: 999px;
+  border: none;
+  background: #7a9c59;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #658448;
+  }
+}
+
+// ── Price breakdown ────────────────────────────────────────────────────────
+
+.modal_breakdown {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.modal_row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &_balance {
+    background: rgba(212, 170, 61, 0.1);
+  }
+}
+
+.modal_label {
+  font-size: 1.05rem;
+  color: #3f4a3e;
+}
+
+.modal_value {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #111509;
+}
+
+.modal_deposit {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #c89f37;
+  letter-spacing: 0.01em;
+}
+
+// ── Body copy ──────────────────────────────────────────────────────────────
+
+.modal_note {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #3f4a3e;
+  margin-bottom: 1.8rem;
+
+  strong {
+    color: #111509;
+  }
+}
+
+.modal_error {
+  background: rgba(220, 38, 38, 0.12);
+  border: 1px solid rgba(220, 38, 38, 0.35);
+  border-radius: 8px;
+  padding: 0.85rem 1.1rem;
+  font-size: 1rem;
+  color: #b91c1c;
+  margin-bottom: 1.4rem;
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────
+
+.modal_actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.modal_btn_primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  width: 100%;
+  min-height: 3.4rem;
+  border: none;
+  border-radius: 8px;
+  background: #0070ba; // PayPal blue
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s ease, transform 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: #005ea6;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+.modal_btn_secondary {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  background: transparent;
+  color: #3f4a3e;
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    border-color: rgba(0, 0, 0, 0.3);
+    color: #111509;
+  }
+}
+
+.modal_secure {
+  text-align: center;
+  margin-top: 1.2rem;
+  font-size: 0.88rem;
+  color: #7b8a7a;
+}
+
+// ── Loading spinner ────────────────────────────────────────────────────────
+
+.modal_spinner {
+  display: inline-block;
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: modal-spin 0.75s linear infinite;
+}
+
+@keyframes modal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
