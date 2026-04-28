@@ -5,6 +5,7 @@
       grid-column: 2 / -2;
       grid-row: 7 / 14;
       padding-top: 1rem;
+      scroll-margin-top: 9rem;
       z-index: 500;
 
       @media (max-width: $screen-medium-large) {

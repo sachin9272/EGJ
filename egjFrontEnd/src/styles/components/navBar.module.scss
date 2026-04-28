@@ -14,8 +14,8 @@
 
   // General styling
 
-  max-width: 80rem; // 100rem × 0.8333
-  min-width: 72rem; // 80rem × 0.8333
+  width: fit-content;
+  max-width: calc(100vw - 4rem);
   height: 5.833rem; // 7rem × 0.8333
   margin-top: 1.667rem; // 2rem × 0.8333
   border-radius: 0.833rem; // 1rem × 0.8333
@@ -142,7 +142,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw;
+      width: 100%;
       height: 6.833rem; // 7rem × 0.8333
       background: rgba(20, 20, 20, 0.05);
       background: linear-gradient(135deg,

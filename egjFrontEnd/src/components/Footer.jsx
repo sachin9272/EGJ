@@ -5,12 +5,16 @@ import {
   FaSquareYoutube,
 } from "react-icons/fa6";
 import { FaTripadvisor } from "react-icons/fa";
+import { useLocation, useNavigate } from "react-router-dom";
 import footer from "../styles/components/footer.module.scss";
 
 import { MdEmail } from "react-icons/md";
 import { IoLogoWhatsapp } from "react-icons/io";
 
 function Footer() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const socialLinks = {
     facebook: "https://www.facebook.com/expeditionsgeorgeofthejungle",
     tripAdvisor:
@@ -30,12 +34,26 @@ function Footer() {
       "_blank"
     );
   };
+
+  const handleAboutClick = (event) => {
+    event.preventDefault();
+
+    if (location.pathname === "/") {
+      document
+        .getElementById("why-travel-with-us")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+
+    navigate("/", { state: { scrollToSection: "why-travel-with-us" } });
+  };
+
   return (
     <footer className={footer.footer_container}>
       <div className={footer.footer_content_top}>
         {/* LOGO */}
         <div className={footer.logo_container}>
-          <img className={footer.logo_image} src="Logo.png" alt="Logo" />
+          <img className={footer.logo_image} src="/Logo.png" alt="Logo" />
         </div>
         <hr className={footer.separator} />
         <div>
@@ -54,7 +72,11 @@ function Footer() {
             <ul className={footer.quick_links}>
               <li>Refund Policy</li>
               <li>Privacy Policy</li>
-              <li>About</li>
+              <li>
+                <a href="/" onClick={handleAboutClick}>
+                  About
+                </a>
+              </li>
             </ul>
           </div>
         </div>

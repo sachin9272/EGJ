@@ -31,7 +31,7 @@ export default function TravelWithUsSection() {
     {
       img: card1,
       title: "Locally Rooted, English-Speaking Guides",
-      text: "Our team is fully fluent in English — no language barrier here! We’re proud locals excited to share the land with you, making you feel connected from the moment you arrive.",
+      text: "Our team is fully fluent in English no language barrier here! We’re proud locals excited to share the land with you, making you feel connected from the moment you arrive.",
       icon: <FaLanguage />,
     },
     {
@@ -43,13 +43,13 @@ export default function TravelWithUsSection() {
     {
       img: card3,
       title: "Unforgettable Jungle Adventures",
-      text: "Not your average trip: night hikes, piranha fishing, jungle survival, and full cultural immersion—every moment a once-in-a-lifetime experience.",
+      text: "Not your average trip: night hikes, piranha fishing, jungle survival, and full cultural immersion every moment a once-in-a-lifetime experience.",
       icon: <GiCanoe />,
     },
     {
       img: card4,
       title: "Well-Planned Experiences",
-      text: "Arrive a day early to settle in, meet the team, and get ready for an early jungle departure—everything is organized for a smooth, stress-free start",
+      text: "Arrive a day early to settle in, meet the team, and get ready for an early jungle departure everything is organized for a smooth, stress-free start",
       icon: <FaPlaneArrival />,
     },
     {
@@ -68,6 +68,7 @@ export default function TravelWithUsSection() {
 
   return (
     <motion.section
+      id="why-travel-with-us"
       initial={{ opacity: 0, y: -100 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: false, margin: "-10%" }}
