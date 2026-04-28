@@ -66,6 +66,49 @@ export const createOrder = async (req, res) => {
   }
 };
 
+// ─── 1b. CREATE DIRECT ORDER (no booking document required) ──────────────
+/**
+ * POST /api/v1/paypal/create-direct-order
+ * Body: { amount, currency?, description? }
+ *
+ * Creates a PayPal order for a fixed amount (e.g. $150 deposit for the
+ * Gamboa-Sacambu tour) without requiring a Booking document.
+ * Use this for quick-pay flows on individual tour pages.
+ */
+export const createDirectOrder = async (req, res) => {
+  try {
+    const {
+      amount,
+      currency = process.env.PAYPAL_CURRENCY || "USD",
+      description = "Tour deposit",
+    } = req.body;
+
+    if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
+      return res
+        .status(400)
+        .json({ error: "A valid positive amount is required" });
+    }
+
+    const order = await createPayPalOrder({
+      bookingId: "direct", // no booking — custom_id won't match any doc
+      depositAmount: parseFloat(amount),
+      currency,
+      description,
+    });
+
+    const approvalUrl = order.links?.find((l) => l.rel === "payer-action")?.href;
+
+    if (!approvalUrl) {
+      throw new Error("PayPal did not return an approval URL");
+    }
+
+    return res.status(200).json({ orderId: order.id, approvalUrl });
+  } catch (error) {
+    console.error("PayPal Direct Order Error:", error.message);
+    return res.status(500).json({ error: "Failed to create PayPal order" });
+  }
+};
+
 // ─── 2. CAPTURE ORDER (frontend return redirect) ──────────────────────────
 /**
  * POST /api/v1/paypal/capture-order

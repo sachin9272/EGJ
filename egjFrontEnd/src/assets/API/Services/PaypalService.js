@@ -22,3 +22,22 @@ export const capturePaypalOrder = async (orderId, bookingId) => {
   const response = await apiPost("paypal/capture-order", { orderId, bookingId });
   return response.data; // { captured: true }
 };
+
+/**
+ * Create a PayPal order for a fixed amount — no booking document required.
+ * Used by standalone tour page quick-pay flows (e.g. Gamboa-Sacambu).
+ *
+ * @param {object} params
+ * @param {number} params.amount       - Amount to charge (e.g. 150)
+ * @param {string} [params.currency]   - ISO code, defaults to USD
+ * @param {string} [params.description]
+ */
+export const createDirectPaypalOrder = async ({ amount, currency = "USD", description }) => {
+  const response = await apiPost("paypal/create-direct-order", {
+    amount,
+    currency,
+    description,
+  });
+  return response.data; // { orderId, approvalUrl }
+};
+
