@@ -8,6 +8,9 @@ import useAuthStore from "./store/auth";
 import Footer from "./components/Footer";
 import TourExpeditioins from "./pages/TourExpeditioins";
 import Experiences from "./pages/Experiences";
+import PaypalReturn from "./pages/PaypalReturn";
+import PaypalCancel from "./pages/PaypalCancel";
+import BookingSuccess from "./pages/BookingSuccess";
 // import Navbar from "./components/NavBar";
 function App() {
   const [token, setToken] = useState(null);
@@ -56,6 +59,13 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/tour" element={<TourExpeditioins />} />
           <Route path="/experiences" element={<Experiences />} />
+
+          {/* Shared post-payment pages */}
+          <Route path="/success" element={<BookingSuccess />} />
+
+          {/* PayPal redirect pages */}
+          <Route path="/paypal/return" element={<PaypalReturn />} />
+          <Route path="/paypal/cancel" element={<PaypalCancel />} />
         </Routes>
         <Footer />
       </main>
