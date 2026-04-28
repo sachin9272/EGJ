@@ -4,11 +4,9 @@
   grid-column: 2 / span 8; // centers the navbar in a 12-column grid
   // Glassmorphism effect
   background: rgba(20, 20, 20, 0.05);
-  background: linear-gradient(
-    135deg,
-    rgba(20, 20, 20, 0.05) 0%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
+  background: linear-gradient(135deg,
+      rgba(20, 20, 20, 0.05) 0%,
+      rgba(255, 255, 255, 0.05) 100%);
   backdrop-filter: blur(2px);
 
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2),
@@ -36,11 +34,9 @@
 
   // Change background and box-shadow on hover
   &:hover {
-    background: linear-gradient(
-      135deg,
-      rgba(84, 84, 84, 0.1) 0%,
-      rgba(150, 149, 149, 0.1) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(84, 84, 84, 0.1) 0%,
+        rgba(150, 149, 149, 0.1) 100%);
 
     box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.25),
       inset 0 0 15px 2px rgba(255, 255, 255, 0.1);
@@ -124,11 +120,9 @@
 
     &:hover {
       cursor: pointer;
-      background: linear-gradient(
-        to right,
-        var(--Primary-colour),
-        var(--Primary-colour)
-      );
+      background: linear-gradient(to right,
+          var(--Primary-colour),
+          var(--Primary-colour));
       transform: scale(1.1);
     }
   }
@@ -151,11 +145,9 @@
       width: 100%;
       height: 6.833rem; // 7rem × 0.8333
       background: rgba(20, 20, 20, 0.05);
-      background: linear-gradient(
-        135deg,
-        rgba(20, 20, 20, 0.05) 0%,
-        rgba(255, 255, 255, 0.05) 100%
-      );
+      background: linear-gradient(135deg,
+          rgba(20, 20, 20, 0.05) 0%,
+          rgba(255, 255, 255, 0.05) 100%);
       backdrop-filter: blur(2px);
       box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2),
         inset 0 0 5px 3px rgba(255, 255, 255, 0.1);
@@ -172,6 +164,7 @@
     align-items: end;
     gap: 2rem;
   }
+
   &_menu {
     position: fixed;
     top: 0;
@@ -221,10 +214,12 @@
     &_icon {
       color: var(--Secondary-colour);
       font-size: 3rem;
+
       &:hover {
         cursor: pointer;
         color: var(--Primary-colour);
       }
+
       @media (max-width: $screen-small) {
         font-size: 3.5rem;
       }
@@ -257,6 +252,7 @@
         transform: scale(1.1);
       }
     }
+
     &_login {
       background: linear-gradient(to right, #1e9146, #79a81c, #7ea15b);
       padding: 0.417rem 1.25rem; // scaled

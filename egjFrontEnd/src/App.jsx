@@ -8,6 +8,9 @@ import useAuthStore from "./store/auth";
 import Footer from "./components/Footer";
 import TourExpeditioins from "./pages/TourExpeditioins";
 import Experiences from "./pages/Experiences";
+import PaypalReturn from "./pages/PaypalReturn";
+import PaypalCancel from "./pages/PaypalCancel";
+import BookingSuccess from "./pages/BookingSuccess";
 import GamboaSacambu from "./pages/GamboaSacambu";
 import Ayahuasca from "./pages/Ayahuasca";
 import TwoDaysOneNight from "./pages/TwoDaysOneNight";
@@ -81,6 +84,13 @@ function App() {
           <Route path="/tour/4-days-3-nights" element={<FourDaysThreeNights />} />
           <Route path="/tour/5-days-4-nights" element={<FiveDaysFourNights />} />
           <Route path="/experiences" element={<Experiences />} />
+
+          {/* Shared post-payment pages */}
+          <Route path="/success" element={<BookingSuccess />} />
+
+          {/* PayPal redirect pages */}
+          <Route path="/paypal/return" element={<PaypalReturn />} />
+          <Route path="/paypal/cancel" element={<PaypalCancel />} />
         </Routes>
         <Footer />
       </main>
