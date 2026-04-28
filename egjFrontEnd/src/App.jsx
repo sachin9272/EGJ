@@ -17,7 +17,6 @@ import TwoDaysOneNight from "./pages/TwoDaysOneNight";
 import ThreeDaysTwoNights from "./pages/ThreeDaysTwoNights";
 import FourDaysThreeNights from "./pages/FourDaysThreeNights";
 import FiveDaysFourNights from "./pages/FiveDaysFourNights";
-// import Navbar from "./components/NavBar";
 
 function ScrollToTop() {
   const location = useLocation();
@@ -71,7 +70,6 @@ function App() {
 
   return (
     <>
-      <Navbar />
       <main className="min-h-[70vh]">
         <ScrollToTop />
         <Routes>
