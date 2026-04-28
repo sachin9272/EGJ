@@ -57,8 +57,28 @@ const getTourOrder = (name = "") => {
 const getTourDetailsPath = (name = "") => {
   const normalizedName = normalizeTourName(name);
 
+  if (normalizedName.includes("AYAHUASCA")) {
+    return "/tour/ayahuasca";
+  }
+
   if (normalizedName.includes("GAMBOA") && normalizedName.includes("SACAMBU")) {
     return "/tour/gamboa-sacambu";
+  }
+
+  if (normalizedName.includes("2 DAYS") && normalizedName.includes("1 NIGHT")) {
+    return "/tour/2-days-1-night";
+  }
+
+  if (normalizedName.includes("3 DAYS") && normalizedName.includes("2 NIGHTS")) {
+    return "/tour/3-days-2-nights";
+  }
+
+  if (normalizedName.includes("4 DAYS") && normalizedName.includes("3 NIGHTS")) {
+    return "/tour/4-days-3-nights";
+  }
+
+  if (normalizedName.includes("5 DAYS") && normalizedName.includes("4 NIGHTS")) {
+    return "/tour/5-days-4-nights";
   }
 
   return null;

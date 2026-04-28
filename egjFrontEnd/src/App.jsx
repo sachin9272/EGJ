@@ -9,6 +9,11 @@ import Footer from "./components/Footer";
 import TourExpeditioins from "./pages/TourExpeditioins";
 import Experiences from "./pages/Experiences";
 import GamboaSacambu from "./pages/GamboaSacambu";
+import Ayahuasca from "./pages/Ayahuasca";
+import TwoDaysOneNight from "./pages/TwoDaysOneNight";
+import ThreeDaysTwoNights from "./pages/ThreeDaysTwoNights";
+import FourDaysThreeNights from "./pages/FourDaysThreeNights";
+import FiveDaysFourNights from "./pages/FiveDaysFourNights";
 // import Navbar from "./components/NavBar";
 
 function ScrollToTop() {
@@ -69,7 +74,12 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/tour" element={<TourExpeditioins />} />
+          <Route path="/tour/ayahuasca" element={<Ayahuasca />} />
           <Route path="/tour/gamboa-sacambu" element={<GamboaSacambu />} />
+          <Route path="/tour/2-days-1-night" element={<TwoDaysOneNight />} />
+          <Route path="/tour/3-days-2-nights" element={<ThreeDaysTwoNights />} />
+          <Route path="/tour/4-days-3-nights" element={<FourDaysThreeNights />} />
+          <Route path="/tour/5-days-4-nights" element={<FiveDaysFourNights />} />
           <Route path="/experiences" element={<Experiences />} />
         </Routes>
         <Footer />
