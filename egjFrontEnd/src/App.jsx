@@ -66,7 +66,7 @@ function App() {
 
   return (
     <>
-      {/* <Navbar /> */}
+      <Navbar />
       <main className="min-h-[70vh]">
         <ScrollToTop />
         <Routes>
