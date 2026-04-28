@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
 import { useSession, useUser } from "@clerk/clerk-react";
@@ -8,7 +8,20 @@ import useAuthStore from "./store/auth";
 import Footer from "./components/Footer";
 import TourExpeditioins from "./pages/TourExpeditioins";
 import Experiences from "./pages/Experiences";
+import GamboaSacambu from "./pages/GamboaSacambu";
 // import Navbar from "./components/NavBar";
+
+function ScrollToTop() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.scrollToSection) return;
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname, location.state]);
+
+  return null;
+}
+
 function App() {
   const [token, setToken] = useState(null);
   const [userData, setUserData] = useState(null);
@@ -52,9 +65,11 @@ function App() {
     <>
       {/* <Navbar /> */}
       <main className="min-h-[70vh]">
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/tour" element={<TourExpeditioins />} />
+          <Route path="/tour/gamboa-sacambu" element={<GamboaSacambu />} />
           <Route path="/experiences" element={<Experiences />} />
         </Routes>
         <Footer />

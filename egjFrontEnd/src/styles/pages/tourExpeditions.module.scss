@@ -1,7 +1,7 @@
 @use "../variables.scss" as *;
 .tours {
   &_container {
-    background-image: url("../../assets/images/TourExpeditions-background.png");
+    background-image: url("../../assets/images/jungle.jpg.jpeg");
     background-size: cover;
     background-position: 50%;
     background-repeat: no-repeat;
@@ -26,17 +26,17 @@
     }
 
     @media (min-width: 1920px) {
-      background-image: url("../../assets/images/TourExpeditions-Background-LargeScreen-1920.png");
+      background-image: url("../../assets/images/jungle.jpg.jpeg");
     }
 
     @media (max-width: $screen-medium) {
-      background-image: url("../../assets/images/TourExpeditions-Background-Medium.png");
+      background-image: url("../../assets/images/jungle.jpg.jpeg");
     }
     @media (max-width: $screen-tablet) {
-      background-image: url("../../assets/images/TourExpeditions-Background-Tablet.png");
+      background-image: url("../../assets/images/jungle.jpg.jpeg");
     }
     @media (max-width: $screen-small) {
-      background-image: url("../../assets/images/TourExpeditions-Background-Mobile.png");
+      background-image: url("../../assets/images/jungle.jpg.jpeg");
     }
   }
 }

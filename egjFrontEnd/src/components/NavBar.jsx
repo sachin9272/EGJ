@@ -85,7 +85,7 @@ const Navbar = () => {
       <nav className={navBar.navbar}>
         {/** Logo*/}
         <Link to="/" className={navBar.logo} onClick={handleLogoClick}>
-          <img src="Logo.png" alt="Logo" className={navBar.logo_Image} />
+          <img src="/Logo.png" alt="Logo" className={navBar.logo_Image} />
         </Link>
 
         {/* Desktop Nav */}
@@ -129,7 +129,7 @@ const Navbar = () => {
       {/* Hamburguer menu for mobile */}
       <nav className={navBar.navbar_mobile}>
         <Link to="/" className={navBar.logo} onClick={handleLogoClick}>
-          <img src="Logo.png" alt="Logo" className={navBar.logo_Image} />
+          <img src="/Logo.png" alt="Logo" className={navBar.logo_Image} />
         </Link>
 
         {/* SIDE BAR */}

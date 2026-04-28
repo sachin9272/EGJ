@@ -54,6 +54,16 @@ const getTourOrder = (name = "") => {
   return matchedTour ? matchedTour.order : orderedTourMatchers.length;
 };
 
+const getTourDetailsPath = (name = "") => {
+  const normalizedName = normalizeTourName(name);
+
+  if (normalizedName.includes("GAMBOA") && normalizedName.includes("SACAMBU")) {
+    return "/tour/gamboa-sacambu";
+  }
+
+  return null;
+};
+
 function CardsSection() {
   const [tours, setTours] = useState([]);
   const location = useLocation();
@@ -116,7 +126,10 @@ function CardsSection() {
       </motion.header>
 
       <article className={Cards.cards_container}>
-        {tours.map((tour, index) => (
+        {tours.map((tour, index) => {
+          const detailsPath = getTourDetailsPath(tour.name);
+
+          return (
           <motion.div
             initial={{ opacity: 0, y: 100 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -142,10 +155,17 @@ function CardsSection() {
             <div className={Cards.card_text_container}>
               <h2 className={Cards.card_title}>{tour.name}</h2>
               <p className={Cards.card_description}>{tour.description}</p>
-              <button className={Cards.card_button}>View Details</button>
+              <button
+                className={Cards.card_button}
+                type="button"
+                onClick={() => detailsPath && navigate(detailsPath)}
+              >
+                View Details
+              </button>
             </div>
           </motion.div>
-        ))}
+          );
+        })}
       </article>
     </section>
   );

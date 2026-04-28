@@ -53,7 +53,7 @@ function Footer() {
       <div className={footer.footer_content_top}>
         {/* LOGO */}
         <div className={footer.logo_container}>
-          <img className={footer.logo_image} src="Logo.png" alt="Logo" />
+          <img className={footer.logo_image} src="/Logo.png" alt="Logo" />
         </div>
         <hr className={footer.separator} />
         <div>
