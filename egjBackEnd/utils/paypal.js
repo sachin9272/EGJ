@@ -6,6 +6,8 @@ export const PAYPAL_BASE =
     ? "https://api-m.paypal.com"
     : "https://api-m.sandbox.paypal.com";
 
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5174";
+
 /**
  * Exchange client credentials for a short-lived Bearer token.
  */
@@ -69,8 +71,8 @@ export const createPayPalOrder = async ({
           locale: "en-US",
           landing_page: "LOGIN",
           user_action: "PAY_NOW",
-          return_url: `${process.env.CLIENT_URL}/paypal/return`,
-          cancel_url: `${process.env.CLIENT_URL}/paypal/cancel`,
+          return_url: `${CLIENT_URL}/paypal/return?bookingId=${bookingId}`,
+          cancel_url: `${CLIENT_URL}/paypal/cancel`,
         },
       },
     },

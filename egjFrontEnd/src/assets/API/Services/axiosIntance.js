@@ -3,7 +3,7 @@ import axios from "axios";
 import useAuthStore from "../../../store/auth";
 
 const api = axios.create({
-  baseURL: "https://egj-back-end.vercel.app/api/v1/",
+  baseURL: "http://localhost:3000/api/v1/",
   headers: { "Content-Type": "application/json" },
 });
 

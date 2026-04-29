@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://egj-back-end.vercel.app/api/v1/users/";
+const BASE_URL = "http://localhost:3000/api/v1/users/";
 
 export const getUser = async (id, token) => {
   try {

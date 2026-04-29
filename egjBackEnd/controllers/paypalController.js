@@ -167,6 +167,12 @@ export const captureOrder = async (req, res) => {
       return res.status(404).json({ error: "Booking not found" });
     }
 
+    if (booking.paypal?.orderId !== orderId) {
+      return res
+        .status(400)
+        .json({ error: "PayPal order does not match booking" });
+    }
+
     if (booking.isPaid) {
       // Already confirmed by webhook — just tell the frontend it's done.
       return res.status(200).json({ captured: true, alreadyConfirmed: true });
