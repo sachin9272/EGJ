@@ -46,7 +46,7 @@ app.use("/api/v1/booking", clerkMiddleware(), bookingRouter);
 app.use("/api/v1/paypal", clerkMiddleware(), paypalRouter);
 
 //dev enviroment
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`SERVER IS RUNNING ON PORT ${PORT}`));
 
 //Production enviroment
