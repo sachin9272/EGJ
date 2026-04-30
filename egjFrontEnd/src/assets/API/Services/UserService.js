@@ -1,10 +1,11 @@
 import axios from "axios";
+import { API_BASE_URL } from "../../../config/api";
 
-const BASE_URL = "http://localhost:3000/api/v1/users/";
+const USERS_URL = `${API_BASE_URL}users/`;
 
 export const getUser = async (id, token) => {
   try {
-    const response = await axios.get(`${BASE_URL}${id}`, {
+    const response = await axios.get(`${USERS_URL}${id}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

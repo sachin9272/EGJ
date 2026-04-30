@@ -21,29 +21,28 @@ const orderedTourMatchers = [
   },
   {
     order: 1,
-    matches: ["PUERTO NARINO"],
-  },
-  {
-    order: 2,
     matches: ["GAMBOA", "SACAMBU"],
   },
   {
-    order: 3,
+    order: 2,
     matches: ["2 DAYS", "1 NIGHT"],
   },
   {
-    order: 4,
+    order: 3,
     matches: ["3 DAYS", "2 NIGHTS"],
   },
   {
-    order: 5,
+    order: 4,
     matches: ["4 DAYS", "3 NIGHTS"],
   },
   {
-    order: 6,
+    order: 5,
     matches: ["5 DAYS", "4 NIGHTS"],
   },
 ];
+
+const isPuertoNarinoTour = (name = "") =>
+  normalizeTourName(name).includes("PUERTO NARINO");
 
 const getTourOrder = (name = "") => {
   const normalizedName = normalizeTourName(name);
@@ -93,9 +92,11 @@ function CardsSection() {
     const fetchTours = async () => {
       try {
         const data = await getTours();
-        const sortedTours = [...data].sort((firstTour, secondTour) => {
-          return getTourOrder(firstTour.name) - getTourOrder(secondTour.name);
-        });
+        const sortedTours = [...data]
+          .filter((tour) => !isPuertoNarinoTour(tour.name))
+          .sort((firstTour, secondTour) => {
+            return getTourOrder(firstTour.name) - getTourOrder(secondTour.name);
+          });
 
         setTours(sortedTours);
       } catch (error) {

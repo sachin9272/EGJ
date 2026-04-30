@@ -1,4 +1,9 @@
 import BookingAdmin from "../models/bookingAdmin.model.js";
+import {
+  MAXIMUM_TOURISTS,
+  MINIMUM_TOURISTS,
+  calculateBookingDeposit,
+} from "../utils/tourPricing.js";
 
 //CREATE NEW BOOKING
 export const createBookingAdmin = async (req, res) => {
@@ -21,6 +26,13 @@ export const createBookingAdmin = async (req, res) => {
         .json({ success: false, message: "Missing required fields" });
     }
 
+    if (totalTourists < MINIMUM_TOURISTS || totalTourists > MAXIMUM_TOURISTS) {
+      return res.status(400).json({
+        success: false,
+        message: "Tour bookings require 1 to 10 people",
+      });
+    }
+
     if (totalTourists !== additionalTourist.length + 1) {
       return res.status(400).json({
         success: false,
@@ -31,7 +43,7 @@ export const createBookingAdmin = async (req, res) => {
     // User info comes from protect middleware
     const totalFinalCost = totalCost * totalTourists;
 
-    const bookingPayment = Math.floor(totalFinalCost * 0.3);
+    const bookingPayment = calculateBookingDeposit(totalFinalCost);
     const balance = totalFinalCost - bookingPayment;
 
     const newBooking = new BookingAdmin({

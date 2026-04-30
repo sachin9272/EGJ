@@ -13,12 +13,11 @@ import { GiCampCookingPot, GiMonkey, GiRiver, GiWalkingBoot } from "react-icons/
 import { IoCloseOutline } from "react-icons/io5";
 import BookingModal from "../components/BookingModal";
 import Navbar from "../components/NavBar";
+import { TOUR_PRICES_2026 } from "../constants/tourPricing";
 import page from "../styles/pages/gamboaSacambu.module.scss";
 
 // ─── Tour constants ────────────────────────────────────────────────────────
-const TOUR_PRICE = 500;
-const DEPOSIT_RATE = 0.3;
-const DEPOSIT_AMOUNT = TOUR_PRICE * DEPOSIT_RATE; // 150
+const TOUR_PRICE = TOUR_PRICES_2026.GAMBOA_SACAMBU.pricePerPerson;
 
 const socialLinks = {
   whatsapp: "https://wa.me/573175299539",
@@ -256,8 +255,7 @@ function GamboaSacambu() {
             <span>Small group, big river.</span>
           </h2>
           <p className={page.cta_copy}>
-            Secure your place with a 30% deposit today. The remaining balance
-            is payable on arrival in Leticia.
+            A 30% booking deposit confirms your reservation. The PayPal charge is shown separately and added to the remaining balance, which is paid at the office in cash only.
           </p>
           <div className={page.hero_actions}>
             <button className={page.primary_button} onClick={openModal}>
@@ -279,8 +277,7 @@ function GamboaSacambu() {
         {showModal && (
           <BookingModal
             tourTitle="Gamboa & Sacambu Full Day"
-            tourPrice={TOUR_PRICE}
-            depositAmount={DEPOSIT_AMOUNT}
+            pricePerPerson={TOUR_PRICE}
             onClose={closeModal}
           />
         )}

@@ -5,6 +5,13 @@ import {
   createPayPalOrder,
   verifyPayPalWebhook,
 } from "../utils/paypal.js";
+import {
+  MAXIMUM_TOURISTS,
+  MINIMUM_TOURISTS,
+  calculatePayPalProcessingFee,
+  calculatePaymentBreakdown,
+  findTourPricing,
+} from "../utils/tourPricing.js";
 
 // ─── 1. CREATE PAYPAL ORDER ───────────────────────────────────────────────
 /**
@@ -34,9 +41,12 @@ export const createOrder = async (req, res) => {
         .json({ error: "This booking has already been paid" });
     }
 
-    const depositAmount = booking.bookingPayment; // already stored as 30% of total
+    const depositAmount = booking.bookingPayment;
+    const paypalProcessingFee = calculatePayPalProcessingFee(depositAmount);
+    const baseCashBalance = booking.totalCost - booking.bookingPayment;
+    const balanceWithPayPalCharge = baseCashBalance + paypalProcessingFee;
     const currency = process.env.PAYPAL_CURRENCY || "USD";
-    const description = `30% deposit – ${booking.totalTourists} person(s) tour booking`;
+    const description = `${booking.totalTourists} person(s) booking deposit`;
 
     const order = await createPayPalOrder({
       bookingId,
@@ -50,6 +60,7 @@ export const createOrder = async (req, res) => {
     await Booking.findByIdAndUpdate(bookingId, {
       "paypal.orderId": order.id,
       "paypal.status": "CREATED",
+      balance: balanceWithPayPalCharge,
     });
 
     // The payer-action link is the URL we redirect the user to.
@@ -69,37 +80,51 @@ export const createOrder = async (req, res) => {
 // ─── 1b. CREATE DIRECT ORDER (no booking document required previously) ──────────────
 /**
  * POST /api/v1/paypal/create-direct-order
- * Body: { amount, currency?, description?, formData, fullPrice }
+ * Body: { currency?, formData }
  *
- * Creates a Booking document with the collected form data, then creates a 
- * PayPal order for a fixed amount (deposit). 
+ * Creates a Booking document with the collected form data, then creates a
+ * PayPal order for the booking deposit from the 2026 pricing table.
  */
 export const createDirectOrder = async (req, res) => {
   try {
     const {
-      amount,
-      fullPrice,
       currency = process.env.PAYPAL_CURRENCY || "USD",
-      description = "Tour deposit",
       formData
     } = req.body;
 
-    if (!amount || isNaN(parseFloat(amount)) || parseFloat(amount) <= 0) {
-      return res
-        .status(400)
-        .json({ error: "A valid positive amount is required" });
+    const pricing = findTourPricing(formData?.tourPackage);
+
+    if (!pricing) {
+      return res.status(400).json({ error: "A valid tour package is required" });
     }
 
+    const requestedTourists = Number(formData?.totalTourists);
+
+    if (
+      !Number.isFinite(requestedTourists) ||
+      requestedTourists < MINIMUM_TOURISTS ||
+      requestedTourists > MAXIMUM_TOURISTS
+    ) {
+      return res
+        .status(400)
+        .json({ error: "Tour bookings require 1 to 10 people" });
+    }
+
+    const paymentBreakdown = calculatePaymentBreakdown(
+      pricing.pricePerPerson,
+      requestedTourists
+    );
+
     const expireAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours TTL
-    const balance = fullPrice - amount;
+    const description = `${pricing.title} booking deposit`;
 
     // Create a Booking document from the form data
     const newBooking = new Booking({
-      totalCost: fullPrice,
-      bookingPayment: amount,
-      balance: balance,
-      totalTourists: formData?.totalTourists || 1,
-      tourPackage: formData?.tourPackage || "Direct Booking",
+      totalCost: paymentBreakdown.totalPrice,
+      bookingPayment: paymentBreakdown.deposit,
+      balance: paymentBreakdown.balance,
+      totalTourists: paymentBreakdown.people,
+      tourPackage: pricing.title,
       comments: formData?.message || "",
       checkIn: formData?.dates || null,
       mainTourist: {
@@ -117,7 +142,7 @@ export const createDirectOrder = async (req, res) => {
 
     const order = await createPayPalOrder({
       bookingId: newBooking._id.toString(), 
-      depositAmount: parseFloat(amount),
+      depositAmount: paymentBreakdown.deposit,
       currency,
       description,
     });
@@ -297,6 +322,11 @@ export const paypalWebhook = async (req, res) => {
         },
         { new: true }
       );
+      const paypalProcessingFee = Math.max(
+        0,
+        updatedBooking.balance -
+          (updatedBooking.totalCost - updatedBooking.bookingPayment)
+      );
 
       // ── Confirmation email to client ───────────────────────────────────
       await sendEmail({
@@ -306,12 +336,15 @@ export const paypalWebhook = async (req, res) => {
           <h2>Hello ${updatedBooking.mainTourist.firstName},</h2>
           <p>Great news — your payment via PayPal was successful and your booking is now confirmed!</p>
           <ul>
-            <li><strong>Tour:</strong> ${updatedBooking.tour}</li>
+            <li><strong>Tour:</strong> ${updatedBooking.tourPackage || updatedBooking.tour}</li>
             <li><strong>Total tourists:</strong> ${updatedBooking.totalTourists}</li>
             <li><strong>Total cost:</strong> $${updatedBooking.totalCost}</li>
-            <li><strong>Deposit paid (30%):</strong> ${updatedBooking.paypal.currency} ${updatedBooking.paypal.amount}</li>
+            <li><strong>Booking deposit paid:</strong> ${updatedBooking.paypal.currency} ${updatedBooking.paypal.amount}</li>
+            <li><strong>PayPal charge added to cash balance:</strong> ${updatedBooking.paypal.currency} ${paypalProcessingFee}</li>
+            <li><strong>Remaining balance:</strong> ${updatedBooking.paypal.currency} ${updatedBooking.balance} cash only at the office</li>
             <li><strong>PayPal Capture ID:</strong> ${updatedBooking.paypal.captureId}</li>
           </ul>
+          <p>The PayPal charge is shown separately and added to your remaining cash balance.</p>
           <p>Thank you for choosing Expeditions George of the Jungle!</p>
         `,
       });
@@ -325,9 +358,11 @@ export const paypalWebhook = async (req, res) => {
           <p><strong>Booking ID:</strong> ${updatedBooking._id}</p>
           <p><strong>Client:</strong> ${updatedBooking.mainTourist.firstName} ${updatedBooking.mainTourist.surname}</p>
           <p><strong>Email:</strong> ${updatedBooking.mainTourist.email}</p>
-          <p><strong>Tour:</strong> ${updatedBooking.tour}</p>
+          <p><strong>Tour:</strong> ${updatedBooking.tourPackage || updatedBooking.tour}</p>
           <p><strong>Total tourists:</strong> ${updatedBooking.totalTourists}</p>
           <p><strong>Deposit paid:</strong> ${updatedBooking.paypal.currency} ${updatedBooking.paypal.amount}</p>
+          <p><strong>PayPal charge added to cash balance:</strong> ${updatedBooking.paypal.currency} ${paypalProcessingFee}</p>
+          <p><strong>Remaining balance:</strong> ${updatedBooking.paypal.currency} ${updatedBooking.balance} cash only at the office</p>
           <p><strong>PayPal Payer:</strong> ${updatedBooking.paypal.payerName} (${updatedBooking.paypal.payerEmail})</p>
           <p><strong>PayPal Capture ID:</strong> ${updatedBooking.paypal.captureId}</p>
         `,

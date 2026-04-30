@@ -10,6 +10,11 @@ function Faq() {
         "No, all remaining balances must be paid in cash in Colombian Pesos (COP) at our office. Make sure to exchange currency before arriving in Leticia, as card services are limited in the Amazon.",
     },
     {
+      question: "How does the booking payment work?",
+      answer:
+        "A 30% booking deposit is required to confirm your reservation. The PayPal charge is shown separately and added to the remaining balance, which is paid in person at the office, cash only.",
+    },
+    {
       question: "Is airport pickup and drop-off included?",
       answer:
         "Yes! Airport transfers are included in your tour package at no extra cost. Our team will greet you upon arrival.",
@@ -52,7 +57,7 @@ function Faq() {
         <h1 className={FaqStyle.text_title}>Frequent Ask Questions</h1>
         <p className={FaqStyle.text_description}>
           We’re here to help you. Contact us anytime. Ready to explore the
-          Amazon? Secure your spot with a 30% deposit today!
+          Amazon? Secure your spot with a booking deposit today.
         </p>
         <hr className={FaqStyle.hr} />
       </header>

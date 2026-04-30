@@ -2,12 +2,18 @@ import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { FiX } from "react-icons/fi";
 import { createDirectPaypalOrder } from "../assets/API/Services/PaypalService";
+import {
+  MAXIMUM_TOURISTS,
+  MINIMUM_TOURISTS,
+  calculateBookingDeposit,
+  calculatePayPalProcessingFee,
+  calculatePaymentBreakdown,
+} from "../constants/tourPricing";
 import page from "../styles/components/bookingModal.module.scss";
 
 export default function BookingModal({
   tourTitle,
-  tourPrice,
-  depositAmount,
+  pricePerPerson,
   onClose,
 }) {
   const [step, setStep] = useState(1);
@@ -21,10 +27,18 @@ export default function BookingModal({
     email: "",
     phone: "",
     tourPackage: tourTitle,
-    totalTourists: "1",
+    totalTourists: String(MINIMUM_TOURISTS),
     dates: "",
     message: "",
   });
+
+  const paymentBreakdown = calculatePaymentBreakdown(
+    pricePerPerson,
+    formData.totalTourists
+  );
+  const depositPerPerson = calculateBookingDeposit(pricePerPerson);
+  const paypalFeePerPerson = calculatePayPalProcessingFee(depositPerPerson);
+  const balancePerPerson = pricePerPerson - depositPerPerson + paypalFeePerPerson;
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -36,6 +50,15 @@ export default function BookingModal({
       setError("Please fill out the required fields (Name and Email).");
       return;
     }
+    const totalTourists = Number(formData.totalTourists);
+    if (
+      !Number.isFinite(totalTourists) ||
+      totalTourists < MINIMUM_TOURISTS ||
+      totalTourists > MAXIMUM_TOURISTS
+    ) {
+      setError("Tour bookings require 1 to 10 people.");
+      return;
+    }
     setError(null);
     setStep(2);
   };
@@ -45,11 +68,8 @@ export default function BookingModal({
     setError(null);
     try {
       const { approvalUrl } = await createDirectPaypalOrder({
-        amount: depositAmount,
-        fullPrice: tourPrice,
         formData: formData,
         currency: "USD",
-        description: `${tourTitle} — 30% deposit (full price $${tourPrice})`,
       });
       window.location.href = approvalUrl;
     } catch (err) {
@@ -155,11 +175,12 @@ export default function BookingModal({
             </div>
 
             <div className={page.form_group}>
-              <label>How many people will be going with you?</label>
+              <label>How many people will be going with you? (1 to 10)</label>
               <input
                 type="number"
                 name="totalTourists"
-                min="1"
+                min={MINIMUM_TOURISTS}
+                max={MAXIMUM_TOURISTS}
                 value={formData.totalTourists}
                 onChange={handleChange}
               />
@@ -193,25 +214,67 @@ export default function BookingModal({
           <div className={page.payment_step}>
             <div className={page.modal_breakdown}>
               <div className={page.modal_row}>
-                <span className={page.modal_label}>Full tour price</span>
-                <span className={page.modal_value}>${tourPrice.toFixed(2)} USD</span>
+                <span className={page.modal_label}>Price per person</span>
+                <span className={page.modal_value}>${pricePerPerson.toFixed(2)} USD</span>
               </div>
               <div className={page.modal_row}>
-                <span className={page.modal_label}>Deposit due today (30%)</span>
-                <span className={page.modal_deposit}>${depositAmount.toFixed(2)} USD</span>
+                <span className={page.modal_label}>Deposit per person</span>
+                <span className={page.modal_value}>
+                  ${depositPerPerson.toFixed(2)} USD
+                </span>
+              </div>
+              <div className={page.modal_row}>
+                <span className={page.modal_label}>PayPal charge per person</span>
+                <span className={page.modal_value}>
+                  ${paypalFeePerPerson.toFixed(2)} USD
+                </span>
+              </div>
+              <div className={page.modal_row}>
+                <span className={page.modal_label}>Cash balance per person</span>
+                <span className={page.modal_value}>
+                  ${balancePerPerson.toFixed(2)} USD
+                </span>
+              </div>
+              <div className={page.modal_row}>
+                <span className={page.modal_label}>Group size</span>
+                <span className={page.modal_value}>
+                  {paymentBreakdown.people} people
+                </span>
+              </div>
+              <div className={page.modal_row}>
+                <span className={page.modal_label}>Total tour price</span>
+                <span className={page.modal_value}>
+                  ${paymentBreakdown.totalPrice.toFixed(2)} USD
+                </span>
+              </div>
+              <div className={page.modal_row}>
+                <span className={page.modal_label}>
+                  Booking deposit due today
+                </span>
+                <span className={page.modal_deposit}>
+                  ${paymentBreakdown.deposit.toFixed(2)} USD
+                </span>
+              </div>
+              <div className={page.modal_row}>
+                <span className={page.modal_label}>PayPal charge added to cash balance</span>
+                <span className={page.modal_value}>
+                  ${paymentBreakdown.paypalProcessingFee.toFixed(2)} USD
+                </span>
               </div>
               <div className={page.modal_row + " " + page.modal_row_balance}>
-                <span className={page.modal_label}>Remaining balance</span>
+                <span className={page.modal_label}>Remaining cash balance</span>
                 <span className={page.modal_value}>
-                  ${(tourPrice - depositAmount).toFixed(2)} USD
+                  ${paymentBreakdown.balance.toFixed(2)} USD
                 </span>
               </div>
             </div>
 
             <p className={page.modal_note}>
-              Secure your place with a 30% deposit via PayPal. The remaining{" "}
-              <strong>${(tourPrice - depositAmount).toFixed(2)}</strong> is
-              payable on arrival in Leticia.
+              A 30% booking deposit is required to confirm your reservation. The
+              PayPal charge is shown separately and added to the remaining cash
+              balance. The remaining{" "}
+              <strong>${paymentBreakdown.balance.toFixed(2)}</strong> is paid
+              in person at the office, cash only.
             </p>
 
             <div className={page.modal_actions}>
@@ -243,7 +306,7 @@ export default function BookingModal({
                         Pay
                       </text>
                     </svg>
-                    Pay ${depositAmount.toFixed(2)} with PayPal
+                    Pay ${paymentBreakdown.deposit.toFixed(2)} with PayPal
                   </>
                 )}
               </button>
@@ -255,7 +318,7 @@ export default function BookingModal({
               </button>
             </div>
             <p className={page.modal_secure}>
-              🔒 Payments are processed securely by PayPal
+              Payments are processed securely by PayPal.
             </p>
           </div>
         )}
