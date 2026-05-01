@@ -23,7 +23,7 @@ function PaypalReturn() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const hasCaptured = useRef(false); // prevent double-fire in React StrictMode
-  const [status, setStatus] = useState("processing"); // "processing" | "error"
+  const [status, setStatus] = useState("processing"); // "processing" | "success" | "error"
 
   useEffect(() => {
     if (hasCaptured.current) return;
@@ -41,12 +41,12 @@ function PaypalReturn() {
     const capture = async () => {
       try {
         await capturePaypalOrder(orderId, bookingId);
-        // Give the webhook a moment then navigate to success
-        setTimeout(() => navigate("/success"), 1500);
+        setStatus("success");
+        setTimeout(() => navigate("/success", { replace: true }), 900);
       } catch (err) {
         console.error("PayPal capture failed:", err);
         setStatus("error");
-        setTimeout(() => navigate("/paypal/cancel"), 3000);
+        setTimeout(() => navigate("/paypal/cancel", { replace: true }), 3000);
       }
     };
 
@@ -64,6 +64,16 @@ function PaypalReturn() {
               Please wait while we confirm your payment with PayPal.
               <br />
               Do not close this tab.
+            </p>
+          </>
+        ) : status === "success" ? (
+          <>
+            <div style={styles.successIcon}>✓</div>
+            <h1 style={styles.heading}>Payment Successful</h1>
+            <p style={styles.sub}>
+              Your booking reservation is confirmed.
+              <br />
+              Redirecting you back to the website…
             </p>
           </>
         ) : (
@@ -128,6 +138,20 @@ const styles = {
     fontSize: "4rem",
     color: "#e05252",
     marginBottom: "1rem",
+  },
+  successIcon: {
+    width: "72px",
+    height: "72px",
+    borderRadius: "50%",
+    background: "linear-gradient(135deg, #7ea15b, #5c7a40)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: "0 auto 1.5rem",
+    color: "#fff",
+    fontSize: "3rem",
+    fontWeight: 700,
+    lineHeight: 1,
   },
   sub: {
     fontSize: "1.5rem",

@@ -83,6 +83,20 @@ const getTourDetailsPath = (name = "") => {
   return null;
 };
 
+const getTourDisplayName = (name = "") =>
+  normalizeTourName(name).includes("AYAHUASCA") ? "AYAHUASCA EXPERIENCE" : name;
+
+const renderTourTitle = (displayName = "") => {
+  if (displayName !== "AYAHUASCA EXPERIENCE") return displayName;
+
+  return (
+    <>
+      <span>AYAHUASCA</span>
+      <span>EXPERIENCE</span>
+    </>
+  );
+};
+
 function CardsSection() {
   const [tours, setTours] = useState([]);
   const location = useLocation();
@@ -149,6 +163,9 @@ function CardsSection() {
       <article className={Cards.cards_container}>
         {tours.map((tour, index) => {
           const detailsPath = getTourDetailsPath(tour.name);
+          const displayName = getTourDisplayName(tour.name);
+          const isAyahuascaExperience =
+            displayName === "AYAHUASCA EXPERIENCE";
 
           return (
           <motion.div
@@ -174,7 +191,13 @@ function CardsSection() {
               />
             </figure>
             <div className={Cards.card_text_container}>
-              <h2 className={Cards.card_title}>{tour.name}</h2>
+              <h2
+                className={`${Cards.card_title} ${
+                  isAyahuascaExperience ? Cards.card_title_stacked : ""
+                }`}
+              >
+                {renderTourTitle(displayName)}
+              </h2>
               <p className={Cards.card_description}>{tour.description}</p>
               <button
                 className={Cards.card_button}

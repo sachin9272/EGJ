@@ -87,7 +87,7 @@ function FourDaysThreeNights() {
             ))}
           </div>
           <div className={page.hero_actions}>
-            <button className={page.primary_button} onClick={openModal}>Book Your Registration</button>
+            <button className={page.primary_button} onClick={openModal}>Booking Reservation</button>
             <a className={page.secondary_button} href="#itinerary">See itinerary <FiArrowDown /></a>
           </div>
         </motion.section>
@@ -142,7 +142,7 @@ function FourDaysThreeNights() {
           <h2>Reserve your spot.<span>Four days woven into the rainforest.</span></h2>
           <p className={page.cta_copy}>A 30% booking deposit confirms your reservation. The PayPal charge is shown separately and added to the remaining balance, which is paid at the office in cash only.</p>
           <div className={page.hero_actions}>
-            <button className={page.primary_button} onClick={openModal}>Book Your Registration</button>
+            <button className={page.primary_button} onClick={openModal}>Booking Reservation</button>
             <a className={page.secondary_button} href={socialLinks.email} target="_blank" rel="noopener noreferrer"><FiMail /> Email us</a>
           </div>
         </motion.section>

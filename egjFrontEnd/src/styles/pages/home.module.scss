@@ -1,16 +1,17 @@
 @use "../variables.scss" as *;
 .home {
   &_container {
-    background-image: url("../../assets/images/Home Page.jpeg");
+    background-color: #050605;
+    background-image: url("../../assets/images/home-hero-1920.webp");
     background-size: cover;
     background-position: 50%;
     background-repeat: no-repeat;
     min-height: 100vh;
   }
 
-  @media (min-width: $screen-xl) {
+  @media (max-width: $screen-small) {
     &_container {
-      background-image: url("../../assets/images/Home Page.jpeg");
+      background-image: url("../../assets/images/home-hero-960.webp");
     }
   }
 }

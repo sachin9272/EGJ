@@ -7,7 +7,6 @@ import { getUser } from "./assets/API/Services/UserService";
 import useAuthStore from "./store/auth";
 import Footer from "./components/Footer";
 import TourExpeditioins from "./pages/TourExpeditioins";
-import Experiences from "./pages/Experiences";
 import PaypalReturn from "./pages/PaypalReturn";
 import PaypalCancel from "./pages/PaypalCancel";
 import BookingSuccess from "./pages/BookingSuccess";
@@ -17,6 +16,9 @@ import TwoDaysOneNight from "./pages/TwoDaysOneNight";
 import ThreeDaysTwoNights from "./pages/ThreeDaysTwoNights";
 import FourDaysThreeNights from "./pages/FourDaysThreeNights";
 import FiveDaysFourNights from "./pages/FiveDaysFourNights";
+import Contact from "./pages/Contact";
+import RefundPolicy from "./pages/RefundPolicy";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 function ScrollToTop() {
   const location = useLocation();
@@ -81,8 +83,9 @@ function App() {
           <Route path="/tour/3-days-2-nights" element={<ThreeDaysTwoNights />} />
           <Route path="/tour/4-days-3-nights" element={<FourDaysThreeNights />} />
           <Route path="/tour/5-days-4-nights" element={<FiveDaysFourNights />} />
-          <Route path="/experiences" element={<Experiences />} />
-
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           {/* Shared post-payment pages */}
           <Route path="/success" element={<BookingSuccess />} />
 

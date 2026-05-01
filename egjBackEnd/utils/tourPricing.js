@@ -4,6 +4,8 @@ export const BOOKING_DEPOSIT_RATE = 0.3;
 export const PAYPAL_PROCESSING_MULTIPLIER = 1.08;
 export const PAYPAL_PROCESSING_RATE = PAYPAL_PROCESSING_MULTIPLIER - 1;
 
+const roundCurrency = (amount) => Math.round(amount * 100) / 100;
+
 const normalizeTourName = (name = "") =>
   name
     .normalize("NFD")
@@ -55,10 +57,10 @@ export const findTourPricing = (tourName = "") => {
 };
 
 export const calculateBookingDeposit = (totalPrice) =>
-  Math.round(totalPrice * BOOKING_DEPOSIT_RATE);
+  roundCurrency(totalPrice * BOOKING_DEPOSIT_RATE);
 
 export const calculatePayPalProcessingFee = (deposit) =>
-  Math.round(deposit * PAYPAL_PROCESSING_RATE);
+  roundCurrency(deposit * PAYPAL_PROCESSING_RATE);
 
 export const calculatePaymentBreakdown = (pricePerPerson, totalTourists) => {
   const people = Math.min(
@@ -68,12 +70,14 @@ export const calculatePaymentBreakdown = (pricePerPerson, totalTourists) => {
   const totalPrice = pricePerPerson * people;
   const deposit = calculateBookingDeposit(totalPrice);
   const paypalProcessingFee = calculatePayPalProcessingFee(deposit);
+  const dueToday = roundCurrency(deposit + paypalProcessingFee);
 
   return {
     people,
     totalPrice,
     deposit,
     paypalProcessingFee,
-    balance: totalPrice - deposit + paypalProcessingFee,
+    dueToday,
+    balance: roundCurrency(totalPrice - deposit),
   };
 };

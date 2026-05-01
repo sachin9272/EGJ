@@ -21,6 +21,7 @@ html {
 
   min-height: 100vh;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 
   @media (max-width: $screen-medium) {
     font-size: 80%;

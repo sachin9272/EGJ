@@ -13,9 +13,9 @@ function BookingSuccess() {
         <div style={styles.checkCircle}>
           <span style={styles.checkMark}>✓</span>
         </div>
-        <h1 style={styles.heading}>Booking Confirmed!</h1>
+        <h1 style={styles.heading}>Payment Successful</h1>
         <p style={styles.sub}>
-          Your payment was successful and your expedition is booked. 🌿
+          Your booking reservation is confirmed.
           <br />
           A confirmation email has been sent to your inbox.
         </p>

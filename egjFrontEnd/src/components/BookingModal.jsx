@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { createDirectPaypalOrder } from "../assets/API/Services/PaypalService";
 import {
   MAXIMUM_TOURISTS,
   MINIMUM_TOURISTS,
+  BOOKING_DEPOSIT_RATE,
+  PAYPAL_PROCESSING_RATE,
   calculateBookingDeposit,
   calculatePayPalProcessingFee,
   calculatePaymentBreakdown,
@@ -19,6 +21,35 @@ export default function BookingModal({
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const scrollY = window.scrollY;
+    const originalBodyStyle = {
+      position: document.body.style.position,
+      top: document.body.style.top,
+      left: document.body.style.left,
+      right: document.body.style.right,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow,
+    };
+
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.position = originalBodyStyle.position;
+      document.body.style.top = originalBodyStyle.top;
+      document.body.style.left = originalBodyStyle.left;
+      document.body.style.right = originalBodyStyle.right;
+      document.body.style.width = originalBodyStyle.width;
+      document.body.style.overflow = originalBodyStyle.overflow;
+      window.scrollTo(0, scrollY);
+    };
+  }, []);
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -38,7 +69,9 @@ export default function BookingModal({
   );
   const depositPerPerson = calculateBookingDeposit(pricePerPerson);
   const paypalFeePerPerson = calculatePayPalProcessingFee(depositPerPerson);
-  const balancePerPerson = pricePerPerson - depositPerPerson + paypalFeePerPerson;
+  const remainingBalancePerPerson = pricePerPerson - depositPerPerson;
+  const depositPercent = Math.round(BOOKING_DEPOSIT_RATE * 100);
+  const paypalFeePercent = Math.round(PAYPAL_PROCESSING_RATE * 100);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -214,31 +247,35 @@ export default function BookingModal({
           <div className={page.payment_step}>
             <div className={page.modal_breakdown}>
               <div className={page.modal_row}>
-                <span className={page.modal_label}>Price per person</span>
-                <span className={page.modal_value}>${pricePerPerson.toFixed(2)} USD</span>
+                <span className={page.modal_label}>Group size</span>
+                <span className={page.modal_value}>
+                  {paymentBreakdown.people} people
+                </span>
               </div>
               <div className={page.modal_row}>
-                <span className={page.modal_label}>Deposit per person</span>
+                <span className={page.modal_label}>Price per person</span>
+                <span className={page.modal_value}>
+                  ${pricePerPerson.toFixed(2)} USD
+                </span>
+              </div>
+              <div className={page.modal_row}>
+                <span className={page.modal_label}>Deposit per person ({depositPercent}%)</span>
                 <span className={page.modal_value}>
                   ${depositPerPerson.toFixed(2)} USD
                 </span>
               </div>
               <div className={page.modal_row}>
-                <span className={page.modal_label}>PayPal charge per person</span>
+                <span className={page.modal_label}>PayPal fee per person ({paypalFeePercent}%)</span>
                 <span className={page.modal_value}>
                   ${paypalFeePerPerson.toFixed(2)} USD
                 </span>
               </div>
-              <div className={page.modal_row}>
-                <span className={page.modal_label}>Cash balance per person</span>
-                <span className={page.modal_value}>
-                  ${balancePerPerson.toFixed(2)} USD
+              <div className={page.modal_row + " " + page.modal_row_balance}>
+                <span className={page.modal_label}>
+                  Booking reservation charges
                 </span>
-              </div>
-              <div className={page.modal_row}>
-                <span className={page.modal_label}>Group size</span>
-                <span className={page.modal_value}>
-                  {paymentBreakdown.people} people
+                <span className={page.modal_deposit}>
+                  ${paymentBreakdown.dueToday.toFixed(2)} USD
                 </span>
               </div>
               <div className={page.modal_row}>
@@ -248,21 +285,13 @@ export default function BookingModal({
                 </span>
               </div>
               <div className={page.modal_row}>
-                <span className={page.modal_label}>
-                  Booking deposit due today
-                </span>
-                <span className={page.modal_deposit}>
-                  ${paymentBreakdown.deposit.toFixed(2)} USD
+                <span className={page.modal_label}>Remaining balance per person</span>
+                <span className={page.modal_value}>
+                  ${remainingBalancePerPerson.toFixed(2)} USD
                 </span>
               </div>
               <div className={page.modal_row}>
-                <span className={page.modal_label}>PayPal charge added to cash balance</span>
-                <span className={page.modal_value}>
-                  ${paymentBreakdown.paypalProcessingFee.toFixed(2)} USD
-                </span>
-              </div>
-              <div className={page.modal_row + " " + page.modal_row_balance}>
-                <span className={page.modal_label}>Remaining cash balance</span>
+                <span className={page.modal_label}>Remaining total cash balance</span>
                 <span className={page.modal_value}>
                   ${paymentBreakdown.balance.toFixed(2)} USD
                 </span>
@@ -270,11 +299,10 @@ export default function BookingModal({
             </div>
 
             <p className={page.modal_note}>
-              A 30% booking deposit is required to confirm your reservation. The
-              PayPal charge is shown separately and added to the remaining cash
-              balance. The remaining{" "}
-              <strong>${paymentBreakdown.balance.toFixed(2)}</strong> is paid
-              in person at the office, cash only.
+              A {depositPercent}% booking deposit plus the PayPal fee is required
+              to confirm your reservation. The remaining{" "}
+              <strong>${paymentBreakdown.balance.toFixed(2)}</strong> is paid in
+              person at the office, cash only.
             </p>
 
             <div className={page.modal_actions}>
@@ -306,7 +334,7 @@ export default function BookingModal({
                         Pay
                       </text>
                     </svg>
-                    Pay ${paymentBreakdown.deposit.toFixed(2)} with PayPal
+                    Pay ${paymentBreakdown.dueToday.toFixed(2)} with PayPal
                   </>
                 )}
               </button>

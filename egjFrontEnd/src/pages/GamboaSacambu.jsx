@@ -153,7 +153,7 @@ function GamboaSacambu() {
 
           <div className={page.hero_actions}>
             <button className={page.primary_button} onClick={openModal}>
-              Book Your Registration
+              Booking Reservation
             </button>
             <a className={page.secondary_button} href="#itinerary">
               See itinerary <FiArrowDown />
@@ -259,7 +259,7 @@ function GamboaSacambu() {
           </p>
           <div className={page.hero_actions}>
             <button className={page.primary_button} onClick={openModal}>
-              Book Your Registration
+              Booking Reservation
             </button>
             <a
               className={page.secondary_button}

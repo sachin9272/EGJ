@@ -13,6 +13,45 @@ import {
   findTourPricing,
 } from "../utils/tourPricing.js";
 
+const escapeHtml = (value = "") =>
+  String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+const getBookingRecipients = () => {
+  const recipients =
+    process.env.CONTACT_EMAIL_TO || process.env.ADMIN_EMAIL || process.env.EMAIL_USER;
+
+  return recipients
+    ?.split(",")
+    .map((email) => email.trim())
+    .filter(Boolean);
+};
+
+const formatDate = (value) => {
+  if (!value) return "Not provided";
+
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Not provided";
+
+  return date.toISOString().slice(0, 10);
+};
+
+const formatMoney = (currency, value) =>
+  `${escapeHtml(currency || "USD")} ${Number(value || 0).toFixed(2)}`;
+
+const bookingRow = (label, value) => `
+  <tr>
+    <td style="padding:12px 0;border-bottom:1px solid rgba(244,238,217,0.16);">
+      <p style="margin:0 0 5px;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:#d9b650;">${escapeHtml(label)}</p>
+      <p style="margin:0;font-size:16px;line-height:1.5;color:#f4eed9;word-break:break-word;">${escapeHtml(value || "Not provided")}</p>
+    </td>
+  </tr>
+`;
+
 // ─── 1. CREATE PAYPAL ORDER ───────────────────────────────────────────────
 /**
  * POST /api/v1/paypal/create-order
@@ -116,12 +155,12 @@ export const createDirectOrder = async (req, res) => {
     );
 
     const expireAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours TTL
-    const description = `${pricing.title} booking deposit`;
+    const description = `${pricing.title} booking reservation`;
 
     // Create a Booking document from the form data
     const newBooking = new Booking({
       totalCost: paymentBreakdown.totalPrice,
-      bookingPayment: paymentBreakdown.deposit,
+      bookingPayment: paymentBreakdown.dueToday,
       balance: paymentBreakdown.balance,
       totalTourists: paymentBreakdown.people,
       tourPackage: pricing.title,
@@ -142,7 +181,7 @@ export const createDirectOrder = async (req, res) => {
 
     const order = await createPayPalOrder({
       bookingId: newBooking._id.toString(), 
-      depositAmount: paymentBreakdown.deposit,
+      depositAmount: paymentBreakdown.dueToday,
       currency,
       description,
     });
@@ -327,6 +366,25 @@ export const paypalWebhook = async (req, res) => {
         updatedBooking.balance -
           (updatedBooking.totalCost - updatedBooking.bookingPayment)
       );
+      const bookingRecipients = getBookingRecipients();
+      const adminBookingRows = [
+        ["Booking ID", updatedBooking._id],
+        ["Tour package", updatedBooking.tourPackage || updatedBooking.tour],
+        ["Tour date", formatDate(updatedBooking.checkIn)],
+        ["Group size", `${updatedBooking.totalTourists} people`],
+        ["First name", updatedBooking.mainTourist.firstName],
+        ["Last name", updatedBooking.mainTourist.surname],
+        ["Email", updatedBooking.mainTourist.email],
+        ["Phone | Whatsapp", updatedBooking.mainTourist.phoneNumber],
+        ["Nationality", updatedBooking.mainTourist.nacionality],
+        ["Message", updatedBooking.comments],
+        ["Total tour price", formatMoney(updatedBooking.paypal.currency, updatedBooking.totalCost)],
+        ["Booking reservation paid", formatMoney(updatedBooking.paypal.currency, updatedBooking.paypal.amount)],
+        ["PayPal fee included in today's payment", formatMoney(updatedBooking.paypal.currency, paypalProcessingFee)],
+        ["Remaining cash balance", formatMoney(updatedBooking.paypal.currency, updatedBooking.balance)],
+        ["PayPal payer", `${updatedBooking.paypal.payerName || "Not provided"} (${updatedBooking.paypal.payerEmail || "Not provided"})`],
+        ["PayPal capture ID", updatedBooking.paypal.captureId],
+      ];
 
       // ── Confirmation email to client ───────────────────────────────────
       await sendEmail({
@@ -339,34 +397,55 @@ export const paypalWebhook = async (req, res) => {
             <li><strong>Tour:</strong> ${updatedBooking.tourPackage || updatedBooking.tour}</li>
             <li><strong>Total tourists:</strong> ${updatedBooking.totalTourists}</li>
             <li><strong>Total cost:</strong> $${updatedBooking.totalCost}</li>
-            <li><strong>Booking deposit paid:</strong> ${updatedBooking.paypal.currency} ${updatedBooking.paypal.amount}</li>
-            <li><strong>PayPal charge added to cash balance:</strong> ${updatedBooking.paypal.currency} ${paypalProcessingFee}</li>
+            <li><strong>Booking reservation paid:</strong> ${updatedBooking.paypal.currency} ${updatedBooking.paypal.amount}</li>
+            <li><strong>PayPal fee included in today's payment:</strong> ${updatedBooking.paypal.currency} ${paypalProcessingFee}</li>
             <li><strong>Remaining balance:</strong> ${updatedBooking.paypal.currency} ${updatedBooking.balance} cash only at the office</li>
             <li><strong>PayPal Capture ID:</strong> ${updatedBooking.paypal.captureId}</li>
           </ul>
-          <p>The PayPal charge is shown separately and added to your remaining cash balance.</p>
+          <p>Your remaining cash balance is paid in person at the office.</p>
           <p>Thank you for choosing Expeditions George of the Jungle!</p>
         `,
       });
 
       // ── Notification email to admin ────────────────────────────────────
-      await sendEmail({
-        to: process.env.ADMIN_EMAIL,
-        subject: "New Booking Received (PayPal)",
-        html: `
-          <h2>New PayPal Booking!</h2>
-          <p><strong>Booking ID:</strong> ${updatedBooking._id}</p>
-          <p><strong>Client:</strong> ${updatedBooking.mainTourist.firstName} ${updatedBooking.mainTourist.surname}</p>
-          <p><strong>Email:</strong> ${updatedBooking.mainTourist.email}</p>
-          <p><strong>Tour:</strong> ${updatedBooking.tourPackage || updatedBooking.tour}</p>
-          <p><strong>Total tourists:</strong> ${updatedBooking.totalTourists}</p>
-          <p><strong>Deposit paid:</strong> ${updatedBooking.paypal.currency} ${updatedBooking.paypal.amount}</p>
-          <p><strong>PayPal charge added to cash balance:</strong> ${updatedBooking.paypal.currency} ${paypalProcessingFee}</p>
-          <p><strong>Remaining balance:</strong> ${updatedBooking.paypal.currency} ${updatedBooking.balance} cash only at the office</p>
-          <p><strong>PayPal Payer:</strong> ${updatedBooking.paypal.payerName} (${updatedBooking.paypal.payerEmail})</p>
-          <p><strong>PayPal Capture ID:</strong> ${updatedBooking.paypal.captureId}</p>
-        `,
-      });
+      if (bookingRecipients?.length) {
+        await sendEmail({
+          to: bookingRecipients.join(","),
+          replyTo: updatedBooking.mainTourist.email,
+          subject: `Paid tour booking - ${updatedBooking.tourPackage || "Expedition"}`,
+          html: `
+            <div style="margin:0;padding:0;background:#061008;font-family:Arial,Helvetica,sans-serif;color:#f4eed9;">
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#061008;padding:24px 12px;">
+                <tr>
+                  <td align="center">
+                    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:760px;border:1px solid rgba(244,238,217,0.35);border-radius:16px;overflow:hidden;background:#10180d;">
+                      <tr>
+                        <td style="padding:28px 28px 20px;background:linear-gradient(135deg,#1e9146,#79a81c);">
+                          <p style="margin:0 0 8px;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#f4eed9;">Successful PayPal Payment</p>
+                          <h1 style="margin:0;font-size:30px;line-height:1.15;color:#ffffff;">Paid Tour Booking Received</h1>
+                          <p style="margin:10px 0 0;font-size:16px;color:#f4eed9;">A customer completed payment for Reserve Your Spot. Full form details are below.</p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:24px 28px;">
+                          <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                            ${adminBookingRows.map(([label, value]) => bookingRow(label, value)).join("")}
+                          </table>
+                          <p style="margin:22px 0 0;font-size:14px;line-height:1.6;color:rgba(244,238,217,0.76);">
+                            This email is sent only after PayPal confirms the payment capture.
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          `,
+        });
+      } else {
+        console.error("PayPal booking email skipped: no recipient configured.");
+      }
 
       console.log(
         `PayPal webhook: booking ${booking._id} confirmed. Capture: ${capture.id}`

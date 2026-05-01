@@ -23,7 +23,7 @@ function Footer() {
     linkedin:
       "https://www.linkedin.com/company/expeditions-george-of-the-jungle-official/",
     youtube: "https://www.youtube.com/@expeditionsgeorgeofthejungle",
-    whatsapp: "https://wa.me/573175299539",
+    whatsapp: "https://wa.me/573208996144",
     email: "expeditionsgeorgeofthejungle@gmail.com",
   };
 
@@ -67,15 +67,18 @@ function Footer() {
               <li>
                 <a href="/tour">Tour Expeditions</a>
               </li>
-              <li>Experience</li>
-            </ul>
-            <ul className={footer.quick_links}>
-              <li>Refund Policy</li>
-              <li>Privacy Policy</li>
               <li>
                 <a href="/" onClick={handleAboutClick}>
                   About
                 </a>
+              </li>
+            </ul>
+            <ul className={footer.quick_links}>
+              <li>
+                <a href="/refund-policy">Refund Policy</a>
+              </li>
+              <li>
+                <a href="/privacy-policy">Privacy Policy</a>
               </li>
             </ul>
           </div>
@@ -175,7 +178,7 @@ function Footer() {
                   aria-label="Whatsapp"
                   rel="noopener noreferrer"
                 >
-                  <IoLogoWhatsapp />+ 57 (317) 529-9539{" "}
+                  <IoLogoWhatsapp />+57 (320) 899-6144{" "}
                 </a>
               </li>
             </ul>
@@ -191,7 +194,7 @@ function Footer() {
       <hr className={footer.separator_full} />
       <div className={footer.copyright_container}>
         <p className={footer.copyright_text}>
-          ©2022 COPYRIGHT. EXPEDITIONS GEORGE OF THE JUNGLE ALL RIGHTS RESERVED
+          ©2026 COPYRIGHT. EXPEDITIONS GEORGE OF THE JUNGLE ALL RIGHTS RESERVED
         </p>
       </div>
     </footer>
