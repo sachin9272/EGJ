@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import { motion } from "motion/react";
@@ -96,18 +96,14 @@ export default function TravelWithUsSection() {
         className={travel.cards}
       >
         <Swiper
-          style={{ height: "31.5rem" }}
-          modules={[Navigation]}
+          modules={[Navigation, Pagination]}
           loop={true}
-          spaceBetween={15}
-          slidesPerView={4}
+          spaceBetween={16}
+          slidesPerView={1}
           breakpoints={{
-            1280: { slidesPerView: 4 },
-            1200: { slidesPerView: 3 },
-            1000: { slidesPerView: 2 },
-            768: { slidesPerView: 2 },
-            480: { slidesPerView: 1 },
-            360: { slidesPerView: 1 },
+            640: { slidesPerView: 2, spaceBetween: 18 },
+            1000: { slidesPerView: 3, spaceBetween: 18 },
+            1280: { slidesPerView: 4, spaceBetween: 20 },
           }}
           navigation={{
             prevEl: prevRef.current,

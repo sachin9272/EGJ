@@ -19,6 +19,7 @@ import FiveDaysFourNights from "./pages/FiveDaysFourNights";
 import Contact from "./pages/Contact";
 import RefundPolicy from "./pages/RefundPolicy";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import About from "./pages/About";
 
 function ScrollToTop() {
   const location = useLocation();
@@ -76,6 +77,7 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/tour" element={<TourExpeditioins />} />
           <Route path="/tour/ayahuasca" element={<Ayahuasca />} />
           <Route path="/tour/gamboa-sacambu" element={<GamboaSacambu />} />

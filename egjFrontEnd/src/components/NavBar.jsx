@@ -1,5 +1,5 @@
-import { useUser, UserButton, useSession } from "@clerk/clerk-react";
-import React, { useEffect, useState } from "react";
+import { useUser, UserButton } from "@clerk/clerk-react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaBook } from "react-icons/fa";
 import navBar from "../styles/components/navBar.module.scss";
@@ -8,11 +8,13 @@ import { AnimatePresence, motion } from "motion/react";
 
 import { IoMenu, IoClose } from "react-icons/io5";
 
+const MotionDiv = motion.div;
+
 const Navbar = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
 
   const navLinks = [
-    { name: "About", path: "/" },
+    { name: "About", path: "/about" },
     { name: "Tour Expeditions", path: "/tour" },
     { name: "Contact", path: "/contact" },
   ];
@@ -52,23 +54,8 @@ const Navbar = () => {
     navigate("/", { state: { scrollToTop: true } });
   };
 
-  const handleNavLinkClick = (event, link) => {
-    if (link.name !== "About") {
-      setIsMenuOpen(false);
-      return;
-    }
-
+  const handleNavLinkClick = () => {
     setIsMenuOpen(false);
-    event.preventDefault();
-
-    if (location.pathname === "/") {
-      document
-        .getElementById("why-travel-with-us")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-
-    navigate("/", { state: { scrollToSection: "why-travel-with-us" } });
   };
 
   // React.useEffect(() => {
@@ -83,8 +70,18 @@ const Navbar = () => {
     <div className={navBar.navbar_container}>
       <nav className={navBar.navbar}>
         {/** Logo*/}
-        <Link to="/" className={navBar.logo} onClick={handleLogoClick}>
-          <img src="/Logo.png" alt="Logo" className={navBar.logo_Image} />
+        <Link
+          to="/"
+          className={`${navBar.logo} notranslate`}
+          onClick={handleLogoClick}
+          translate="no"
+        >
+          <img
+            src="/Logo.png"
+            alt="Logo"
+            className={`${navBar.logo_Image} notranslate`}
+            translate="no"
+          />
         </Link>
 
         {/* Desktop Nav */}
@@ -95,7 +92,7 @@ const Navbar = () => {
                 <a
                   className={navBar.nav_link}
                   href={link.path}
-                  onClick={(event) => handleNavLinkClick(event, link)}
+                  onClick={handleNavLinkClick}
                 >
                   {link.name}
                 </a>
@@ -127,14 +124,24 @@ const Navbar = () => {
       </nav>
       {/* Hamburguer menu for mobile */}
       <nav className={navBar.navbar_mobile}>
-        <Link to="/" className={navBar.logo} onClick={handleLogoClick}>
-          <img src="/Logo.png" alt="Logo" className={navBar.logo_Image} />
+        <Link
+          to="/"
+          className={`${navBar.logo} notranslate`}
+          onClick={handleLogoClick}
+          translate="no"
+        >
+          <img
+            src="/Logo.png"
+            alt="Logo"
+            className={`${navBar.logo_Image} notranslate`}
+            translate="no"
+          />
         </Link>
 
         {/* SIDE BAR */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{
@@ -166,7 +173,7 @@ const Navbar = () => {
                       <a
                         className={navBar.nav_link}
                         href={link.path}
-                        onClick={(event) => handleNavLinkClick(event, link)}
+                        onClick={handleNavLinkClick}
                       >
                         {link.name}
                       </a>
@@ -199,7 +206,7 @@ const Navbar = () => {
                   </UserButton>
                 ) : null}
               </div>
-            </motion.div>
+            </MotionDiv>
           )}
         </AnimatePresence>
 

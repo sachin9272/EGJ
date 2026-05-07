@@ -5,16 +5,12 @@ import {
   FaSquareYoutube,
 } from "react-icons/fa6";
 import { FaTripadvisor } from "react-icons/fa";
-import { useLocation, useNavigate } from "react-router-dom";
 import footer from "../styles/components/footer.module.scss";
 
 import { MdEmail } from "react-icons/md";
 import { IoLogoWhatsapp } from "react-icons/io";
 
 function Footer() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
   const socialLinks = {
     facebook: "https://www.facebook.com/expeditionsgeorgeofthejungle",
     tripAdvisor:
@@ -35,25 +31,17 @@ function Footer() {
     );
   };
 
-  const handleAboutClick = (event) => {
-    event.preventDefault();
-
-    if (location.pathname === "/") {
-      document
-        .getElementById("why-travel-with-us")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-
-    navigate("/", { state: { scrollToSection: "why-travel-with-us" } });
-  };
-
   return (
     <footer className={footer.footer_container}>
       <div className={footer.footer_content_top}>
         {/* LOGO */}
-        <div className={footer.logo_container}>
-          <img className={footer.logo_image} src="/Logo.png" alt="Logo" />
+        <div className={`${footer.logo_container} notranslate`} translate="no">
+          <img
+            className={`${footer.logo_image} notranslate`}
+            src="/Logo.png"
+            alt="Logo"
+            translate="no"
+          />
         </div>
         <hr className={footer.separator} />
         <div>
@@ -65,12 +53,10 @@ function Footer() {
               </li>
 
               <li>
-                <a href="/tour">Tour Expeditions</a>
+                <a href="/about">About</a>
               </li>
               <li>
-                <a href="/" onClick={handleAboutClick}>
-                  About
-                </a>
+                <a href="/tour">Tour Expeditions</a>
               </li>
             </ul>
             <ul className={footer.quick_links}>

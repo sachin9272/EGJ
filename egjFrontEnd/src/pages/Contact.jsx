@@ -191,12 +191,16 @@ function Contact() {
               </>
             );
 
+            const itemClassName = `${contact.info_item} ${
+              title === "Email" ? contact.email_item : ""
+            }`;
+
             return href ? (
-              <a key={title} href={href} className={contact.info_item}>
+              <a key={title} href={href} className={itemClassName}>
                 {content}
               </a>
             ) : (
-              <div key={title} className={contact.info_item}>
+              <div key={title} className={itemClassName}>
                 {content}
               </div>
             );
