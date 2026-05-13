@@ -181,8 +181,16 @@ const buildInvoiceEmail = ({ booking, title, intro, audience }) => {
 };
 
 const sendBookingInvoiceEmails = async (booking) => {
+  const customerRecipients = [
+    booking.mainTourist.email,
+    booking.paypal?.payerEmail,
+  ]
+    .map((email) => email?.trim())
+    .filter(Boolean)
+    .filter((email, index, emails) => emails.indexOf(email) === index);
+
   await sendEmail({
-    to: booking.mainTourist.email,
+    to: customerRecipients.join(","),
     subject: `Your booking is confirmed - ${booking.tourPackage || "Expedition"}`,
     html: buildInvoiceEmail({
       booking,
