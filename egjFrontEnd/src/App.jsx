@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { getUser } from "./assets/API/Services/UserService";
 import useAuthStore from "./store/auth";
 import Footer from "./components/Footer";
+import GoogleReviewsCarousel from "./components/GoogleReviewsCarousel";
 import TourExpeditioins from "./pages/TourExpeditioins";
 import PaypalReturn from "./pages/PaypalReturn";
 import PaypalCancel from "./pages/PaypalCancel";
@@ -97,6 +98,7 @@ function App() {
           <Route path="/paypal/return" element={<PaypalReturn />} />
           <Route path="/paypal/cancel" element={<PaypalCancel />} />
         </Routes>
+        <GoogleReviewsCarousel />
         <Footer />
       </main>
     </>
