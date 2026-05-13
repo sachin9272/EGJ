@@ -31,6 +31,11 @@ export const TOUR_PRICES_2026 = {
     title: "5 Days & 4 Nights",
     pricePerPerson: 510,
   },
+  LIVE_PAYMENT_TEST: {
+    title: "Live Payment Test Tour",
+    pricePerPerson: 1,
+    payInFull: true,
+  },
 };
 
 export const calculateBookingDeposit = (totalPrice) =>
@@ -39,12 +44,28 @@ export const calculateBookingDeposit = (totalPrice) =>
 export const calculatePayPalProcessingFee = (deposit) =>
   roundCurrency(deposit * PAYPAL_PROCESSING_RATE);
 
-export const calculatePaymentBreakdown = (pricePerPerson, totalTourists) => {
+export const calculatePaymentBreakdown = (
+  pricePerPerson,
+  totalTourists,
+  options = {}
+) => {
   const people = Math.min(
     Math.max(Number(totalTourists) || MINIMUM_TOURISTS, MINIMUM_TOURISTS),
     MAXIMUM_TOURISTS
   );
   const totalPrice = pricePerPerson * people;
+
+  if (options.payInFull) {
+    return {
+      people,
+      totalPrice,
+      deposit: totalPrice,
+      paypalProcessingFee: 0,
+      dueToday: totalPrice,
+      balance: 0,
+    };
+  }
+
   const deposit = calculateBookingDeposit(totalPrice);
   const paypalProcessingFee = calculatePayPalProcessingFee(deposit);
   const dueToday = roundCurrency(deposit + paypalProcessingFee);

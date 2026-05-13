@@ -16,6 +16,8 @@ import page from "../styles/components/bookingModal.module.scss";
 export default function BookingModal({
   tourTitle,
   pricePerPerson,
+  payInFull = false,
+  fixedTotalTourists = null,
   onClose,
 }) {
   const [step, setStep] = useState(1);
@@ -58,19 +60,26 @@ export default function BookingModal({
     email: "",
     phone: "",
     tourPackage: tourTitle,
-    totalTourists: String(MINIMUM_TOURISTS),
+    totalTourists: String(fixedTotalTourists || MINIMUM_TOURISTS),
     dates: "",
     message: "",
   });
 
   const paymentBreakdown = calculatePaymentBreakdown(
     pricePerPerson,
-    formData.totalTourists
+    formData.totalTourists,
+    { payInFull }
   );
-  const depositPerPerson = calculateBookingDeposit(pricePerPerson);
-  const paypalFeePerPerson = calculatePayPalProcessingFee(depositPerPerson);
-  const remainingBalancePerPerson = pricePerPerson - depositPerPerson;
-  const depositPercent = Math.round(BOOKING_DEPOSIT_RATE * 100);
+  const depositPerPerson = payInFull
+    ? pricePerPerson
+    : calculateBookingDeposit(pricePerPerson);
+  const paypalFeePerPerson = payInFull
+    ? 0
+    : calculatePayPalProcessingFee(depositPerPerson);
+  const remainingBalancePerPerson = payInFull
+    ? 0
+    : pricePerPerson - depositPerPerson;
+  const depositPercent = payInFull ? 100 : Math.round(BOOKING_DEPOSIT_RATE * 100);
   const paypalFeePercent = Math.round(PAYPAL_PROCESSING_RATE * 100);
 
   const handleChange = (e) => {
@@ -83,7 +92,7 @@ export default function BookingModal({
       setError("Please fill out the required fields (Name and Email).");
       return;
     }
-    const totalTourists = Number(formData.totalTourists);
+    const totalTourists = Number(fixedTotalTourists || formData.totalTourists);
     if (
       !Number.isFinite(totalTourists) ||
       totalTourists < MINIMUM_TOURISTS ||
@@ -216,6 +225,7 @@ export default function BookingModal({
                 max={MAXIMUM_TOURISTS}
                 value={formData.totalTourists}
                 onChange={handleChange}
+                readOnly={Boolean(fixedTotalTourists)}
               />
             </div>
 
@@ -259,17 +269,21 @@ export default function BookingModal({
                 </span>
               </div>
               <div className={page.modal_row}>
-                <span className={page.modal_label}>Deposit per person ({depositPercent}%)</span>
+                <span className={page.modal_label}>
+                  {payInFull ? "Payment per person" : `Deposit per person (${depositPercent}%)`}
+                </span>
                 <span className={page.modal_value}>
                   ${depositPerPerson.toFixed(2)} USD
                 </span>
               </div>
-              <div className={page.modal_row}>
-                <span className={page.modal_label}>PayPal fee per person ({paypalFeePercent}%)</span>
-                <span className={page.modal_value}>
-                  ${paypalFeePerPerson.toFixed(2)} USD
-                </span>
-              </div>
+              {!payInFull && (
+                <div className={page.modal_row}>
+                  <span className={page.modal_label}>PayPal fee per person ({paypalFeePercent}%)</span>
+                  <span className={page.modal_value}>
+                    ${paypalFeePerPerson.toFixed(2)} USD
+                  </span>
+                </div>
+              )}
               <div className={page.modal_row + " " + page.modal_row_balance}>
                 <span className={page.modal_label}>
                   Booking reservation charges
@@ -284,25 +298,39 @@ export default function BookingModal({
                   ${paymentBreakdown.totalPrice.toFixed(2)} USD
                 </span>
               </div>
-              <div className={page.modal_row}>
-                <span className={page.modal_label}>Remaining balance per person</span>
-                <span className={page.modal_value}>
-                  ${remainingBalancePerPerson.toFixed(2)} USD
-                </span>
-              </div>
-              <div className={page.modal_row}>
-                <span className={page.modal_label}>Remaining total cash balance</span>
-                <span className={page.modal_value}>
-                  ${paymentBreakdown.balance.toFixed(2)} USD
-                </span>
-              </div>
+              {!payInFull && (
+                <>
+                  <div className={page.modal_row}>
+                    <span className={page.modal_label}>Remaining balance per person</span>
+                    <span className={page.modal_value}>
+                      ${remainingBalancePerPerson.toFixed(2)} USD
+                    </span>
+                  </div>
+                  <div className={page.modal_row}>
+                    <span className={page.modal_label}>Remaining total cash balance</span>
+                    <span className={page.modal_value}>
+                      ${paymentBreakdown.balance.toFixed(2)} USD
+                    </span>
+                  </div>
+                </>
+              )}
             </div>
 
             <p className={page.modal_note}>
-              A {depositPercent}% booking deposit plus the PayPal fee is required
-              to confirm your reservation. The remaining{" "}
-              <strong>${paymentBreakdown.balance.toFixed(2)}</strong> is paid in
-              person at the office, cash only.
+              {payInFull ? (
+                <>
+                  This test tour charges the full{" "}
+                  <strong>${paymentBreakdown.dueToday.toFixed(2)}</strong> today
+                  so you can verify the live PayPal payment flow.
+                </>
+              ) : (
+                <>
+                  A {depositPercent}% booking deposit plus the PayPal fee is required
+                  to confirm your reservation. The remaining{" "}
+                  <strong>${paymentBreakdown.balance.toFixed(2)}</strong> is paid in
+                  person at the office, cash only.
+                </>
+              )}
             </p>
 
             <div className={page.modal_actions}>

@@ -16,6 +16,7 @@ import TwoDaysOneNight from "./pages/TwoDaysOneNight";
 import ThreeDaysTwoNights from "./pages/ThreeDaysTwoNights";
 import FourDaysThreeNights from "./pages/FourDaysThreeNights";
 import FiveDaysFourNights from "./pages/FiveDaysFourNights";
+import LivePaymentTestTour from "./pages/LivePaymentTestTour";
 import Contact from "./pages/Contact";
 import RefundPolicy from "./pages/RefundPolicy";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
@@ -85,6 +86,7 @@ function App() {
           <Route path="/tour/3-days-2-nights" element={<ThreeDaysTwoNights />} />
           <Route path="/tour/4-days-3-nights" element={<FourDaysThreeNights />} />
           <Route path="/tour/5-days-4-nights" element={<FiveDaysFourNights />} />
+          <Route path="/tour/live-payment-test" element={<LivePaymentTestTour />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/refund-policy" element={<RefundPolicy />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
