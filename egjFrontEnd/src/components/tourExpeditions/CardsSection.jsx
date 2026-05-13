@@ -161,40 +161,6 @@ function CardsSection() {
       </motion.header>
 
       <article className={Cards.cards_container}>
-        <motion.div
-          initial={{ opacity: 0, y: 100 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-3%" }}
-          transition={{
-            delay: 0,
-            y: { duration: 0.5, ease: "easeInOut" },
-            opacity: { duration: 1.2, ease: "easeOut" },
-          }}
-          className={Cards.card_individual_container}
-        >
-          <figure className={Cards.card_image_container}>
-            <img
-              src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=80"
-              alt="Live PayPal payment test"
-              className={Cards.card_image}
-            />
-          </figure>
-          <div className={Cards.card_text_container}>
-            <h2 className={Cards.card_title}>LIVE PAYMENT TEST</h2>
-            <p className={Cards.card_description}>
-              Temporary $1 PayPal live checkout to verify successful payment,
-              confirmation routing, and invoice emails.
-            </p>
-            <button
-              className={Cards.card_button}
-              type="button"
-              onClick={() => navigate("/tour/live-payment-test")}
-            >
-              View Details
-            </button>
-          </div>
-        </motion.div>
-
         {tours.map((tour, index) => {
           const detailsPath = getTourDetailsPath(tour.name);
           const displayName = getTourDisplayName(tour.name);
