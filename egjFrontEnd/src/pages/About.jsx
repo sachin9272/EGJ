@@ -41,10 +41,9 @@ function About() {
             About <span>George Of</span> <span>The Jungle</span>
           </h1>
           <p className={about.hero_text}>
-            Born of the Amazon, raised by the river. The life story of a
-            responsible guide, entrepreneur, and lifelong guardian of the jungle
-            who brings indigenous wisdom together with unforgettable journeys
-            into the lungs of the Earth.
+            A life story of George of the Jungle, born from a multicoloured
+            Amazon region and shaped by the river, the jungle, indigenous
+            culture, and more than 30 years of tourism work.
           </p>
           <div className={about.hero_actions}>
             <a href="#story" className={about.primary_button}>
@@ -67,7 +66,7 @@ function About() {
         <section className={about.story_section} id="story">
           <p className={about.kicker}>A Life Story</p>
           <h2>
-            George Of The <span>Jungle</span>
+            A Life Story Of <span>George Of The Jungle</span>
           </h2>
 
           <div className={about.story_grid}>
@@ -83,9 +82,9 @@ function About() {
               <article className={about.quote_card}>
                 <span>“</span>
                 <p>
-                  Loving this profession with passion and respect takes me to
-                  recognize the Amazonian characters that shaped this life — the
-                  “Tatu” Mendoza and Mawgli, the Amazonian Tarzan.
+                  The universe of jungle and river was the school where he
+                  learned about aboriginal culture, flora, fauna, ancestral
+                  medicine, trails, roads, and customs.
                 </p>
               </article>
             </div>
@@ -93,55 +92,72 @@ function About() {
             <div className={about.story_copy}>
               <p>
                 His name is George. His origin has no borders. He is a BRACOPE
-                descendant — Brazilian, Colombian and Peruvian blood runs
-                through his DNA. At just 10 years old he connected with his
-                first actions of tourist guidance. Joel, a Miraña indigenous
-                polyglot known as TATU for his small stature, became his initial
-                mentor and boss — speaking English, Portuguese, French, Spanish
-                and native languages also.
+                descendant. Something Brazilian, Colombian and Peruvian runs
+                through his DNA. At an early age, 10 years old, he connected
+                with the first actions of tourist guidance. Joel, a character
+                from the region, was known as TATU because of his small stature,
+                of Miraña indigenous descent, a polyglot with a good knowledge
+                of different languages, such as English, Portuguese, French,
+                Spanish as well as native languages, he was his initial mentor
+                and boss in what would be his life Project.
               </p>
               <p>
-                At 19 he began a formal job at the Hotel Anaconda in Leticia,
-                Amazonas. Family, friends, and foreign tourists chose to call
-                him George — a name that later became his tradition name:
-                George of the Jungle. Born in a region dressed in multicoloured
-                jungle, magical as its sunrises and immense as its river, he
-                grew into a good-natured man in harmony with the ecosystem of
-                the Amazon.
+                At the age of 19, he began a formal job at the Hotel Anaconda
+                in Leticia, Amazonas. Time when family, friends and foreign
+                tourists chose to call him George. To later leverage as a
+                trading name, George of the Jungle. Being born in a region
+                dressed in a multicoloured jungle, magical as its sunrises and
+                immense as his river, would make him a friendly man, good man,
+                with the environment and the ecosystems of the Amazon Nature.
               </p>
               <p>
                 The universe of jungle and river was the school where he learned
                 aboriginal culture, flora, fauna, ancestral medicine, trails,
-                roads and customs — prodigies of life that today define him as
-                an expeditious guide, agent and entrepreneur specializing in
-                everything Amazon tourism represents.
+                roads, and customs... Prodigies of life that today define him
+                as an expeditious guide, agent and entrepreneur specializing in
+                everything which means Tourism in the Amazon.
               </p>
               <article className={about.highlight_card}>
                 <small>The Trilogy</small>
                 <p>
-                  Together with George, Joel Mendoza “TATU”, and Mawgli, the
-                  Amazonian Tarzan, three characters born and raised in the
-                  Colombian Amazon became pioneers of tourism who inspired
-                  adventure and nature tourism in Leticia.
+                  Loving his profession with passion and respect leads him to
+                  recognize Amazonian characters that are part of his life story
+                  and the trilogy that they represented with unparalleled
+                  experience for adventure and nature tourism. Together with
+                  George Of the Jungle, Joel Mendoza TATU (q. e. p. d) and
+                  MOWGLI the Amazonian Tarzan. Leticiano admired for his great
+                  resemblance to the character in the stories of Disney's Mowgli
+                  Jungle Book.
                 </p>
               </article>
               <p>
-                After more than 30 years of work in tourism, George consolidated
-                his entrepreneurial vision: Expeditions George of the Jungle, a
-                company in agreement with the promotion and preservation of the
-                environment, education, job opportunity, social and culture —
-                integrating the native and ancestral with the experiences of the
-                wild and mystical scenery of the jungle and the jungle world of
-                the greatest treasure the Amazon represents.
+                The three of them were born and grew up in the Colombian Amazon
+                as recognized memorable icons, referenced by hundreds of tourists
+                from many parts of the world who visit us longing for the
+                tourism entrepreneurship services offered with complete
+                satisfaction by these 3 wonderful characters. EXPEDITIONS GEORGE
+                OF THE JUNGLE = EGJ.
               </p>
               <p>
-                Nothing needs the sensitization that George’s exciting work
-                gives like the happy and content tourists who decide to share the
-                best days of their lives in the Amazon — the great home, the
-                lung of the earth that awaits you with splendid plans and
+                And the day came when the more than 30 years of work in Tourism,
+                added up for George to consolidate his entrepreneurial business
+                from Leticia and the Amazon, for the world: Expeditions George
+                of the Jungle. Today, a company synonymous with the promotion
+                and preservation of the environment, education, job opportunity,
+                social and culture. Being the greatest passion, being able to
+                integrate the native and the ancestral with the experiences of
+                the wild and mystical scenery of the jungle and the hydric world
+                of the greatest treasure that the Amazon represents.
+              </p>
+              <p>
+                At Expedition George of the Jungle, nothing beats the
+                satisfaction that George's exciting work gives like the happy and
+                content tourists and visitors who expectantly decide to share the
+                best days of their lives in the Amazon destination. The great
+                home, lung of the earth that awaits you with splendid plans and
                 services. Always welcome.
               </p>
-              <p className={about.story_author}>— By Gicarl E. Reinos C.</p>
+              <p className={about.story_author}>By Gloria E Revelo C.</p>
             </div>
           </div>
         </section>
