@@ -8,12 +8,12 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 import travel from "../../styles/components/home/travelWithUs.module.scss";
-import card1 from "../../assets/images/Card1.png";
-import card2 from "../../assets/images/Card2.png";
-import card3 from "../../assets/images/Card3.png";
-import card4 from "../../assets/images/Card4.png";
-import card5 from "../../assets/images/Card5.png";
-import card6 from "../../assets/images/Card6.png";
+import card1 from "../../assets/images/optimized/card1.webp";
+import card2 from "../../assets/images/optimized/card2.webp";
+import card3 from "../../assets/images/optimized/card3.webp";
+import card4 from "../../assets/images/optimized/card4.webp";
+import card5 from "../../assets/images/optimized/card5.webp";
+import card6 from "../../assets/images/optimized/card6.webp";
 
 import { FaLanguage, FaPersonHiking } from "react-icons/fa6";
 import { MdNavigateNext, MdOutlineNavigateBefore } from "react-icons/md";
@@ -126,6 +126,8 @@ export default function TravelWithUsSection() {
                         className={travel.card_image}
                         src={card.img}
                         alt={card.title}
+                        loading="lazy"
+                        decoding="async"
                       />
                       <h4 className={travel.card_title}>
                         {card.title} {card.icon}

@@ -2,7 +2,7 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
 import { useSession, useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getUser } from "./assets/API/Services/UserService";
 import useAuthStore from "./store/auth";
 import Footer from "./components/Footer";
@@ -32,6 +32,42 @@ function ScrollToTop() {
   }, [location.pathname, location.state]);
 
   return null;
+}
+
+function DeferredGoogleReviews() {
+  const [shouldRender, setShouldRender] = useState(false);
+  const triggerRef = useRef(null);
+
+  useEffect(() => {
+    if (shouldRender) return;
+
+    const trigger = triggerRef.current;
+    if (!trigger || !("IntersectionObserver" in window)) {
+      setShouldRender(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+
+        setShouldRender(true);
+        observer.disconnect();
+      },
+      { rootMargin: "900px 0px" }
+    );
+
+    observer.observe(trigger);
+
+    return () => observer.disconnect();
+  }, [shouldRender]);
+
+  return (
+    <>
+      <div ref={triggerRef} aria-hidden="true" />
+      {shouldRender ? <GoogleReviewsCarousel /> : null}
+    </>
+  );
 }
 
 function App() {
@@ -98,7 +134,7 @@ function App() {
           <Route path="/paypal/return" element={<PaypalReturn />} />
           <Route path="/paypal/cancel" element={<PaypalCancel />} />
         </Routes>
-        <GoogleReviewsCarousel />
+        <DeferredGoogleReviews />
         <Footer />
       </main>
     </>

@@ -15,7 +15,14 @@ function VideoSection() {
       className={videoSection.video_section}
     >
       <figure className={videoSection.video_container}>
-        <video className={videoSection.video} autoPlay loop muted playsInline>
+        <video
+          className={videoSection.video}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+        >
           <source
             src="https://res.cloudinary.com/dbuxt1ti8/video/upload/v1759272080/React_lp5cj4.mp4"
             type="video/mp4"

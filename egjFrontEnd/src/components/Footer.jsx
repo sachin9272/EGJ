@@ -38,7 +38,7 @@ function Footer() {
         <div className={`${footer.logo_container} notranslate`} translate="no">
           <img
             className={`${footer.logo_image} notranslate`}
-            src="/Logo.png"
+            src="/Logo.webp"
             alt="Logo"
             translate="no"
           />
@@ -48,10 +48,6 @@ function Footer() {
           <h4 className={footer.quick_links_title}>Quick Links</h4>
           <div className={footer.quick_links_container}>
             <ul className={footer.quick_links}>
-              <li>
-                <a href="/">Home</a>{" "}
-              </li>
-
               <li>
                 <a href="/about">About</a>
               </li>

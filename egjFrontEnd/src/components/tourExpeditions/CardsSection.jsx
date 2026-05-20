@@ -97,6 +97,14 @@ const renderTourTitle = (displayName = "") => {
   );
 };
 
+const optimizeCloudinaryImage = (url) => {
+  if (!url?.includes("res.cloudinary.com") || !url.includes("/image/upload/")) {
+    return url;
+  }
+
+  return url.replace("/image/upload/", "/image/upload/f_auto,q_auto,w_760,c_fill/");
+};
+
 function CardsSection() {
   const [tours, setTours] = useState([]);
   const location = useLocation();
@@ -183,11 +191,13 @@ function CardsSection() {
             <figure className={Cards.card_image_container}>
               <img
                 src={
-                  tour.images?.[0]?.url ||
+                  optimizeCloudinaryImage(tour.images?.[0]?.url) ||
                   "https://res.cloudinary.com/default-placeholder.jpg"
                 }
                 alt={tour.name || "Tour Image"}
                 className={Cards.card_image}
+                loading="lazy"
+                decoding="async"
               />
             </figure>
             <div className={Cards.card_text_container}>

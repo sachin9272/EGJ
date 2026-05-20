@@ -77,7 +77,7 @@ const Navbar = () => {
           translate="no"
         >
           <img
-            src="/Logo.png"
+            src="/Logo.webp"
             alt="Logo"
             className={`${navBar.logo_Image} notranslate`}
             translate="no"
@@ -131,7 +131,7 @@ const Navbar = () => {
           translate="no"
         >
           <img
-            src="/Logo.png"
+            src="/Logo.webp"
             alt="Logo"
             className={`${navBar.logo_Image} notranslate`}
             translate="no"
@@ -141,72 +141,82 @@ const Navbar = () => {
         {/* SIDE BAR */}
         <AnimatePresence>
           {isMenuOpen && (
-            <MotionDiv
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{
-                opacity: 0,
-                x: 200,
-                transition: {
-                  duration: 0.3,
-                  ease: "easeOut",
-                  opacity: { duration: 1, ease: "easeOut" },
-                },
-              }}
-              transition={{
-                delay: 0.1,
-                x: { duration: 0.5, ease: "easeInOut" },
-                opacity: { duration: 0.2, ease: "easeOut" },
-              }}
-              className={navBar.hamburguer_menu}
-            >
-              <button
-                className={navBar.hamburguer_button_close}
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+            <>
+              <MotionDiv
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className={navBar.hamburguer_overlay}
+                onClick={() => setIsMenuOpen(false)}
+              />
+              <MotionDiv
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{
+                  opacity: 0,
+                  x: 200,
+                  transition: {
+                    duration: 0.3,
+                    ease: "easeOut",
+                    opacity: { duration: 1, ease: "easeOut" },
+                  },
+                }}
+                transition={{
+                  delay: 0.1,
+                  x: { duration: 0.5, ease: "easeInOut" },
+                  opacity: { duration: 0.2, ease: "easeOut" },
+                }}
+                className={navBar.hamburguer_menu}
               >
-                <IoClose className={navBar.hamburguer_button_close_icon} />
-              </button>
-              <div className={navBar.hamburguer_links_sidebar}>
-                <ul>
-                  {navLinks.map((link, i) => (
-                    <li key={i}>
-                      <a
-                        className={navBar.nav_link}
-                        href={link.path}
-                        onClick={handleNavLinkClick}
-                      >
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className={navBar.hamburguer_right}>
-                {currentUser?.role === "Admin" && (
-                  <button className={navBar.hamburguer_button_dashboard}>
-                    Dashboard
-                  </button>
-                )}
                 <button
-                  className={navBar.button_book}
-                  onClick={handleBookNowClick}
+                  className={navBar.hamburguer_button_close}
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
-                  Book Now
+                  <IoClose className={navBar.hamburguer_button_close_icon} />
                 </button>
+                <div className={navBar.hamburguer_links_sidebar}>
+                  <ul>
+                    {navLinks.map((link, i) => (
+                      <li key={i}>
+                        <a
+                          className={navBar.nav_link}
+                          href={link.path}
+                          onClick={handleNavLinkClick}
+                        >
+                          {link.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className={navBar.hamburguer_right}>
+                  {currentUser?.role === "Admin" && (
+                    <button className={navBar.hamburguer_button_dashboard}>
+                      Dashboard
+                    </button>
+                  )}
+                  <button
+                    className={navBar.button_book}
+                    onClick={handleBookNowClick}
+                  >
+                    Book Now
+                  </button>
 
-                {user ? (
-                  <UserButton>
-                    <UserButton.MenuItems>
-                      <UserButton.Action
-                        label="My Bookings"
-                        labelIcon={<FaBook />}
-                        onClick={() => navigate("/my-bookings")}
-                      ></UserButton.Action>
-                    </UserButton.MenuItems>
-                  </UserButton>
-                ) : null}
-              </div>
-            </MotionDiv>
+                  {user ? (
+                    <UserButton>
+                      <UserButton.MenuItems>
+                        <UserButton.Action
+                          label="My Bookings"
+                          labelIcon={<FaBook />}
+                          onClick={() => navigate("/my-bookings")}
+                        ></UserButton.Action>
+                      </UserButton.MenuItems>
+                    </UserButton>
+                  ) : null}
+                </div>
+              </MotionDiv>
+            </>
           )}
         </AnimatePresence>
 

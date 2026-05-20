@@ -27,10 +27,10 @@ function BePartOfUs() {
   ];
 
   const imagesCard = [
-    "https://res.cloudinary.com/dbuxt1ti8/image/upload/v1755138303/tours/irvfiutfwc1vbfnhu0sk.jpg",
-    "https://res.cloudinary.com/dbuxt1ti8/image/upload/v1755138303/tours/jwguy81xnrmj0twhipnl.jpg",
-    "https://res.cloudinary.com/dbuxt1ti8/image/upload/v1755138165/tours/g8oaqgk1i8vmovghdj2f.jpg",
-    "https://res.cloudinary.com/dbuxt1ti8/image/upload/v1755138164/tours/m4dwczfbbn3evjqdsei5.jpg",
+    "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138303/tours/irvfiutfwc1vbfnhu0sk.jpg",
+    "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138303/tours/jwguy81xnrmj0twhipnl.jpg",
+    "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138165/tours/g8oaqgk1i8vmovghdj2f.jpg",
+    "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138164/tours/m4dwczfbbn3evjqdsei5.jpg",
   ];
 
   const [isMuted, setIsMuted] = useState(true);
@@ -67,6 +67,7 @@ function BePartOfUs() {
           loop
           muted={isMuted}
           playsInline
+          preload="metadata"
           ref={videoRef}
         >
           <source
@@ -101,6 +102,8 @@ function BePartOfUs() {
                 src={image}
                 alt={`Image${index}`}
                 className={bePartOfUs.images}
+                loading="lazy"
+                decoding="async"
               />
             </figure>
           ))}

@@ -50,6 +50,8 @@
     grid-column: 2 / -2;
     background: none;
     pointer-events: none; // pass clicks through to page below
+    position: relative;
+    z-index: 3000;
 
     // Re-enable pointer events on the actual navbar
     > * {
@@ -188,10 +190,12 @@
       width: 100%;
       height: 6.4rem;
 
-      background: #111;
+      background: rgba(17, 17, 17, 0.96);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-      z-index: 1000;
+      z-index: 3000;
     }
   }
 }
@@ -199,6 +203,17 @@
 // ─── Hamburger Menu (mobile side-drawer) ─────────────────────────────────────
 
 .hamburguer {
+  &_overlay {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    background: rgba(0, 0, 0, 0.48);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    z-index: 3090;
+  }
+
   &_right {
     margin-bottom: 2rem;
     display: flex;
@@ -220,7 +235,7 @@
     flex-direction: column;
     align-items: flex-end;
     justify-content: flex-start;
-    z-index: 1500;
+    z-index: 3100;
     padding: 2rem;
     border-left: 1px solid rgba(255, 255, 255, 0.08);
   }

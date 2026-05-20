@@ -3,6 +3,8 @@
 .bePartOfUs_section {
   grid-row: 16 / 20;
   grid-column: 2 / -2;
+  width: 100%;
+  min-width: 0;
 
   //   background-color: beige;
   gap: clamp(1rem, 3vw, 2rem);
@@ -22,7 +24,13 @@
   }
 
   @media (max-width: $screen-small-690) {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    grid-template-rows: none;
+    gap: 1.25rem;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 }
 
@@ -33,6 +41,7 @@
     height: 100%;
     position: relative;
     margin: 0;
+    min-width: 0;
 
     @media (max-width: $screen-medium-large) {
       justify-self: center;
@@ -45,7 +54,8 @@
 
     @media (max-width: $screen-small-690) {
       grid-column: 1;
-      grid-row: 2;
+      grid-row: auto;
+      order: 2;
       margin-top: 0;
       width: 100%;
     }
@@ -83,6 +93,7 @@
     background-color: var(--Primary-colour);
     border-radius: 50%;
     padding: 0.5rem;
+    line-height: 0;
 
     transition: all 0.2s ease-in-out;
 
@@ -108,6 +119,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    min-width: 0;
 
     //Glassmorphism effect
     background: rgba(20, 20, 20, 0.05);
@@ -146,7 +158,8 @@
 
     @media (max-width: $screen-small-690) {
       grid-column: 1;
-      grid-row: 1;
+      grid-row: auto;
+      order: 1;
     }
   }
 
@@ -162,6 +175,8 @@
     text-shadow: 8px 8px 15px rgba(0, 0, 0, 0.4);
 
     font-weight: 700;
+    overflow-wrap: break-word;
+    text-wrap: balance;
 
     @media (min-width: $screen-xl) {
       font-size: 2.7rem;
@@ -169,6 +184,10 @@
 
     @media (max-width: $screen-medium-large) {
       font-size: 2.1rem;
+    }
+
+    @media (max-width: $screen-small) {
+      font-size: clamp(1.7rem, 8vw, 2.1rem);
     }
   }
 
@@ -189,6 +208,10 @@
     @media (max-width: $screen-medium) {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    @media (max-width: $screen-small-360) {
+      gap: 0.75rem;
+    }
   }
 
   &_wrapper {
@@ -198,7 +221,7 @@
 
     &:hover {
       cursor: pointer;
-      transform: scale(125%);
+      transform: scale(1.06);
     }
 
     @media (min-width: $screen-xl) {
@@ -225,6 +248,7 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
+    min-width: 0;
 
     @media (max-width: $screen-medium) {
       grid-template-columns: 1fr;
@@ -234,7 +258,9 @@
 
     @media (max-width: $screen-small-690) {
       grid-column: 1;
-      grid-row: 3;
+      grid-row: auto;
+      order: 3;
+      gap: 0.85rem;
     }
   }
 
@@ -275,7 +301,7 @@
 
       &:hover {
         cursor: pointer;
-        transform: scale(110%);
+        transform: translateY(-0.25rem);
       }
 
       @media (min-width: $screen-xl) {
@@ -291,6 +317,7 @@
 
       @media (max-width: $screen-small) {
         border-radius: 1rem;
+        padding: 0.85rem;
       }
     }
 
@@ -302,6 +329,7 @@
       flex-direction: column;
 
       justify-content: space-around;
+      gap: 0.75rem;
     }
 
     &_icon {
@@ -324,6 +352,7 @@
       color: var(--Secondary-colour);
       font-weight: 600;
       margin-top: 1rem;
+      overflow-wrap: break-word;
 
       @media (max-width: $screen-medium-large) {
         font-size: 1.3rem;
@@ -333,6 +362,8 @@
     &_text {
       color: var(--Secondary-colour);
       font-size: 1.1rem;
+      line-height: 1.35;
+      overflow-wrap: break-word;
 
       @media (min-width: $screen-xl) {
         font-size: 1.2rem;
@@ -344,6 +375,10 @@
 
       @media (max-width: $screen-medium) {
         font-size: 1.2rem;
+      }
+
+      @media (max-width: $screen-small) {
+        font-size: 1.05rem;
       }
     }
   }

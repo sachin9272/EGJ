@@ -1,6 +1,6 @@
 import { FaCompass, FaLocationDot, FaSeedling } from "react-icons/fa6";
 import Navbar from "../components/NavBar";
-import georgeImage from "../assets/images/GEORGE.png";
+import georgeImage from "../assets/images/optimized/george.webp";
 import about from "../styles/pages/about.module.scss";
 
 const facts = [
@@ -73,7 +73,12 @@ function About() {
             <div className={about.profile_column}>
               <aside className={about.profile_card}>
                 <div className={about.profile_image_wrap}>
-                  <img src={georgeImage} alt="George of the Jungle" />
+                  <img
+                    src={georgeImage}
+                    alt="George of the Jungle"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
                 <p className={about.profile_role}>Guide · Agent · Entrepreneur</p>
                 <h3>George</h3>
