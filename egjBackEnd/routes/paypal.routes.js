@@ -18,17 +18,17 @@ paypalRouter.post("/create-order", protect, createOrder);
 
 /**
  * POST /api/v1/paypal/create-direct-order
- * Protected — creates a PayPal order for a fixed amount without a booking doc.
+ * Public guest checkout — creates a booking and PayPal order from form data.
  * Body: { amount, currency?, description? }
  */
-paypalRouter.post("/create-direct-order", protect, createDirectOrder);
+paypalRouter.post("/create-direct-order", createDirectOrder);
 
 /**
  * POST /api/v1/paypal/capture-order
- * Protected — called by the frontend /paypal/return page.
+ * Public guest checkout return — verifies bookingId + PayPal orderId match.
  * Body: { orderId, bookingId }
  */
-paypalRouter.post("/capture-order", protect, captureOrder);
+paypalRouter.post("/capture-order", captureOrder);
 
 /**
  * POST /api/v1/paypal/webhook

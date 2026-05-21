@@ -5,16 +5,12 @@ import {
   FaSquareYoutube,
 } from "react-icons/fa6";
 import { FaTripadvisor } from "react-icons/fa";
-import { useLocation, useNavigate } from "react-router-dom";
 import footer from "../styles/components/footer.module.scss";
 
 import { MdEmail } from "react-icons/md";
 import { IoLogoWhatsapp } from "react-icons/io";
 
 function Footer() {
-  const location = useLocation();
-  const navigate = useNavigate();
-
   const socialLinks = {
     facebook: "https://www.facebook.com/expeditionsgeorgeofthejungle",
     tripAdvisor:
@@ -23,7 +19,7 @@ function Footer() {
     linkedin:
       "https://www.linkedin.com/company/expeditions-george-of-the-jungle-official/",
     youtube: "https://www.youtube.com/@expeditionsgeorgeofthejungle",
-    whatsapp: "https://wa.me/573175299539",
+    whatsapp: "https://wa.me/573208996144",
     email: "expeditionsgeorgeofthejungle@gmail.com",
   };
 
@@ -35,25 +31,17 @@ function Footer() {
     );
   };
 
-  const handleAboutClick = (event) => {
-    event.preventDefault();
-
-    if (location.pathname === "/") {
-      document
-        .getElementById("why-travel-with-us")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-
-    navigate("/", { state: { scrollToSection: "why-travel-with-us" } });
-  };
-
   return (
     <footer className={footer.footer_container}>
       <div className={footer.footer_content_top}>
         {/* LOGO */}
-        <div className={footer.logo_container}>
-          <img className={footer.logo_image} src="/Logo.png" alt="Logo" />
+        <div className={`${footer.logo_container} notranslate`} translate="no">
+          <img
+            className={`${footer.logo_image} notranslate`}
+            src="/Logo.webp"
+            alt="Logo"
+            translate="no"
+          />
         </div>
         <hr className={footer.separator} />
         <div>
@@ -61,21 +49,18 @@ function Footer() {
           <div className={footer.quick_links_container}>
             <ul className={footer.quick_links}>
               <li>
-                <a href="/">Home</a>{" "}
+                <a href="/about">About</a>
               </li>
-
               <li>
                 <a href="/tour">Tour Expeditions</a>
               </li>
-              <li>Experience</li>
             </ul>
             <ul className={footer.quick_links}>
-              <li>Refund Policy</li>
-              <li>Privacy Policy</li>
               <li>
-                <a href="/" onClick={handleAboutClick}>
-                  About
-                </a>
+                <a href="/refund-policy">Refund Policy</a>
+              </li>
+              <li>
+                <a href="/privacy-policy">Privacy Policy</a>
               </li>
             </ul>
           </div>
@@ -175,7 +160,7 @@ function Footer() {
                   aria-label="Whatsapp"
                   rel="noopener noreferrer"
                 >
-                  <IoLogoWhatsapp />+ 57 (317) 529-9539{" "}
+                  <IoLogoWhatsapp />+57 (320) 899-6144{" "}
                 </a>
               </li>
             </ul>
@@ -191,7 +176,7 @@ function Footer() {
       <hr className={footer.separator_full} />
       <div className={footer.copyright_container}>
         <p className={footer.copyright_text}>
-          ©2022 COPYRIGHT. EXPEDITIONS GEORGE OF THE JUNGLE ALL RIGHTS RESERVED
+          ©2026 COPYRIGHT. EXPEDITIONS GEORGE OF THE JUNGLE ALL RIGHTS RESERVED
         </p>
       </div>
     </footer>

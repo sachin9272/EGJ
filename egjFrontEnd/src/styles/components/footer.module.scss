@@ -2,7 +2,7 @@
 
 .footer_container {
   background-color: rgb(27, 27, 27);
-  padding: 3.5rem;
+  padding: clamp(2rem, 4vw, 3.5rem);
   padding-bottom: 1rem;
 
   @media (max-width: $screen-medium) {
@@ -17,14 +17,20 @@
       display: flex;
       justify-content: space-evenly;
       align-items: start;
-      height: 150px;
+      gap: 2rem;
+      min-height: 150px;
+      height: auto;
+
+      > * {
+        min-width: 0;
+      }
 
       @media (max-width: $screen-small-footer) {
         flex-direction: column;
         align-items: start;
         height: auto;
 
-        padding: 2rem;
+        padding: 1rem 0;
         padding-bottom: 1rem;
       }
     }
@@ -36,6 +42,11 @@
     height: 7rem;
     margin-top: 2rem;
     transition: $transition-duration;
+
+    @media (max-width: $screen-small-footer) {
+      height: 6rem;
+      margin-top: 0;
+    }
 
     &:hover {
       cursor: pointer;
@@ -56,6 +67,14 @@
 
   align-self: stretch;
   margin-bottom: 2rem;
+
+  @media (max-width: $screen-small-footer) {
+    width: 100%;
+    height: 1px;
+    align-self: auto;
+    margin: 0;
+    background: linear-gradient(to right, transparent, white, transparent);
+  }
 
   &_full {
     border: none;
@@ -82,6 +101,11 @@
     display: flex;
     gap: 1.5rem;
     margin-top: 1rem;
+
+    @media (max-width: $screen-small) {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
   }
 
   &_title {
@@ -154,6 +178,7 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    overflow-wrap: anywhere;
   }
   @media (max-width: $screen-medium) {
     font-size: 60%;
@@ -174,5 +199,7 @@
     font-size: 1.2rem;
     font-family: karla, sans-serif;
     font-weight: 100;
+    text-align: center;
+    line-height: 1.4;
   }
 }

@@ -4,6 +4,12 @@
   &_container {
     grid-row: 12 / 16;
     grid-column: 2 / -2;
+    width: 100%;
+    min-width: 0;
+
+    @media (max-width: $screen-medium) {
+      grid-row: auto;
+    }
   }
 
   &_title {
@@ -17,25 +23,24 @@
     display: flex;
     justify-content: center;
     margin-top: 0rem;
-    font-size: 2.5rem;
+    font-size: clamp(2rem, 5vw, 2.5rem);
     font-weight: 600;
-    letter-spacing: 0.5rem;
+    letter-spacing: 0;
+    text-align: center;
+    overflow-wrap: break-word;
+    text-wrap: balance;
 
     @media (max-width: 628px) {
       font-size: 2.1rem;
-      letter-spacing: 0.1rem;
     }
     @media (max-width: $screen-small) {
       font-size: 2rem;
-      letter-spacing: 0.3rem;
     }
     @media (max-width: $screen-small-414) {
       font-size: 2.1rem;
-      letter-spacing: 0.2rem;
     }
     @media (max-width: $screen-small-375) {
-      font-size: 2rem;
-      letter-spacing: 0.1rem;
+      font-size: 1.85rem;
     }
   }
 }
@@ -48,9 +53,17 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+  min-width: 0;
+  margin-bottom: 3.25rem;
 
   :global(.swiper) {
     width: 100%;
+    height: clamp(29rem, 40vw, 31.5rem);
+    overflow: hidden;
+
+    @media (max-width: $screen-small) {
+      height: 28.5rem;
+    }
   }
 
   // .swiper-wrapper {
@@ -75,7 +88,7 @@
     perspective: 1000px;
     margin-top: 4rem;
     width: 100%;
-    max-width: 20rem;
+    max-width: min(20rem, 100%);
     height: 25rem;
 
     font-family: Karla, sans-serif;
@@ -96,6 +109,14 @@
 
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2),
       inset 0 0 5px 3px rgba(255, 255, 255, 0.1);
+
+    @media (max-width: $screen-small) {
+      max-width: min(25rem, 86vw);
+      height: 23.5rem;
+      margin-top: 2.5rem;
+      padding: 0.8rem;
+      border-radius: 1.5rem;
+    }
   }
 
   &_inner {
@@ -112,8 +133,11 @@
     left: 1rem;
     z-index: 2;
     color: var(--Secondary-colour);
-    font-size: 1.6rem;
+    font-size: clamp(1.25rem, 4vw, 1.6rem);
     font-weight: 600;
+    line-height: 1.15;
+    max-width: calc(100% - 2rem);
+    overflow-wrap: break-word;
 
     backface-visibility: hidden;
     transform: translateZ(1px);
@@ -130,7 +154,7 @@
 
   &_container:hover .card_inner {
     cursor: pointer;
-    transform: rotateY(180deg) scale(110%);
+    transform: rotateY(180deg) scale(1.04);
   }
 
   &_front,
@@ -149,7 +173,7 @@
   }
 
   &_back {
-    background-image: url("../../../assets/images/CardBackground.png");
+    background-image: url("../../../assets/images/optimized/card-background.webp");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 40%;
@@ -179,8 +203,10 @@
 
     &_text {
       margin-top: 1rem;
-      font-size: 1.2rem;
+      font-size: clamp(1rem, 3.2vw, 1.2rem);
+      line-height: 1.35;
       z-index: 5;
+      overflow-wrap: break-word;
     }
 
     &_icon {
@@ -250,12 +276,13 @@
   &_container {
     display: flex;
     justify-content: center;
+    margin-top: 0.25rem;
   }
 
   background: linear-gradient(to right, #1e9146, #79a81c, #7ea15b);
   padding: 0.417rem 1.25rem;
   border-radius: 0.5rem;
-  font-size: 1.8rem;
+  font-size: clamp(1.3rem, 3.4vw, 1.8rem);
   color: var(--Secondary-colour);
   box-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.25);
   margin-top: 1rem;
@@ -269,7 +296,11 @@
       var(--Primary-colour),
       var(--Primary-colour)
     );
-    transform: scale(1.1);
+    transform: scale(1.05);
+  }
+
+  @media (max-width: $screen-small) {
+    margin-top: 0.5rem;
   }
 }
 
@@ -303,12 +334,16 @@
 
   &:hover {
     background: var(--Primary-colour);
-    transform: translateY(-1.5rem) scale(110%);
+    transform: translateY(-50%) scale(1.08);
   }
 }
 
 .customprev {
   left: -4rem; // adjust as needed
+
+  @media (max-width: $screen-medium-large) {
+    left: -1rem;
+  }
 
   @media (max-width: $screen-small) {
     left: 0rem; // adjust as needed
@@ -317,17 +352,23 @@
 
 .customnext {
   right: -4rem;
+
+  @media (max-width: $screen-medium-large) {
+    right: -1rem;
+  }
+
   @media (max-width: $screen-small) {
     right: 0rem; // adjust as needed
   }
 }
 
 .cards :global(.swiper-pagination) {
-  bottom: -2rem; // move below slides
+  bottom: -2.35rem; // move below slides
   z-index: 10;
   display: flex;
   justify-content: center;
   gap: 0.5rem;
+  min-height: 1rem;
 }
 
 .cards :global(.swiper-pagination-bullet) {

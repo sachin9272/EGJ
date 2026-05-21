@@ -14,6 +14,7 @@ import productRouter from "./routes/product.route.js";
 import bookingRouter from "./routes/booking.route.js";
 import checkoutRouter from "./routes/checkout.route.js";
 import paypalRouter from "./routes/paypal.routes.js";
+import contactRouter from "./routes/contact.route.js";
 
 const app = express();
 
@@ -45,8 +46,11 @@ app.use("/api/v1/booking", clerkMiddleware(), bookingRouter);
 //PAYPAL PAYMENT GATEWAY
 app.use("/api/v1/paypal", clerkMiddleware(), paypalRouter);
 
+//CONTACT FORM
+app.use("/api/v1/contact", contactRouter);
+
 //dev enviroment
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`SERVER IS RUNNING ON PORT ${PORT}`));
 
 //Production enviroment

@@ -1,5 +1,5 @@
-import { useUser, UserButton, useSession } from "@clerk/clerk-react";
-import React, { useEffect, useState } from "react";
+import { useUser, UserButton } from "@clerk/clerk-react";
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaBook } from "react-icons/fa";
 import navBar from "../styles/components/navBar.module.scss";
@@ -8,14 +8,15 @@ import { AnimatePresence, motion } from "motion/react";
 
 import { IoMenu, IoClose } from "react-icons/io5";
 
+const MotionDiv = motion.div;
+
 const Navbar = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
 
   const navLinks = [
-    { name: "About", path: "/" },
+    { name: "About", path: "/about" },
     { name: "Tour Expeditions", path: "/tour" },
-    { name: "Experiences", path: "/experiences" },
-    { name: "Contact", path: "/" },
+    { name: "Contact", path: "/contact" },
   ];
 
   // const [isScrolled, setIsScrolled] = useState(false);
@@ -53,23 +54,8 @@ const Navbar = () => {
     navigate("/", { state: { scrollToTop: true } });
   };
 
-  const handleNavLinkClick = (event, link) => {
-    if (link.name !== "About") {
-      setIsMenuOpen(false);
-      return;
-    }
-
+  const handleNavLinkClick = () => {
     setIsMenuOpen(false);
-    event.preventDefault();
-
-    if (location.pathname === "/") {
-      document
-        .getElementById("why-travel-with-us")
-        ?.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-
-    navigate("/", { state: { scrollToSection: "why-travel-with-us" } });
   };
 
   // React.useEffect(() => {
@@ -84,8 +70,18 @@ const Navbar = () => {
     <div className={navBar.navbar_container}>
       <nav className={navBar.navbar}>
         {/** Logo*/}
-        <Link to="/" className={navBar.logo} onClick={handleLogoClick}>
-          <img src="/Logo.png" alt="Logo" className={navBar.logo_Image} />
+        <Link
+          to="/"
+          className={`${navBar.logo} notranslate`}
+          onClick={handleLogoClick}
+          translate="no"
+        >
+          <img
+            src="/Logo.webp"
+            alt="Logo"
+            className={`${navBar.logo_Image} notranslate`}
+            translate="no"
+          />
         </Link>
 
         {/* Desktop Nav */}
@@ -96,7 +92,7 @@ const Navbar = () => {
                 <a
                   className={navBar.nav_link}
                   href={link.path}
-                  onClick={(event) => handleNavLinkClick(event, link)}
+                  onClick={handleNavLinkClick}
                 >
                   {link.name}
                 </a>
@@ -128,79 +124,99 @@ const Navbar = () => {
       </nav>
       {/* Hamburguer menu for mobile */}
       <nav className={navBar.navbar_mobile}>
-        <Link to="/" className={navBar.logo} onClick={handleLogoClick}>
-          <img src="/Logo.png" alt="Logo" className={navBar.logo_Image} />
+        <Link
+          to="/"
+          className={`${navBar.logo} notranslate`}
+          onClick={handleLogoClick}
+          translate="no"
+        >
+          <img
+            src="/Logo.webp"
+            alt="Logo"
+            className={`${navBar.logo_Image} notranslate`}
+            translate="no"
+          />
         </Link>
 
         {/* SIDE BAR */}
         <AnimatePresence>
           {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{
-                opacity: 0,
-                x: 200,
-                transition: {
-                  duration: 0.3,
-                  ease: "easeOut",
-                  opacity: { duration: 1, ease: "easeOut" },
-                },
-              }}
-              transition={{
-                delay: 0.1,
-                x: { duration: 0.5, ease: "easeInOut" },
-                opacity: { duration: 0.2, ease: "easeOut" },
-              }}
-              className={navBar.hamburguer_menu}
-            >
-              <button
-                className={navBar.hamburguer_button_close}
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
+            <>
+              <MotionDiv
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className={navBar.hamburguer_overlay}
+                onClick={() => setIsMenuOpen(false)}
+              />
+              <MotionDiv
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{
+                  opacity: 0,
+                  x: 200,
+                  transition: {
+                    duration: 0.3,
+                    ease: "easeOut",
+                    opacity: { duration: 1, ease: "easeOut" },
+                  },
+                }}
+                transition={{
+                  delay: 0.1,
+                  x: { duration: 0.5, ease: "easeInOut" },
+                  opacity: { duration: 0.2, ease: "easeOut" },
+                }}
+                className={navBar.hamburguer_menu}
               >
-                <IoClose className={navBar.hamburguer_button_close_icon} />
-              </button>
-              <div className={navBar.hamburguer_links_sidebar}>
-                <ul>
-                  {navLinks.map((link, i) => (
-                    <li key={i}>
-                      <a
-                        className={navBar.nav_link}
-                        href={link.path}
-                        onClick={(event) => handleNavLinkClick(event, link)}
-                      >
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className={navBar.hamburguer_right}>
-                {currentUser?.role === "Admin" && (
-                  <button className={navBar.hamburguer_button_dashboard}>
-                    Dashboard
-                  </button>
-                )}
                 <button
-                  className={navBar.button_book}
-                  onClick={handleBookNowClick}
+                  className={navBar.hamburguer_button_close}
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
-                  Book Now
+                  <IoClose className={navBar.hamburguer_button_close_icon} />
                 </button>
+                <div className={navBar.hamburguer_links_sidebar}>
+                  <ul>
+                    {navLinks.map((link, i) => (
+                      <li key={i}>
+                        <a
+                          className={navBar.nav_link}
+                          href={link.path}
+                          onClick={handleNavLinkClick}
+                        >
+                          {link.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className={navBar.hamburguer_right}>
+                  {currentUser?.role === "Admin" && (
+                    <button className={navBar.hamburguer_button_dashboard}>
+                      Dashboard
+                    </button>
+                  )}
+                  <button
+                    className={navBar.button_book}
+                    onClick={handleBookNowClick}
+                  >
+                    Book Now
+                  </button>
 
-                {user ? (
-                  <UserButton>
-                    <UserButton.MenuItems>
-                      <UserButton.Action
-                        label="My Bookings"
-                        labelIcon={<FaBook />}
-                        onClick={() => navigate("/my-bookings")}
-                      ></UserButton.Action>
-                    </UserButton.MenuItems>
-                  </UserButton>
-                ) : null}
-              </div>
-            </motion.div>
+                  {user ? (
+                    <UserButton>
+                      <UserButton.MenuItems>
+                        <UserButton.Action
+                          label="My Bookings"
+                          labelIcon={<FaBook />}
+                          onClick={() => navigate("/my-bookings")}
+                        ></UserButton.Action>
+                      </UserButton.MenuItems>
+                    </UserButton>
+                  ) : null}
+                </div>
+              </MotionDiv>
+            </>
           )}
         </AnimatePresence>
 

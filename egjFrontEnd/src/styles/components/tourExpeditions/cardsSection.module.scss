@@ -173,6 +173,21 @@
     @media (max-width: $screen-medium-large) {
       font-size: 1.3rem;
     }
+
+    &_stacked {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: fit-content;
+      min-width: 10.5rem;
+      line-height: 1.15;
+      text-align: justify;
+
+      span {
+        display: block;
+        text-align: center;
+      }
+    }
   }
 
   &_description {

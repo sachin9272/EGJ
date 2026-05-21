@@ -2,12 +2,12 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import "./App.css";
 import Home from "./pages/Home";
 import { useSession, useUser } from "@clerk/clerk-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getUser } from "./assets/API/Services/UserService";
 import useAuthStore from "./store/auth";
 import Footer from "./components/Footer";
+import GoogleReviewsCarousel from "./components/GoogleReviewsCarousel";
 import TourExpeditioins from "./pages/TourExpeditioins";
-import Experiences from "./pages/Experiences";
 import PaypalReturn from "./pages/PaypalReturn";
 import PaypalCancel from "./pages/PaypalCancel";
 import BookingSuccess from "./pages/BookingSuccess";
@@ -17,6 +17,11 @@ import TwoDaysOneNight from "./pages/TwoDaysOneNight";
 import ThreeDaysTwoNights from "./pages/ThreeDaysTwoNights";
 import FourDaysThreeNights from "./pages/FourDaysThreeNights";
 import FiveDaysFourNights from "./pages/FiveDaysFourNights";
+import LivePaymentTestTour from "./pages/LivePaymentTestTour";
+import Contact from "./pages/Contact";
+import RefundPolicy from "./pages/RefundPolicy";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import About from "./pages/About";
 
 function ScrollToTop() {
   const location = useLocation();
@@ -27,6 +32,42 @@ function ScrollToTop() {
   }, [location.pathname, location.state]);
 
   return null;
+}
+
+function DeferredGoogleReviews() {
+  const [shouldRender, setShouldRender] = useState(false);
+  const triggerRef = useRef(null);
+
+  useEffect(() => {
+    if (shouldRender) return;
+
+    const trigger = triggerRef.current;
+    if (!trigger || !("IntersectionObserver" in window)) {
+      setShouldRender(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+
+        setShouldRender(true);
+        observer.disconnect();
+      },
+      { rootMargin: "900px 0px" }
+    );
+
+    observer.observe(trigger);
+
+    return () => observer.disconnect();
+  }, [shouldRender]);
+
+  return (
+    <>
+      <div ref={triggerRef} aria-hidden="true" />
+      {shouldRender ? <GoogleReviewsCarousel /> : null}
+    </>
+  );
 }
 
 function App() {
@@ -74,6 +115,7 @@ function App() {
         <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/tour" element={<TourExpeditioins />} />
           <Route path="/tour/ayahuasca" element={<Ayahuasca />} />
           <Route path="/tour/gamboa-sacambu" element={<GamboaSacambu />} />
@@ -81,8 +123,10 @@ function App() {
           <Route path="/tour/3-days-2-nights" element={<ThreeDaysTwoNights />} />
           <Route path="/tour/4-days-3-nights" element={<FourDaysThreeNights />} />
           <Route path="/tour/5-days-4-nights" element={<FiveDaysFourNights />} />
-          <Route path="/experiences" element={<Experiences />} />
-
+          <Route path="/tour/live-payment-test" element={<LivePaymentTestTour />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           {/* Shared post-payment pages */}
           <Route path="/success" element={<BookingSuccess />} />
 
@@ -90,6 +134,7 @@ function App() {
           <Route path="/paypal/return" element={<PaypalReturn />} />
           <Route path="/paypal/cancel" element={<PaypalCancel />} />
         </Routes>
+        <DeferredGoogleReviews />
         <Footer />
       </main>
     </>

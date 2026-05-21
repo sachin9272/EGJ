@@ -2,33 +2,67 @@
 
 .video_section {
   display: flex;
-
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
+  padding: clamp(1rem, 3vw, 2.5rem) 0;
   //   background-color: #f9f9f9;
-  gap: 2rem;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  width: 100%;
 
   grid-row: 8 / 12;
   grid-column: 2 / -2;
 
   @media (max-width: $screen-medium) {
+    grid-row: auto;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: $screen-small) {
+    padding: 1rem 0;
+    gap: 1.25rem;
+  }
+}
+
+.video_container {
+  flex: 1 1 28rem;
+  max-width: 50rem;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+
+  @media (max-width: $screen-medium) {
+    flex-basis: auto;
+    max-width: 45rem;
+  }
+
+  @media (max-width: $screen-small) {
+    max-width: 100%;
   }
 }
 
 .video {
-  width: 50rem;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
   border-radius: 2rem;
   border: 3px solid #ffffff1a;
+
+  @media (max-width: $screen-small) {
+    border-radius: 1rem;
+  }
 }
 
 .textBox {
   &_container {
-    width: 50rem;
-    height: 26.5rem;
+    flex: 1 1 28rem;
+    max-width: 50rem;
+    min-width: 0;
+    width: 100%;
+    min-height: auto;
     padding: 1.5rem;
     border-radius: 2rem;
 
@@ -44,25 +78,27 @@
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2),
       inset 0 0 5px 3px rgba(255, 255, 255, 0.1);
 
-    @media (max-width: $screen-medium-large) {
-      height: 29rem;
-    }
-
     @media (max-width: $screen-medium) {
-      width: 90%;
-      height: auto;
+      width: 100%;
+      max-width: 45rem;
+      min-height: auto;
     }
 
     @media (max-width: $screen-small) {
       width: 100%;
-      height: auto;
+      padding: 1.25rem;
+      border-radius: 1rem;
+      min-height: auto;
     }
   }
 
   &_titles {
-    font-size: 2.5rem;
+    font-size: clamp(2rem, 4vw, 2.5rem);
     font-weight: 700;
-    line-height: 2.8rem;
+    line-height: 1.12;
+    overflow-wrap: break-word;
+    text-wrap: balance;
+
     & h2 {
       color: var(--Secondary-colour);
     }
@@ -74,12 +110,36 @@
       font-size: 2.2rem;
       line-height: 2.5rem;
     }
+
+    @media (max-width: $screen-small-360) {
+      font-size: 2rem;
+      line-height: 2.3rem;
+    }
   }
 
   &_paragraph {
     margin-top: 1rem;
-    font-size: 1.25rem;
+    font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+    line-height: 1.45;
     font-weight: 300;
     color: var(--Secondary-colour);
+    overflow-wrap: break-word;
+
+    @media (max-width: $screen-medium-large) {
+      font-size: 1.12rem;
+    }
+
+    @media (max-width: $screen-medium) {
+      font-size: 1.2rem;
+    }
+
+    @media (max-width: $screen-small) {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: $screen-small-360) {
+      font-size: 0.95rem;
+    }
   }
 }

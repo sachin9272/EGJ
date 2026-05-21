@@ -21,29 +21,28 @@ const orderedTourMatchers = [
   },
   {
     order: 1,
-    matches: ["PUERTO NARINO"],
-  },
-  {
-    order: 2,
     matches: ["GAMBOA", "SACAMBU"],
   },
   {
-    order: 3,
+    order: 2,
     matches: ["2 DAYS", "1 NIGHT"],
   },
   {
-    order: 4,
+    order: 3,
     matches: ["3 DAYS", "2 NIGHTS"],
   },
   {
-    order: 5,
+    order: 4,
     matches: ["4 DAYS", "3 NIGHTS"],
   },
   {
-    order: 6,
+    order: 5,
     matches: ["5 DAYS", "4 NIGHTS"],
   },
 ];
+
+const isPuertoNarinoTour = (name = "") =>
+  normalizeTourName(name).includes("PUERTO NARINO");
 
 const getTourOrder = (name = "") => {
   const normalizedName = normalizeTourName(name);
@@ -84,6 +83,28 @@ const getTourDetailsPath = (name = "") => {
   return null;
 };
 
+const getTourDisplayName = (name = "") =>
+  normalizeTourName(name).includes("AYAHUASCA") ? "AYAHUASCA EXPERIENCE" : name;
+
+const renderTourTitle = (displayName = "") => {
+  if (displayName !== "AYAHUASCA EXPERIENCE") return displayName;
+
+  return (
+    <>
+      <span>AYAHUASCA</span>
+      <span>EXPERIENCE</span>
+    </>
+  );
+};
+
+const optimizeCloudinaryImage = (url) => {
+  if (!url?.includes("res.cloudinary.com") || !url.includes("/image/upload/")) {
+    return url;
+  }
+
+  return url.replace("/image/upload/", "/image/upload/f_auto,q_auto,w_760,c_fill/");
+};
+
 function CardsSection() {
   const [tours, setTours] = useState([]);
   const location = useLocation();
@@ -93,9 +114,11 @@ function CardsSection() {
     const fetchTours = async () => {
       try {
         const data = await getTours();
-        const sortedTours = [...data].sort((firstTour, secondTour) => {
-          return getTourOrder(firstTour.name) - getTourOrder(secondTour.name);
-        });
+        const sortedTours = [...data]
+          .filter((tour) => !isPuertoNarinoTour(tour.name))
+          .sort((firstTour, secondTour) => {
+            return getTourOrder(firstTour.name) - getTourOrder(secondTour.name);
+          });
 
         setTours(sortedTours);
       } catch (error) {
@@ -148,6 +171,9 @@ function CardsSection() {
       <article className={Cards.cards_container}>
         {tours.map((tour, index) => {
           const detailsPath = getTourDetailsPath(tour.name);
+          const displayName = getTourDisplayName(tour.name);
+          const isAyahuascaExperience =
+            displayName === "AYAHUASCA EXPERIENCE";
 
           return (
           <motion.div
@@ -165,15 +191,23 @@ function CardsSection() {
             <figure className={Cards.card_image_container}>
               <img
                 src={
-                  tour.images?.[0]?.url ||
+                  optimizeCloudinaryImage(tour.images?.[0]?.url) ||
                   "https://res.cloudinary.com/default-placeholder.jpg"
                 }
                 alt={tour.name || "Tour Image"}
                 className={Cards.card_image}
+                loading="lazy"
+                decoding="async"
               />
             </figure>
             <div className={Cards.card_text_container}>
-              <h2 className={Cards.card_title}>{tour.name}</h2>
+              <h2
+                className={`${Cards.card_title} ${
+                  isAyahuascaExperience ? Cards.card_title_stacked : ""
+                }`}
+              >
+                {renderTourTitle(displayName)}
+              </h2>
               <p className={Cards.card_description}>{tour.description}</p>
               <button
                 className={Cards.card_button}

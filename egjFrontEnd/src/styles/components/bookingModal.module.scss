@@ -162,6 +162,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1rem;
   padding: 1rem 1.4rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 
@@ -171,6 +172,12 @@
 
   &_balance {
     background: rgba(212, 170, 61, 0.1);
+  }
+
+  @media (max-width: $screen-small) {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
   }
 }
 

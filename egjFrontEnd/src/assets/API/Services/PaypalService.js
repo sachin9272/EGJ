@@ -1,7 +1,7 @@
 import { apiPost } from "./axiosIntance.js";
 
 /**
- * Create a PayPal order for the 30% deposit on a booking.
+ * Create a PayPal order for the booking deposit on a booking.
  * Returns { orderId, approvalUrl } — redirect the user to approvalUrl.
  *
  * @param {string} bookingId - MongoDB booking _id
@@ -24,22 +24,17 @@ export const capturePaypalOrder = async (orderId, bookingId) => {
 };
 
 /**
- * Create a PayPal order for a fixed amount — no booking document required.
- * Used by standalone tour page quick-pay flows (e.g. Gamboa-Sacambu).
+ * Create a PayPal order from the 2026 tour pricing table.
+ * Used by standalone tour page booking flows.
  *
  * @param {object} params
- * @param {number} params.amount       - Amount to charge (e.g. 150)
  * @param {string} [params.currency]   - ISO code, defaults to USD
- * @param {string} [params.description]
+ * @param {object} params.formData     - Customer and tour form data
  */
-export const createDirectPaypalOrder = async ({ amount, fullPrice, formData, currency = "USD", description }) => {
+export const createDirectPaypalOrder = async ({ formData, currency = "USD" }) => {
   const response = await apiPost("paypal/create-direct-order", {
-    amount,
-    fullPrice,
     formData,
     currency,
-    description,
   });
   return response.data; // { orderId, approvalUrl, bookingId }
 };
-

@@ -2,29 +2,53 @@
 
 .hero_section {
   grid-column: 2 / -2;
-  grid-row: 2 / 4;
+  grid-row: 1 / 8;
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-height: 100svh;
+  width: 100%;
+  padding: clamp(8rem, 12vh, 10rem) 0 clamp(4rem, 8vh, 6rem);
+  text-align: center;
+
+  @media (max-width: $screen-medium) {
+    grid-row: auto;
+    min-height: 100svh;
+    padding: 8.5rem 0 5rem;
+  }
+
+  @media (max-width: $screen-small) {
+    min-height: 100svh;
+    padding: 7.8rem 0 4rem;
+  }
 }
 
 .title {
   color: var(--Secondary-colour);
 
-  font-size: 3.8rem;
+  font-size: clamp(3.2rem, 7vw, 5.2rem);
   font-weight: 700;
   text-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.25);
   font-family: chivo, sans-serif;
-  letter-spacing: 0.5rem;
+  letter-spacing: 0;
+  line-height: 1.05;
+  max-width: min(58rem, 100%);
+  text-wrap: balance;
+  overflow-wrap: break-word;
 
   @media (max-width: $screen-medium-large) {
     text-align: center;
   }
 
+  @media (max-width: $screen-small) {
+    font-size: clamp(2.75rem, 13vw, 4rem);
+    line-height: 1.08;
+  }
+
   @media (max-width: $screen-small-375) {
-    font-size: 3rem;
+    font-size: clamp(2.45rem, 12vw, 3.2rem);
   }
 }
 
@@ -41,6 +65,11 @@
   &_2 {
     color: var(--Tertiary-colour);
     margin-left: 1rem;
+
+    @media (max-width: $screen-small) {
+      display: block;
+      margin-left: 0;
+    }
   }
 }
 
@@ -48,18 +77,20 @@
   color: var(--Secondary-colour);
   text-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.25);
 
-  font-size: 1.8rem;
+  font-size: clamp(1.25rem, 2.4vw, 1.8rem);
   font-weight: 500;
 
   text-align: center;
-  max-width: 600px;
+  max-width: min(44rem, 100%);
+  line-height: 1.35;
+  text-wrap: balance;
 
   @media (max-width: $screen-small) {
-    font-size: 1.6rem;
+    font-size: clamp(1.35rem, 6vw, 1.6rem);
   }
 
   @media (max-width: $screen-small-414) {
-    font-size: 1.8rem;
+    font-size: 1.45rem;
   }
 }
 
@@ -80,13 +111,19 @@
 
 .button {
   background: linear-gradient(to right, #1e9146, #79a81c, #7ea15b);
-  padding: 0.417rem 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.2rem;
+  padding: 0.55rem 1.35rem;
   border-radius: 0.5rem;
-  font-size: 1.4rem;
+  font-size: clamp(1.25rem, 4vw, 1.4rem);
   color: var(--Secondary-colour);
   box-shadow: 0 12px 40px 5px rgba(0, 0, 0, 0.25);
   margin-top: 1rem;
   font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
 
   transition: $transition-duration;
 

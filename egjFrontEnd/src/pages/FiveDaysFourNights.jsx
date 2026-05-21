@@ -6,11 +6,10 @@ import { GiCampCookingPot, GiCanoe, GiCrocJaws, GiNightSleep } from "react-icons
 import { IoCloseOutline } from "react-icons/io5";
 import BookingModal from "../components/BookingModal";
 import Navbar from "../components/NavBar";
+import { TOUR_PRICES_2026 } from "../constants/tourPricing";
 import page from "../styles/pages/gamboaSacambu.module.scss";
 
-const TOUR_PRICE = 800;
-const DEPOSIT_RATE = 0.3;
-const DEPOSIT_AMOUNT = TOUR_PRICE * DEPOSIT_RATE;
+const TOUR_PRICE = TOUR_PRICES_2026.FIVE_DAYS_FOUR_NIGHTS.pricePerPerson;
 
 const socialLinks = {
   whatsapp: "https://wa.me/573175299539",
@@ -90,7 +89,7 @@ function FiveDaysFourNights() {
             ))}
           </div>
           <div className={page.hero_actions}>
-            <button className={page.primary_button} onClick={openModal}>Book Your Registration</button>
+            <button className={page.primary_button} onClick={openModal}>Booking Reservation</button>
             <a className={page.secondary_button} href="#itinerary">See itinerary <FiArrowDown /></a>
           </div>
         </motion.section>
@@ -143,9 +142,9 @@ function FiveDaysFourNights() {
         <motion.section className={page.cta_section} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <p className={page.section_label}>READY WHEN YOU ARE</p>
           <h2>Reserve your spot.<span>Five days fully inside the Amazon rhythm.</span></h2>
-          <p className={page.cta_copy}>Secure your place with a 30% deposit today. The remaining balance is payable on arrival in Leticia.</p>
+          <p className={page.cta_copy}>A 30% booking deposit confirms your reservation. The PayPal charge is shown separately and added to the remaining balance, which is paid at the office in cash only.</p>
           <div className={page.hero_actions}>
-            <button className={page.primary_button} onClick={openModal}>Book Your Registration</button>
+            <button className={page.primary_button} onClick={openModal}>Booking Reservation</button>
             <a className={page.secondary_button} href={socialLinks.email} target="_blank" rel="noopener noreferrer"><FiMail /> Email us</a>
           </div>
         </motion.section>
@@ -155,8 +154,7 @@ function FiveDaysFourNights() {
         {showModal && (
           <BookingModal
             tourTitle="5 Days & 4 Nights"
-            tourPrice={TOUR_PRICE}
-            depositAmount={DEPOSIT_AMOUNT}
+            pricePerPerson={TOUR_PRICE}
             onClose={closeModal}
           />
         )}
