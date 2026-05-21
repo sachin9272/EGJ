@@ -86,6 +86,8 @@ const bookingSchema = new mongoose.Schema(
       payerId: { type: String },        // PayPal payer ID
       amount: { type: Number },         // Captured amount in major currency unit
       currency: { type: String },       // ISO currency code e.g. "USD"
+      fee: { type: Number },            // PayPal transaction fee
+      netAmount: { type: Number },      // Net amount received (amount - fee)
       status: {
         type: String,
         enum: ["CREATED", "APPROVED", "CAPTURED", "COMPLETED", "FAILED"],

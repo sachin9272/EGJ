@@ -10,13 +10,14 @@ const transporter = nodemailer.createTransport({
 });
 
 // Function to send email
-export async function sendEmail({ to, subject, html }) {
+export async function sendEmail({ to, subject, html, attachments = [] }) {
   try {
     await transporter.sendMail({
       from: `"Expeditions George of the Jungle" <${process.env.EMAIL_USER}>`,
       to,
       subject,
       html,
+      attachments,
     });
     console.log(`Email sent to ${to}`);
   } catch (err) {

@@ -1,5 +1,6 @@
 import Booking from "../models/booking.model.js";
 import { sendEmail } from "../utils/email.js";
+import { generateInvoicePDF } from "../utils/pdfGenerator.js";
 import {
   capturePayPalOrder,
   createPayPalOrder,
@@ -272,6 +273,13 @@ export const paypalWebhook = async (req, res) => {
         .filter(Boolean)
         .join(" ");
 
+      const fee = capture.seller_receivable_breakdown?.paypal_fee?.value
+        ? parseFloat(capture.seller_receivable_breakdown.paypal_fee.value)
+        : 0;
+      const netAmount = capture.seller_receivable_breakdown?.net_amount?.value
+        ? parseFloat(capture.seller_receivable_breakdown.net_amount.value)
+        : parseFloat(capture.amount?.value ?? 0) - fee;
+
       const updatedBooking = await Booking.findByIdAndUpdate(
         booking._id,
         {
@@ -286,6 +294,8 @@ export const paypalWebhook = async (req, res) => {
           "paypal.payerId": payer.payer_id || "",
           "paypal.amount": parseFloat(capture.amount?.value ?? 0),
           "paypal.currency": capture.amount?.currency_code || "",
+          "paypal.fee": fee,
+          "paypal.netAmount": netAmount,
           "paypal.status": "COMPLETED",
           "paypal.capturedAt": new Date(),
         },
@@ -326,6 +336,35 @@ export const paypalWebhook = async (req, res) => {
           <p><strong>PayPal Capture ID:</strong> ${updatedBooking.paypal.captureId}</p>
         `,
       });
+
+      // ── Generate and send separate Invoice PDF email ──────────────────────
+      try {
+        const bookingWithTour = await Booking.findById(updatedBooking._id).populate("tour");
+        if (bookingWithTour) {
+          const pdfBuffer = await generateInvoicePDF(bookingWithTour);
+          await sendEmail({
+            to: bookingWithTour.mainTourist.email,
+            subject: "Your Booking Invoice & Receipt 📄",
+            html: `
+              <h2>Hello ${bookingWithTour.mainTourist.firstName},</h2>
+              <p>Thank you for booking your adventure with Expeditions George of the Jungle!</p>
+              <p>Please find attached your official booking invoice and payment receipt (PDF).</p>
+              <p>We look forward to welcoming you to the jungle!</p>
+              <p>Respectfully,</p>
+              <p>— Expeditions George of the Jungle Team</p>
+            `,
+            attachments: [
+              {
+                filename: `Invoice-${bookingWithTour._id.toString().slice(-4).toUpperCase()}.pdf`,
+                content: pdfBuffer,
+                contentType: "application/pdf",
+              },
+            ],
+          });
+        }
+      } catch (pdfErr) {
+        console.error("Error generating/sending PDF invoice:", pdfErr);
+      }
 
       console.log(
         `PayPal webhook: booking ${booking._id} confirmed. Capture: ${capture.id}`

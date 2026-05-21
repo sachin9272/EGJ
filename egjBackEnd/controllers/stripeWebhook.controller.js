@@ -1,6 +1,7 @@
 import Stripe from "stripe";
 import Booking from "../models/booking.model.js";
 import { sendEmail } from "../utils/email.js";
+import { generateInvoicePDF } from "../utils/pdfGenerator.js";
 
 const stripe = new Stripe(process.env.STRIPE_API_SECRET);
 
@@ -68,6 +69,35 @@ export const stripeWebhook = async (req, res) => {
             <p>Deposit paid: $${booking.bookingPayment}</p>
           `,
         });
+
+        // 4️⃣ Generate and send separate Invoice PDF email
+        try {
+          const bookingWithTour = await Booking.findById(booking._id).populate("tour");
+          if (bookingWithTour) {
+            const pdfBuffer = await generateInvoicePDF(bookingWithTour);
+            await sendEmail({
+              to: bookingWithTour.mainTourist.email,
+              subject: "Your Booking Invoice & Receipt 📄",
+              html: `
+                <h2>Hello ${bookingWithTour.mainTourist.firstName},</h2>
+                <p>Thank you for booking your adventure with Expeditions George of the Jungle!</p>
+                <p>Please find attached your official booking invoice and payment receipt (PDF).</p>
+                <p>We look forward to welcoming you to the jungle!</p>
+                <p>Respectfully,</p>
+                <p>— Expeditions George of the Jungle Team</p>
+              `,
+              attachments: [
+                {
+                  filename: `Invoice-${bookingWithTour._id.toString().slice(-4).toUpperCase()}.pdf`,
+                  content: pdfBuffer,
+                  contentType: "application/pdf",
+                },
+              ],
+            });
+          }
+        } catch (pdfErr) {
+          console.error("Error generating/sending Stripe PDF invoice:", pdfErr);
+        }
       }
     }
   }
