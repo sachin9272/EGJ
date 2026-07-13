@@ -13,7 +13,6 @@ import productRouter from "./routes/product.route.js";
 
 import bookingRouter from "./routes/booking.route.js";
 import checkoutRouter from "./routes/checkout.route.js";
-import paypalRouter from "./routes/paypal.routes.js";
 import contactRouter from "./routes/contact.route.js";
 
 const app = express();
@@ -21,6 +20,13 @@ const app = express();
 await connectDB();
 
 app.use(cors());
+
+// --- STRIPE WEBHOOK MUST COME BEFORE express.json() ---
+// We define it here so it gets the raw body which Stripe requires for signature verification
+import { stripeWebhook } from "./controllers/stripeWebhook.controller.js";
+app.post("/api/v1/booking/webhook", express.raw({ type: "application/json" }), stripeWebhook);
+// --------------------------------------------------------
+
 app.use(express.json());
 
 //ENDPOINTS
@@ -43,8 +49,6 @@ app.use("/api/v1/checkout", checkoutRouter);
 //BOOKING DOCUMENTS
 app.use("/api/v1/booking", clerkMiddleware(), bookingRouter);
 
-//PAYPAL PAYMENT GATEWAY
-app.use("/api/v1/paypal", clerkMiddleware(), paypalRouter);
 
 //CONTACT FORM
 app.use("/api/v1/contact", contactRouter);
