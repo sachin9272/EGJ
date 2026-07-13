@@ -19,7 +19,7 @@ function TourExpeditioins() {
 
   return (
     <>
-      <div className={`${tour.tours_container} grid-container`}>
+      <div id="tour" className={`${tour.tours_container} grid-container`}>
         <Navbar />
         <Hero />
         <CardsSection />

@@ -1,14 +1,12 @@
 import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
-import { createDirectPaypalOrder } from "../assets/API/Services/PaypalService";
+import { createDirectStripeOrder } from "../assets/API/Services/StripeService";
 import {
   MAXIMUM_TOURISTS,
   MINIMUM_TOURISTS,
   BOOKING_DEPOSIT_RATE,
-  PAYPAL_PROCESSING_RATE,
   calculateBookingDeposit,
-  calculatePayPalProcessingFee,
   calculatePaymentBreakdown,
 } from "../constants/tourPricing";
 import page from "../styles/components/bookingModal.module.scss";
@@ -73,14 +71,10 @@ export default function BookingModal({
   const depositPerPerson = payInFull
     ? pricePerPerson
     : calculateBookingDeposit(pricePerPerson);
-  const paypalFeePerPerson = payInFull
-    ? 0
-    : calculatePayPalProcessingFee(depositPerPerson);
   const remainingBalancePerPerson = payInFull
     ? 0
     : pricePerPerson - depositPerPerson;
   const depositPercent = payInFull ? 100 : Math.round(BOOKING_DEPOSIT_RATE * 100);
-  const paypalFeePercent = Math.round(PAYPAL_PROCESSING_RATE * 100);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -109,13 +103,12 @@ export default function BookingModal({
     setLoading(true);
     setError(null);
     try {
-      const { approvalUrl } = await createDirectPaypalOrder({
+      const { url } = await createDirectStripeOrder({
         formData: formData,
-        currency: "USD",
       });
-      window.location.href = approvalUrl;
+      window.location.href = url;
     } catch (err) {
-      console.error("PayPal error:", err);
+      console.error("Stripe error:", err);
       setError("Something went wrong. Please try again or contact us directly.");
       setLoading(false);
     }
@@ -276,14 +269,6 @@ export default function BookingModal({
                   ${depositPerPerson.toFixed(2)} USD
                 </span>
               </div>
-              {!payInFull && (
-                <div className={page.modal_row}>
-                  <span className={page.modal_label}>PayPal fee per person ({paypalFeePercent}%)</span>
-                  <span className={page.modal_value}>
-                    ${paypalFeePerPerson.toFixed(2)} USD
-                  </span>
-                </div>
-              )}
               <div className={page.modal_row + " " + page.modal_row_balance}>
                 <span className={page.modal_label}>
                   Booking reservation charges
@@ -321,11 +306,11 @@ export default function BookingModal({
                 <>
                   This test tour charges the full{" "}
                   <strong>${paymentBreakdown.dueToday.toFixed(2)}</strong> today
-                  so you can verify the live PayPal payment flow.
+                  so you can verify the live Stripe payment flow.
                 </>
               ) : (
                 <>
-                  A {depositPercent}% booking deposit plus the PayPal fee is required
+                  A {depositPercent}% booking deposit is required
                   to confirm your reservation. The remaining{" "}
                   <strong>${paymentBreakdown.balance.toFixed(2)}</strong> is paid in
                   person at the office, cash only.
@@ -343,26 +328,7 @@ export default function BookingModal({
                   <span className={page.modal_spinner} />
                 ) : (
                   <>
-                    <svg
-                      height="18"
-                      viewBox="0 0 101 32"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M12.237 2.43C11.38.96 9.833 0 8.032 0H2.395C1.07 0 0 1.07 0 2.395v27.21C0 30.93 1.07 32 2.395 32h5.637c5.285 0 9.574-4.29 9.574-9.574V9.574C17.606 6.245 15.38 3.6 12.237 2.43z"
-                        fill="#009CDE"
-                      />
-                      <path
-                        d="M38.035 0H21.8C20.476 0 19.406 1.07 19.406 2.395v27.21c0 1.325 1.07 2.395 2.395 2.395h16.234c5.285 0 9.574-4.29 9.574-9.574V9.574C47.609 4.29 43.32 0 38.035 0z"
-                        fill="#012169"
-                      />
-                      <text x="52" y="22" fill="#fff" fontSize="14" fontWeight="bold" fontFamily="Arial">
-                        Pay
-                      </text>
-                    </svg>
-                    Pay ${paymentBreakdown.dueToday.toFixed(2)} with PayPal
+                    Pay ${paymentBreakdown.dueToday.toFixed(2)} Securely
                   </>
                 )}
               </button>
@@ -374,7 +340,7 @@ export default function BookingModal({
               </button>
             </div>
             <p className={page.modal_secure}>
-              Payments are processed securely by PayPal.
+              Payments are processed securely by Stripe.
             </p>
           </div>
         )}
