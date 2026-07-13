@@ -78,22 +78,7 @@ const bookingSchema = new mongoose.Schema(
       customerId: { type: String },
     },
 
-    paypal: {
-      orderId: { type: String },        // PayPal Order ID (created before redirect)
-      captureId: { type: String },      // PayPal Capture ID (set after capture)
-      payerEmail: { type: String },     // Buyer's PayPal email
-      payerName: { type: String },      // Buyer's full name from PayPal
-      payerId: { type: String },        // PayPal payer ID
-      amount: { type: Number },         // Captured amount in major currency unit
-      currency: { type: String },       // ISO currency code e.g. "USD"
-      fee: { type: Number },            // PayPal transaction fee
-      netAmount: { type: Number },      // Net amount received (amount - fee)
-      status: {
-        type: String,
-        enum: ["CREATED", "APPROVED", "CAPTURED", "COMPLETED", "FAILED"],
-      },
-      capturedAt: { type: Date },       // Timestamp of successful capture (from webhook)
-    },
+
   },
   {
     timestamps: true,
