@@ -20,12 +20,7 @@ import { stripeWebhook } from "../controllers/stripeWebhook.controller.js";
 
 const bookingRouter = express.Router();
 
-// Webhook route should use raw body parser middleware because Stripe needs raw payload
-bookingRouter.post(
-  "/webhook",
-  express.raw({ type: "application/json" }),
-  stripeWebhook
-);
+  // Webhook route has been moved to server.js to bypass express.json()
 
 //route for Admins to create personalised bookings
 bookingRouter.post("/admin", protect, adminOnly, createBookingAdmin);
