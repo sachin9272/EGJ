@@ -9,6 +9,8 @@ import {
 
 const stripe = new Stripe(process.env.STRIPE_API_SECRET);
 
+const CLIENT_URL = process.env.CLIENT_URL.replace(/\/+$/, "");
+
 export const createCheckoutSession = async (req, res) => {
   try {
     const { productId, quantity = 1, userId, bookingId } = req.body;
@@ -50,8 +52,8 @@ export const createCheckoutSession = async (req, res) => {
           quantity, // Multiply deposit by number of people
         },
       ],
-      success_url: `${process.env.CLIENT_URL}/success`,
-      cancel_url: `${process.env.CLIENT_URL}/`,
+      success_url: `${CLIENT_URL}/success`,
+      cancel_url: `${CLIENT_URL}/`,
       metadata: {
         productId,
         userId,
@@ -143,8 +145,8 @@ export const createDirectCheckoutSession = async (req, res) => {
           quantity: 1, // Quantity is 1 because the deposit amount is total for all tourists based on paymentBreakdown
         },
       ],
-      success_url: `${process.env.CLIENT_URL}/success`,
-      cancel_url: `${process.env.CLIENT_URL}/`,
+      success_url: `${CLIENT_URL}/success`,
+      cancel_url: `${CLIENT_URL}/`,
       metadata: {
         bookingId: newBooking._id.toString(),
         fullPrice: paymentBreakdown.totalPrice * 100,
