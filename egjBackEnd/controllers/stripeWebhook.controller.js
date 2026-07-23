@@ -61,7 +61,7 @@ export const stripeWebhook = async (req, res) => {
             <h2>Hello ${booking.mainTourist.firstName},</h2>
             <p>Your booking is confirmed! Here are your details:</p>
             <ul>
-              <li>Tour: ${booking.tour}</li>
+              <li>Tour: ${booking.tourPackage}</li>
               <li>Total tourists: ${booking.totalTourists}</li>
               <li>Total cost: $${booking.totalCost}</li>
               <li>Deposit paid: $${booking.bookingPayment}</li>
@@ -84,7 +84,7 @@ export const stripeWebhook = async (req, res) => {
             <h2>New Booking!</h2>
             <p>Booking ID: ${booking._id}</p>
             <p>Client: ${booking.mainTourist.firstName} ${booking.mainTourist.surname}</p>
-            <p>Tour: ${booking.tour}</p>
+            <p>Tour: ${booking.tourPackage}</p>
             <p>Total tourists: ${booking.totalTourists}</p>
             <p>Deposit paid: $${booking.bookingPayment}</p>
           `,

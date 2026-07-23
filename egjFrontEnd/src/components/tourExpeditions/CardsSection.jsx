@@ -80,7 +80,19 @@ const getTourDetailsPath = (name = "") => {
     return "/tour/5-days-4-nights";
   }
 
+  if (normalizedName.includes("LIVE PAYMENT TEST")) {
+    return "/tour/live-payment-test";
+  }
+
   return null;
+};
+
+const TEST_TOUR_CARD = {
+  _id: "live-payment-test-tour",
+  name: "Live Payment Test Tour",
+  description:
+    "A $1 test booking used to verify the live Stripe payment flow and confirmation emails before customers use the real tour pages.",
+  images: [],
 };
 
 const getTourDisplayName = (name = "") =>
@@ -120,7 +132,7 @@ function CardsSection() {
             return getTourOrder(firstTour.name) - getTourOrder(secondTour.name);
           });
 
-        setTours(sortedTours);
+        setTours([...sortedTours, TEST_TOUR_CARD]);
       } catch (error) {
         console.error("Error fetching tours:", error);
       }
