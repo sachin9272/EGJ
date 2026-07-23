@@ -18,7 +18,7 @@ const included = [
 ];
 
 const infoItems = [
-  { icon: FiCreditCard, label: "Payment", value: "$1.00 USD" },
+  { icon: FiCreditCard, label: "Payment", value: "$0.50 USD" },
   { icon: FiShield, label: "Gateway", value: "Stripe Live" },
   { icon: FiMail, label: "Email", value: "Invoice test" },
   { icon: FiUsers, label: "Group size", value: "1 test booking" },
@@ -41,7 +41,7 @@ function LivePaymentTestTour() {
           <p className={page.eyebrow}>LIVE PAYMENT TEST</p>
           <h1 className={page.title}>
             <span>STRIPE</span>
-            <span className={page.title_highlight}>$1 TEST</span>
+            <span className={page.title_highlight}>$0.50 TEST</span>
           </h1>
           <p className={page.description}>
             A temporary test tour for verifying live Stripe payments,

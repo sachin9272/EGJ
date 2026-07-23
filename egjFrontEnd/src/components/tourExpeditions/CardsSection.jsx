@@ -91,7 +91,7 @@ const TEST_TOUR_CARD = {
   _id: "live-payment-test-tour",
   name: "Live Payment Test Tour",
   description:
-    "A $1 test booking used to verify the live Stripe payment flow and confirmation emails before customers use the real tour pages.",
+    "A $0.50 test booking used to verify the live Stripe payment flow and confirmation emails before customers use the real tour pages.",
   images: [],
 };
 

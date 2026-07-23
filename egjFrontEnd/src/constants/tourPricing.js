@@ -33,7 +33,7 @@ export const TOUR_PRICES_2026 = {
   },
   LIVE_PAYMENT_TEST: {
     title: "Live Payment Test Tour",
-    pricePerPerson: 1,
+    pricePerPerson: 0.5,
     payInFull: true,
   },
 };
