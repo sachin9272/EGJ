@@ -172,13 +172,14 @@ export function generateInvoicePDF(booking) {
       
       currentY = doc.y;
       
+      const isCustomPayment = booking.paymentType === "custom";
       const pdfBalance = totalCost - totalPaid;
       doc.fillColor("#3ab54a")
          .font("Helvetica-Bold")
          .text(`REMAINING CASH BALANCE: ${currency} $${pdfBalance.toFixed(2)}`, 260, currentY, { align: "right" });
-         
+
       currentY = doc.y + 25;
-      
+
       // 8. Tour Description
       const tourPackageName = (booking.tourPackage || (booking.tour && booking.tour.name) || "Jungle Tour").toUpperCase();
       const checkInDate = booking.checkIn;
@@ -194,9 +195,17 @@ export function generateInvoicePDF(booking) {
          .text("TOUR DESCRIPTION", 40, currentY, { lineGap: 3 })
          .text(`${tourPackageName} | DATE: ${travelDates}`, { lineGap: 3 })
          .font("Helvetica")
-         .text(`${currency} $${totalCost.toFixed(2)} - ${currency} $${totalPaid.toFixed(2)} (Booking deposit 30%)`, { lineGap: 3 })
-         .text(`Balance: ${currency} $${pdfBalance.toFixed(2)} | COP ${copBalanceFormatted}.000 (balance must pay at the office, own currency and cash only)`);
-         
+         .text(
+           isCustomPayment
+             ? `${currency} $${totalCost.toFixed(2)} (PAID IN FULL)`
+             : `${currency} $${totalCost.toFixed(2)} - ${currency} $${totalPaid.toFixed(2)} (Booking deposit 30%)`,
+           { lineGap: 3 }
+         );
+
+      if (!isCustomPayment) {
+        doc.text(`Balance: ${currency} $${pdfBalance.toFixed(2)} | COP ${copBalanceFormatted}.000 (balance must pay at the office, own currency and cash only)`);
+      }
+
       currentY = doc.y + 60;
       
       // 9. Terms & Conditions

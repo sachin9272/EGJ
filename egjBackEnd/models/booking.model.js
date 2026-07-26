@@ -66,6 +66,11 @@ const bookingSchema = new mongoose.Schema(
       default: "Incoming",
     },
     isPaid: { type: Boolean, default: false },
+    paymentType: {
+      type: String,
+      enum: ["deposit", "custom"],
+      default: "deposit",
+    },
     expireAt: {
       type: Date,
       default: undefined, // no expiration by default, will set on create

@@ -50,7 +50,113 @@ export const stripeWebhook = async (req, res) => {
 
       if (booking) {
         console.log(`✅ Booking ${bookingId} found and updated as paid. Proceeding to send emails.`);
-        
+
+        if (booking.paymentType === "custom") {
+          // Custom "Pay Now" flow: mirrors the existing deposit flow's email
+          // sequence (confirmation email, then a separate PDF invoice email),
+          // but sends BOTH emails to the client AND to the admin.
+
+          // 2️⃣ Send confirmation email to client
+          try {
+            console.log(`📧 Sending custom payment confirmation to client: ${booking.mainTourist.email}`);
+            await sendEmail({
+              to: booking.mainTourist.email,
+              subject: "Payment Received — Thank You! ✅",
+              html: `
+                <h2>Hello ${booking.mainTourist.firstName},</h2>
+                <p>We've received your payment. Here are your details:</p>
+                <ul>
+                  <li>Amount paid: $${booking.bookingPayment}</li>
+                  ${booking.comments ? `<li>Details: ${booking.comments}</li>` : ""}
+                </ul>
+                <p>Thank you for choosing Expeditions George of the Jungle!</p>
+              `,
+            });
+            console.log(`✅ Client confirmation email sent successfully.`);
+          } catch (emailErr) {
+            console.error("❌ Failed to send client confirmation email:", emailErr);
+          }
+
+          // 3️⃣ Send notification email to admin
+          try {
+            console.log(`📧 Sending custom payment notification to admin: ${process.env.ADMIN_EMAIL}`);
+            await sendEmail({
+              to: process.env.ADMIN_EMAIL,
+              subject: "New Custom Tour Payment Received",
+              html: `
+                <h2>New Custom Payment!</h2>
+                <p>Booking ID: ${booking._id}</p>
+                <p>Client: ${booking.mainTourist.firstName} ${booking.mainTourist.surname}</p>
+                <p>Email: ${booking.mainTourist.email}</p>
+                <p>Phone: ${booking.mainTourist.phoneNumber}</p>
+                <p>Amount paid: $${booking.bookingPayment}</p>
+                ${booking.comments ? `<p>Details: ${booking.comments}</p>` : ""}
+              `,
+            });
+            console.log(`✅ Admin notification email sent successfully.`);
+          } catch (adminEmailErr) {
+            console.error("❌ Failed to send admin notification email:", adminEmailErr);
+          }
+
+          // 4️⃣ Generate the invoice PDF once, then send it to BOTH client and admin
+          try {
+            console.log(`📄 Generating invoice PDF for booking ${booking._id}`);
+            const bookingWithTour = await Booking.findById(booking._id).populate("tour");
+            if (bookingWithTour) {
+              const pdfBuffer = await generateInvoicePDF(bookingWithTour);
+              const attachments = [
+                {
+                  filename: `Invoice-${bookingWithTour._id.toString().slice(-4).toUpperCase()}.pdf`,
+                  content: pdfBuffer,
+                  contentType: "application/pdf",
+                },
+              ];
+
+              try {
+                await sendEmail({
+                  to: bookingWithTour.mainTourist.email,
+                  subject: "Your Payment Invoice & Receipt 📄",
+                  html: `
+                    <h2>Hello ${bookingWithTour.mainTourist.firstName},</h2>
+                    <p>Thank you for your payment to Expeditions George of the Jungle!</p>
+                    <p>Please find attached your official payment invoice/receipt (PDF).</p>
+                    <p>Respectfully,</p>
+                    <p>— Expeditions George of the Jungle Team</p>
+                  `,
+                  attachments,
+                });
+                console.log(`✅ Invoice PDF email sent successfully to ${bookingWithTour.mainTourist.email}.`);
+              } catch (clientPdfErr) {
+                console.error("❌ Failed to send client invoice PDF email:", clientPdfErr);
+              }
+
+              try {
+                await sendEmail({
+                  to: process.env.ADMIN_EMAIL,
+                  subject: "Custom Payment Invoice & Receipt 📄",
+                  html: `
+                    <h2>New Custom Payment — Invoice Copy</h2>
+                    <p>Booking ID: ${bookingWithTour._id}</p>
+                    <p>Client: ${bookingWithTour.mainTourist.firstName} ${bookingWithTour.mainTourist.surname}</p>
+                    <p>Please find attached the invoice/receipt (PDF) sent to the client.</p>
+                  `,
+                  attachments,
+                });
+                console.log(`✅ Invoice PDF email sent successfully to admin.`);
+              } catch (adminPdfErr) {
+                console.error("❌ Failed to send admin invoice PDF email:", adminPdfErr);
+              }
+            } else {
+              console.warn(`⚠️ Could not generate PDF: Booking details missing.`);
+            }
+          } catch (pdfErr) {
+            console.error("❌ Error generating/sending custom payment invoice PDF:", pdfErr);
+          }
+
+          res.json({ received: true });
+          return;
+        }
+
         // 2️⃣ Send confirmation email to client
         try {
           console.log(`📧 Attempting to send confirmation email to client: ${booking.mainTourist.email}`);
