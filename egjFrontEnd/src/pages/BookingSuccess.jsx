@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 /**
  * /success
- * Generic booking success page — shown after both Stripe and PayPal payments.
+ * Generic booking success page — shown after both Stripe and  payments.
  */
 function BookingSuccess() {
   const navigate = useNavigate();

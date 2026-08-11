@@ -1,8 +1,6 @@
 export const MINIMUM_TOURISTS = 1;
 export const MAXIMUM_TOURISTS = 10;
 export const BOOKING_DEPOSIT_RATE = 0.3;
-export const PAYPAL_PROCESSING_MULTIPLIER = 1.08;
-export const PAYPAL_PROCESSING_RATE = PAYPAL_PROCESSING_MULTIPLIER - 1;
 
 const roundCurrency = (amount) => Math.round(amount * 100) / 100;
 
@@ -41,9 +39,6 @@ export const TOUR_PRICES_2026 = {
 export const calculateBookingDeposit = (totalPrice) =>
   roundCurrency(totalPrice * BOOKING_DEPOSIT_RATE);
 
-export const calculatePayPalProcessingFee = (deposit) =>
-  roundCurrency(deposit * PAYPAL_PROCESSING_RATE);
-
 export const calculatePaymentBreakdown = (
   pricePerPerson,
   totalTourists,
@@ -60,21 +55,18 @@ export const calculatePaymentBreakdown = (
       people,
       totalPrice,
       deposit: totalPrice,
-      paypalProcessingFee: 0,
       dueToday: totalPrice,
       balance: 0,
     };
   }
 
   const deposit = calculateBookingDeposit(totalPrice);
-  const paypalProcessingFee = calculatePayPalProcessingFee(deposit);
-  const dueToday = roundCurrency(deposit + paypalProcessingFee);
+  const dueToday = roundCurrency(deposit);
 
   return {
     people,
     totalPrice,
     deposit,
-    paypalProcessingFee,
     dueToday,
     balance: roundCurrency(totalPrice - deposit),
   };

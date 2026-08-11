@@ -255,7 +255,7 @@ function GamboaSacambu() {
             <span>Small group, big river.</span>
           </h2>
           <p className={page.cta_copy}>
-            A 30% booking deposit confirms your reservation. The PayPal charge is shown separately and added to the remaining balance, which is paid at the office in cash only.
+            A 30% booking deposit confirms your reservation. The remaining balance is paid at the office in cash only.
           </p>
           <div className={page.hero_actions}>
             <button className={page.primary_button} onClick={openModal}>
