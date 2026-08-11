@@ -14,6 +14,8 @@ import productRouter from "./routes/product.route.js";
 import bookingRouter from "./routes/booking.route.js";
 import checkoutRouter from "./routes/checkout.route.js";
 import contactRouter from "./routes/contact.route.js";
+import ssoRouter from "./routes/sso.route.js";
+import masterStatsRouter from "./routes/masterStats.route.js";
 
 const app = express();
 
@@ -35,6 +37,10 @@ app.use("/", healthRoutes); // ENDPOINT TO CHECK DATABASE CONNECTION
 
 //User
 app.use("/api/v1/user", clerkMiddleware(), userRouter);
+
+//SSO and Master Admin
+app.use("/api/v1/sso", ssoRouter);
+app.use("/api/v1/master-stats", masterStatsRouter);
 
 //ENDPOINTS FOR ADMIN USAGE
 app.use("/api/v1/users", clerkMiddleware(), adminRouter);
