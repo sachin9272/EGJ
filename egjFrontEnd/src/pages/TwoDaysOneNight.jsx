@@ -138,7 +138,7 @@ function TwoDaysOneNight() {
         <motion.section className={page.cta_section} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-10%" }} transition={{ duration: 0.6, ease: "easeOut" }}>
           <p className={page.section_label}>READY WHEN YOU ARE</p>
           <h2>Reserve your spot.<span>Two days deep in the Amazon.</span></h2>
-          <p className={page.cta_copy}>A 30% booking deposit confirms your reservation. The PayPal charge is shown separately and added to the remaining balance, which is paid at the office in cash only.</p>
+          <p className={page.cta_copy}>A 30% booking deposit confirms your reservation. The remaining balance is paid at the office in cash only.</p>
           <div className={page.hero_actions}>
             <button className={page.primary_button} onClick={openModal}>Booking Reservation</button>
             <a className={page.secondary_button} href={socialLinks.email} target="_blank" rel="noopener noreferrer"><FiMail /> Email us</a>
