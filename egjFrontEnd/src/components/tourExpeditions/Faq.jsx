@@ -12,7 +12,7 @@ function Faq() {
     {
       question: "How does the booking payment work?",
       answer:
-        "A 30% booking deposit is required to confirm your reservation. The PayPal charge is shown separately and added to the remaining balance, which is paid in person at the office, cash only.",
+        "A 30% booking deposit is required to confirm your reservation. The remaining balance is paid in person at the office, cash only.",
     },
     {
       question: "Is airport pickup and drop-off included?",
