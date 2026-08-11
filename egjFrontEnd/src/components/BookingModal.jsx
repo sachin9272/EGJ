@@ -61,6 +61,7 @@ export default function BookingModal({
     totalTourists: String(fixedTotalTourists || MINIMUM_TOURISTS),
     dates: "",
     message: "",
+    participants: [],
   });
 
   const paymentBreakdown = calculatePaymentBreakdown(
@@ -78,6 +79,30 @@ export default function BookingModal({
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  // Sync participants array with selected number of tourists
+  useEffect(() => {
+    const count = Number(formData.totalTourists) || MINIMUM_TOURISTS;
+    setFormData(prev => ({
+      ...prev,
+      participants: Array.from({ length: count }, (_, i) =>
+        prev.participants[i] || { firstName: "", lastName: "", passport: "" }
+      ),
+    }));
+  }, [formData.totalTourists]);
+
+  const handleParticipantChange = (e) => {
+    const { name, value } = e.target;
+    const match = name.match(/participants\[(\d+)\]\.(.+)/);
+    if (!match) return;
+    const idx = Number(match[1]);
+    const field = match[2];
+    setFormData(prev => {
+      const newParticipants = [...prev.participants];
+      newParticipants[idx] = { ...newParticipants[idx], [field]: value };
+      return { ...prev, participants: newParticipants };
+    });
   };
 
   const handleNext = (e) => {
@@ -211,16 +236,46 @@ export default function BookingModal({
 
             <div className={page.form_group}>
               <label>How many people will be going with you? (1 to 10)</label>
-              <input
-                type="number"
+              <select
                 name="totalTourists"
                 min={MINIMUM_TOURISTS}
                 max={MAXIMUM_TOURISTS}
                 value={formData.totalTourists}
                 onChange={handleChange}
                 readOnly={Boolean(fixedTotalTourists)}
-              />
+              >
+                {[...Array(10)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>{i + 1}</option>
+                ))}
+              </select>
             </div>
+            {/* Participant details */}
+            {formData.participants.map((p, idx) => (
+              <div key={idx} className={page.form_group}>
+                <label>Participant {idx + 1} (optional)</label>
+                <input
+                  type="text"
+                  name={`participants[${idx}].firstName`}
+                  placeholder="First Name"
+                  value={p.firstName}
+                  onChange={handleParticipantChange}
+                />
+                <input
+                  type="text"
+                  name={`participants[${idx}].lastName`}
+                  placeholder="Last Name"
+                  value={p.lastName}
+                  onChange={handleParticipantChange}
+                />
+                <input
+                  type="text"
+                  name={`participants[${idx}].passport`}
+                  placeholder="Passport # (optional)"
+                  value={p.passport}
+                  onChange={handleParticipantChange}
+                />
+              </div>
+            ))}
 
             <div className={page.form_group}>
               <label>Dates for your tour package</label>
