@@ -9,6 +9,8 @@ import {
 
 const stripe = new Stripe(process.env.STRIPE_API_SECRET);
 
+const CLIENT_URL = process.env.CLIENT_URL.replace(/\/+$/, "");
+
 export const createCheckoutSession = async (req, res) => {
   try {
     const { productId, quantity = 1, userId, bookingId } = req.body;
@@ -50,8 +52,8 @@ export const createCheckoutSession = async (req, res) => {
           quantity, // Multiply deposit by number of people
         },
       ],
-      success_url: `${process.env.CLIENT_URL}/success`,
-      cancel_url: `${process.env.CLIENT_URL}/`,
+      success_url: `${CLIENT_URL}/success`,
+      cancel_url: `${CLIENT_URL}/`,
       metadata: {
         productId,
         userId,
@@ -143,8 +145,8 @@ export const createDirectCheckoutSession = async (req, res) => {
           quantity: 1, // Quantity is 1 because the deposit amount is total for all tourists based on paymentBreakdown
         },
       ],
-      success_url: `${process.env.CLIENT_URL}/success`,
-      cancel_url: `${process.env.CLIENT_URL}/`,
+      success_url: `${CLIENT_URL}/success`,
+      cancel_url: `${CLIENT_URL}/`,
       metadata: {
         bookingId: newBooking._id.toString(),
         fullPrice: paymentBreakdown.totalPrice * 100,
@@ -156,5 +158,78 @@ export const createDirectCheckoutSession = async (req, res) => {
   } catch (error) {
     console.error("Stripe Direct Checkout Error:", error.message);
     res.status(500).json({ error: "Failed to create direct checkout session" });
+  }
+};
+
+export const createCustomPaymentSession = async (req, res) => {
+  try {
+    const { formData } = req.body;
+
+    if (!formData?.firstName || !formData?.lastName || !formData?.email) {
+      return res
+        .status(400)
+        .json({ error: "First name, last name, and email are required" });
+    }
+
+    const amount = Number(formData?.amount);
+    if (!Number.isFinite(amount) || amount < 1) {
+      return res
+        .status(400)
+        .json({ error: "A valid payment amount of at least $1 is required" });
+    }
+
+    const roundedAmount = Math.round(amount * 100) / 100;
+    const expireAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours TTL
+
+    const newBooking = new Booking({
+      totalCost: roundedAmount,
+      bookingPayment: roundedAmount,
+      balance: 0,
+      totalTourists: 1,
+      tourPackage: "Custom Tour Payment",
+      comments: formData?.notes || "",
+      paymentType: "custom",
+      mainTourist: {
+        firstName: formData.firstName,
+        surname: formData.lastName,
+        email: formData.email,
+        phoneNumber: formData?.phone || "0000000000",
+        nacionality: formData?.nationality || "Unknown",
+      },
+      expireAt,
+      isPaid: false,
+    });
+
+    await newBooking.save();
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "Custom Tour Payment",
+              description: `Payment for ${formData.firstName} ${formData.lastName}`,
+            },
+            unit_amount: Math.round(roundedAmount * 100),
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${CLIENT_URL}/success`,
+      cancel_url: `${CLIENT_URL}/`,
+      metadata: {
+        bookingId: newBooking._id.toString(),
+        paymentType: "custom",
+      },
+    });
+
+    res.status(200).json({ url: session.url, bookingId: newBooking._id });
+  } catch (error) {
+    console.error("Stripe Custom Payment Checkout Error:", error.message);
+    res
+      .status(500)
+      .json({ error: "Failed to create custom payment session" });
   }
 };

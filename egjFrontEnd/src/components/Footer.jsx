@@ -1,5 +1,4 @@
 import {
-  FaLinkedin,
   FaSquareInstagram,
   FaSquareFacebook,
   FaSquareYoutube,
@@ -16,8 +15,6 @@ function Footer() {
     tripAdvisor:
       "https://www.tripadvisor.com/Attraction_Review-g317037-d12250134-Reviews-Expeditions_George_of_the_Jungle-Leticia_Amazonas_Department.html",
     instagram: "https://www.instagram.com/expeditionsgeorgeofthejungle/",
-    linkedin:
-      "https://www.linkedin.com/company/expeditions-george-of-the-jungle-official/",
     youtube: "https://www.youtube.com/@expeditionsgeorgeofthejungle",
     whatsapp: "https://wa.me/573208996144",
     email: "expeditionsgeorgeofthejungle@gmail.com",
@@ -84,12 +81,12 @@ function Footer() {
                 </li>
                 <li>
                   <a
-                    href={socialLinks.linkedin}
+                    href={socialLinks.youtube}
                     target="_blank"
-                    aria-label="LinkedIn"
+                    aria-label="Youtube"
                     rel="noopener noreferrer"
                   >
-                    <FaLinkedin />
+                    <FaSquareYoutube />
                   </a>
                 </li>
               </ul>
@@ -105,16 +102,6 @@ function Footer() {
                     rel="noopener noreferrer"
                   >
                     <FaSquareFacebook />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={socialLinks.youtube}
-                    target="_blank"
-                    aria-label="Youtube"
-                    rel="noopener noreferrer"
-                  >
-                    <FaSquareYoutube />
                   </a>
                 </li>
               </ul>

@@ -45,7 +45,7 @@ export const TOUR_PRICES_2026 = [
   },
   {
     title: "Live Payment Test Tour",
-    pricePerPerson: 1,
+    pricePerPerson: 0.5,
     matches: ["LIVE PAYMENT TEST"],
     payInFull: true,
     fixedTotalTourists: 1,

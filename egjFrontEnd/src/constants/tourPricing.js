@@ -29,11 +29,6 @@ export const TOUR_PRICES_2026 = {
     title: "5 Days & 4 Nights",
     pricePerPerson: 510,
   },
-  LIVE_PAYMENT_TEST: {
-    title: "Live Payment Test Tour",
-    pricePerPerson: 1,
-    payInFull: true,
-  },
 };
 
 export const calculateBookingDeposit = (totalPrice) =>

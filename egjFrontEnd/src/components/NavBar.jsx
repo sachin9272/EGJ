@@ -5,6 +5,7 @@ import { FaBook } from "react-icons/fa";
 import navBar from "../styles/components/navBar.module.scss";
 import useAuthStore from "../store/auth";
 import { AnimatePresence, motion } from "motion/react";
+import PayNowModal from "./PayNowModal";
 
 import { IoMenu, IoClose } from "react-icons/io5";
 
@@ -21,6 +22,7 @@ const Navbar = () => {
 
   // const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showPayNow, setShowPayNow] = useState(false);
 
   const { user } = useUser();
 
@@ -108,6 +110,15 @@ const Navbar = () => {
           )}
           <button className={navBar.button_book} onClick={handleBookNowClick}>
             Book Now
+          </button>
+          <button
+            className={navBar.button_book}
+            onClick={() => {
+              setShowPayNow(true);
+              setIsMenuOpen(false);
+            }}
+          >
+            Pay Now
           </button>
           {user ? (
             <UserButton>
@@ -202,6 +213,15 @@ const Navbar = () => {
                   >
                     Book Now
                   </button>
+                  <button
+                    className={navBar.button_book}
+                    onClick={() => {
+                      setShowPayNow(true);
+                      setIsMenuOpen(false);
+                    }}
+                  >
+                    Pay Now
+                  </button>
 
                   {user ? (
                     <UserButton>
@@ -231,6 +251,12 @@ const Navbar = () => {
           </div>
         )}
       </nav>
+
+      <AnimatePresence>
+        {showPayNow && (
+          <PayNowModal onClose={() => setShowPayNow(false)} />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
