@@ -102,6 +102,13 @@ export const createDirectCheckoutSession = async (req, res) => {
 
     const expireAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours TTL
 
+    const additionalTourists = formData?.participants?.map(p => ({
+      firstName: p.firstName || "Unknown",
+      surname: p.lastName || "Unknown",
+      passportNumber: p.passport || "N/A",
+      nacionality: "Unknown"
+    })) || [];
+
     // Create a Booking document from the form data
     const newBooking = new Booking({
       totalCost: paymentBreakdown.totalPrice,
@@ -117,7 +124,13 @@ export const createDirectCheckoutSession = async (req, res) => {
         email: formData?.email || "no-email@provided.com",
         phoneNumber: formData?.phone || "0000000000",
         nacionality: formData?.nationality || "Unknown",
+        flightInformation: {
+          arrival: { flightNumber: formData?.arrivalFlight || "" },
+          departure: { flightNumber: formData?.departureFlight || "" },
+        },
+        hotel: formData?.hotel || "",
       },
+      additionalTourist: additionalTourists,
       expireAt,
       isPaid: false,
     });

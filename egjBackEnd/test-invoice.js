@@ -23,6 +23,24 @@ async function testInvoice() {
 
     console.log(`✅ Found booking: ${bookingWithTour._id}`);
     
+    // Inject mock flight and hotel info for testing
+    if (bookingWithTour.mainTourist) {
+      bookingWithTour.mainTourist.flightInformation = {
+        arrival: { flightNumber: "Oct 12, 10:30 AM - LA2233" },
+        departure: { flightNumber: "Oct 18, 5:00 PM - LA2234" }
+      };
+      bookingWithTour.mainTourist.hotel = "Wawazu Amazon Hotel";
+    }
+    
+    // Inject 6 dummy members for testing PDF generation
+    bookingWithTour.additionalTourist = Array.from({ length: 2 }, (_, i) => ({
+      firstName: `TestMember${i + 1}`,
+      surname: `TestLastname${i + 1}`,
+      passportNumber: `PASS${1000 + i}`,
+      nacionality: "Testland"
+    }));
+    bookingWithTour.totalTourists = 7;
+    
     // You can hardcode your email here to test receiving it directly:
     // const targetEmail = "your.email@example.com";
     // const targetEmail = bookingWithTour.mainTourist.email;

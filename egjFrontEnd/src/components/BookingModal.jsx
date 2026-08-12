@@ -60,6 +60,9 @@ export default function BookingModal({
     tourPackage: tourTitle,
     totalTourists: String(fixedTotalTourists || MINIMUM_TOURISTS),
     dates: "",
+    arrivalFlight: "",
+    departureFlight: "",
+    hotel: "",
     message: "",
     participants: [],
   });
@@ -81,12 +84,13 @@ export default function BookingModal({
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  // Sync participants array with selected number of tourists
+  // Sync participants array with selected number of tourists minus the primary booker
   useEffect(() => {
     const count = Number(formData.totalTourists) || MINIMUM_TOURISTS;
+    const additionalParticipantsCount = Math.max(0, count - 1);
     setFormData(prev => ({
       ...prev,
-      participants: Array.from({ length: count }, (_, i) =>
+      participants: Array.from({ length: additionalParticipantsCount }, (_, i) =>
         prev.participants[i] || { firstName: "", lastName: "", passport: "" }
       ),
     }));
@@ -252,7 +256,7 @@ export default function BookingModal({
             {/* Participant details */}
             {formData.participants.map((p, idx) => (
               <div key={idx} className={page.form_group}>
-                <label>Participant {idx + 1} (optional)</label>
+                <label>Participant {idx + 2} (optional)</label>
                 <input
                   type="text"
                   name={`participants[${idx}].firstName`}
@@ -283,6 +287,39 @@ export default function BookingModal({
                 type="date"
                 name="dates"
                 value={formData.dates}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={page.form_group}>
+              <label>Arrival Date/Time & Flight Number (optional)</label>
+              <input
+                type="text"
+                name="arrivalFlight"
+                placeholder="e.g. Oct 12, 10:30 AM - LA2233"
+                value={formData.arrivalFlight}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={page.form_group}>
+              <label>Departure Date/Time & Flight Number (optional)</label>
+              <input
+                type="text"
+                name="departureFlight"
+                placeholder="e.g. Oct 18, 5:00 PM - LA2234"
+                value={formData.departureFlight}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={page.form_group}>
+              <label>Hotel Accommodation Address (optional)</label>
+              <input
+                type="text"
+                name="hotel"
+                placeholder="e.g. Wawazu Amazon Hotel"
+                value={formData.hotel}
                 onChange={handleChange}
               />
             </div>

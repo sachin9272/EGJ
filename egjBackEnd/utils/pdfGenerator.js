@@ -126,36 +126,45 @@ export function generateInvoicePDF(booking) {
       
       doc.text(`$${totalCost.toFixed(2)}`, { align: "right" });
          
-      // 6. Tourist Info
+      // 6. Logistics & Tourist Info
       let currentY = 220;
       
       const arrivalDateStr = formatFlightDate(booking.mainTourist?.flightInformation?.arrival?.date);
       const arrivalFlight = booking.mainTourist?.flightInformation?.arrival?.flightNumber || "";
       const departureDateStr = formatFlightDate(booking.mainTourist?.flightInformation?.departure?.date);
       const departureFlight = booking.mainTourist?.flightInformation?.departure?.flightNumber || "";
-      const hotelName = booking.mainTourist?.hotel || "";
+      const hotelName = booking.mainTourist?.hotel || "N/A";
+      
+      // Print Flight & Accommodation first
+      doc.fillColor("#444444")
+         .font("Helvetica-Bold")
+         .fontSize(10)
+         .text("Logistics Details:", 40, currentY, { lineGap: 4 })
+         .font("Helvetica")
+         .text(`• Arrival Time & Flight Number: ${arrivalDateStr} ${arrivalFlight}`.trim() || "N/A", { indent: 10, lineGap: 4 })
+         .text(`• Departure Time & Flight Number: ${departureDateStr} ${departureFlight}`.trim() || "N/A", { indent: 10, lineGap: 4 })
+         .text(`• Hotel Accommodation Address: ${hotelName}`, { indent: 10, lineGap: 10 });
+         
+      currentY = doc.y;
+
       const passportNo = booking.mainTourist?.passportNumber || "N/A";
       const nationalityName = booking.mainTourist?.nacionality || "Unknown";
       const firstName = booking.mainTourist?.firstName || "Unknown";
       const lastName = booking.mainTourist?.surname || "";
 
-      doc.fillColor("#444444")
+      doc.font("Helvetica-Bold")
+         .text("Tourist List:", 40, currentY, { lineGap: 4 })
          .font("Helvetica")
-         .fontSize(10)
-         .text(`1. Tourist Full Name: ${firstName} ${lastName}`, 40, currentY, { lineGap: 4 })
-         .text(`• Passport Number: ${passportNo}, ${nationalityName}`, { indent: 10, lineGap: 4 })
-         .text(`• Arrival Time & Flight Number: ${arrivalDateStr} ${arrivalFlight}`, { indent: 10, lineGap: 4 })
-         .text(`• Departure Time & Flight Number: ${departureDateStr} ${departureFlight}`, { indent: 10, lineGap: 4 })
-         .text(`• Hotel Accommodation Address: ${hotelName}`, { indent: 10, lineGap: 4 });
+         .text(`1. Name: ${firstName} ${lastName}`, { indent: 10, lineGap: 4 })
+         .text(`• Passport Number: ${passportNo}`, { indent: 20, lineGap: 6 });
          
       currentY = doc.y;
 
       if (booking.additionalTourist && booking.additionalTourist.length > 0) {
         booking.additionalTourist.forEach((tourist, idx) => {
           const addPassport = tourist.passportNumber || "N/A";
-          const addNat = tourist.nacionality || "Unknown";
-          doc.text(`${idx + 2}. Tourist Full Name: ${tourist.firstName} ${tourist.surname}`, 40, currentY, { lineGap: 4 })
-             .text(`• Passport Number: ${addPassport}, ${addNat}`, { indent: 10, lineGap: 4 });
+          doc.text(`${idx + 2}. Name: ${tourist.firstName} ${tourist.surname}`, 40, currentY, { indent: 10, lineGap: 4 })
+             .text(`• Passport Number: ${addPassport}`, { indent: 20, lineGap: 6 });
           currentY = doc.y;
         });
       }
