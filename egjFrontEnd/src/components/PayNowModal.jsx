@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { FiX } from "react-icons/fi";
 import { createCustomPaymentOrder } from "../assets/API/Services/StripeService";
+import { MAXIMUM_TOURISTS, MINIMUM_TOURISTS } from "../constants/tourPricing";
 import page from "../styles/components/bookingModal.module.scss";
 
 export default function PayNowModal({ onClose }) {
@@ -44,9 +45,40 @@ export default function PayNowModal({ onClose }) {
     nationality: "",
     email: "",
     phone: "",
+    totalTourists: String(MINIMUM_TOURISTS),
+    participants: [],
+    dates: "",
+    arrivalFlight: "",
+    departureFlight: "",
+    hotel: "",
     amount: "",
     notes: "",
   });
+
+  // Sync participants array with selected number of tourists minus the primary booker
+  useEffect(() => {
+    const count = Number(formData.totalTourists) || MINIMUM_TOURISTS;
+    const additionalParticipantsCount = Math.max(0, count - 1);
+    setFormData((prev) => ({
+      ...prev,
+      participants: Array.from({ length: additionalParticipantsCount }, (_, i) =>
+        prev.participants[i] || { firstName: "", lastName: "", passport: "" }
+      ),
+    }));
+  }, [formData.totalTourists]);
+
+  const handleParticipantChange = (e) => {
+    const { name, value } = e.target;
+    const match = name.match(/participants\[(\d+)\]\.(.+)/);
+    if (!match) return;
+    const idx = Number(match[1]);
+    const field = match[2];
+    setFormData((prev) => {
+      const newParticipants = [...prev.participants];
+      newParticipants[idx] = { ...newParticipants[idx], [field]: value };
+      return { ...prev, participants: newParticipants };
+    });
+  };
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -161,6 +193,91 @@ export default function PayNowModal({ onClose }) {
                 type="tel"
                 name="phone"
                 value={formData.phone}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={page.form_group}>
+              <label>How many people will be going with you? (1 to 10)</label>
+              <select
+                name="totalTourists"
+                min={MINIMUM_TOURISTS}
+                max={MAXIMUM_TOURISTS}
+                value={formData.totalTourists}
+                onChange={handleChange}
+              >
+                {[...Array(10)].map((_, i) => (
+                  <option key={i + 1} value={i + 1}>{i + 1}</option>
+                ))}
+              </select>
+            </div>
+            {/* Participant details */}
+            {formData.participants.map((p, idx) => (
+              <div key={idx} className={page.form_group}>
+                <label>Participant {idx + 2} (optional)</label>
+                <input
+                  type="text"
+                  name={`participants[${idx}].firstName`}
+                  placeholder="First Name"
+                  value={p.firstName}
+                  onChange={handleParticipantChange}
+                />
+                <input
+                  type="text"
+                  name={`participants[${idx}].lastName`}
+                  placeholder="Last Name"
+                  value={p.lastName}
+                  onChange={handleParticipantChange}
+                />
+                <input
+                  type="text"
+                  name={`participants[${idx}].passport`}
+                  placeholder="Passport # (optional)"
+                  value={p.passport}
+                  onChange={handleParticipantChange}
+                />
+              </div>
+            ))}
+
+            <div className={page.form_group}>
+              <label>Dates for your tour package</label>
+              <input
+                type="date"
+                name="dates"
+                value={formData.dates}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={page.form_group}>
+              <label>Arrival Date/Time & Flight Number (optional)</label>
+              <input
+                type="text"
+                name="arrivalFlight"
+                placeholder="e.g. Oct 12, 10:30 AM - LA2233"
+                value={formData.arrivalFlight}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={page.form_group}>
+              <label>Departure Date/Time & Flight Number (optional)</label>
+              <input
+                type="text"
+                name="departureFlight"
+                placeholder="e.g. Oct 18, 5:00 PM - LA2234"
+                value={formData.departureFlight}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className={page.form_group}>
+              <label>Hotel Accommodation Address (optional)</label>
+              <input
+                type="text"
+                name="hotel"
+                placeholder="e.g. Wawazu Amazon Hotel"
+                value={formData.hotel}
                 onChange={handleChange}
               />
             </div>

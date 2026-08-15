@@ -194,13 +194,22 @@ export const createCustomPaymentSession = async (req, res) => {
     const roundedAmount = Math.round(amount * 100) / 100;
     const expireAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours TTL
 
+    const requestedTourists = Number(formData?.totalTourists) || 1;
+    const additionalTourists = formData?.participants?.map(p => ({
+      firstName: p.firstName || "Unknown",
+      surname: p.lastName || "Unknown",
+      passportNumber: p.passport || "N/A",
+      nacionality: "Unknown"
+    })) || [];
+
     const newBooking = new Booking({
       totalCost: roundedAmount,
       bookingPayment: roundedAmount,
       balance: 0,
-      totalTourists: 1,
+      totalTourists: requestedTourists,
       tourPackage: "Custom Tour Payment",
       comments: formData?.notes || "",
+      checkIn: formData?.dates || null,
       paymentType: "custom",
       mainTourist: {
         firstName: formData.firstName,
@@ -208,7 +217,13 @@ export const createCustomPaymentSession = async (req, res) => {
         email: formData.email,
         phoneNumber: formData?.phone || "0000000000",
         nacionality: formData?.nationality || "Unknown",
+        flightInformation: {
+          arrival: { flightNumber: formData?.arrivalFlight || "" },
+          departure: { flightNumber: formData?.departureFlight || "" },
+        },
+        hotel: formData?.hotel || "",
       },
+      additionalTourist: additionalTourists,
       expireAt,
       isPaid: false,
     });
