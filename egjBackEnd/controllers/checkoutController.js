@@ -123,6 +123,7 @@ export const createDirectCheckoutSession = async (req, res) => {
         surname: formData?.lastName || "Unknown",
         email: formData?.email || "no-email@provided.com",
         phoneNumber: formData?.phone || "0000000000",
+        passportNumber: formData?.passportNumber || "N/A",
         nacionality: formData?.nationality || "Unknown",
         flightInformation: {
           arrival: { flightNumber: formData?.arrivalFlight || "" },
@@ -216,6 +217,7 @@ export const createCustomPaymentSession = async (req, res) => {
         surname: formData.lastName,
         email: formData.email,
         phoneNumber: formData?.phone || "0000000000",
+        passportNumber: formData?.passportNumber || "N/A",
         nacionality: formData?.nationality || "Unknown",
         flightInformation: {
           arrival: { flightNumber: formData?.arrivalFlight || "" },

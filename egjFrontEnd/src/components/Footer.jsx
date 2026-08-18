@@ -104,10 +104,6 @@ function Footer() {
                     <FaSquareFacebook />
                   </a>
                 </li>
-              </ul>
-            </div>
-            <div className={footer.social_media_icons}>
-              <ul>
                 <li>
                   <a
                     href={socialLinks.instagram}

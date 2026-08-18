@@ -14,12 +14,6 @@ function formatLongDate(dateInput) {
   return date.toLocaleDateString("en-US", options).toUpperCase();
 }
 
-function formatFlightDate(dateInput) {
-  if (!dateInput) return "N/A";
-  const date = new Date(dateInput);
-  return date.toLocaleDateString("en-US", { hour: '2-digit', minute:'2-digit' }) + " on the " + date.toLocaleDateString("en-US", { day: 'numeric', month: 'short' });
-}
-
 function getTourDurationInNights(name) {
   if (!name) return 0;
   const normalized = name.toLowerCase();
@@ -129,20 +123,18 @@ export function generateInvoicePDF(booking) {
       // 6. Logistics & Tourist Info
       let currentY = 220;
       
-      const arrivalDateStr = formatFlightDate(booking.mainTourist?.flightInformation?.arrival?.date);
       const arrivalFlight = booking.mainTourist?.flightInformation?.arrival?.flightNumber || "";
-      const departureDateStr = formatFlightDate(booking.mainTourist?.flightInformation?.departure?.date);
       const departureFlight = booking.mainTourist?.flightInformation?.departure?.flightNumber || "";
       const hotelName = booking.mainTourist?.hotel || "N/A";
-      
+
       // Print Flight & Accommodation first
       doc.fillColor("#444444")
          .font("Helvetica-Bold")
          .fontSize(10)
          .text("Logistics Details:", 40, currentY, { lineGap: 4 })
          .font("Helvetica")
-         .text(`• Arrival Time & Flight Number: ${arrivalDateStr} ${arrivalFlight}`.trim() || "N/A", { indent: 10, lineGap: 4 })
-         .text(`• Departure Time & Flight Number: ${departureDateStr} ${departureFlight}`.trim() || "N/A", { indent: 10, lineGap: 4 })
+         .text(`• Arrival Time & Flight Number: ${arrivalFlight || "N/A"}`, { indent: 10, lineGap: 4 })
+         .text(`• Departure Time & Flight Number: ${departureFlight || "N/A"}`, { indent: 10, lineGap: 4 })
          .text(`• Hotel Accommodation Address: ${hotelName}`, { indent: 10, lineGap: 10 });
          
       currentY = doc.y;

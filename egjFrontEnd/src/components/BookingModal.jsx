@@ -55,6 +55,7 @@ export default function BookingModal({
     firstName: "",
     lastName: "",
     nationality: "",
+    passportNumber: "",
     email: "",
     phone: "",
     tourPackage: tourTitle,
@@ -111,8 +112,15 @@ export default function BookingModal({
 
   const handleNext = (e) => {
     e.preventDefault();
-    if (!formData.firstName || !formData.lastName || !formData.email) {
-      setError("Please fill out the required fields (Name and Email).");
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.nationality ||
+      !formData.passportNumber ||
+      !formData.email ||
+      !formData.phone
+    ) {
+      setError("Please fill out all required fields.");
       return;
     }
     const totalTourists = Number(fixedTotalTourists || formData.totalTourists);
@@ -196,14 +204,26 @@ export default function BookingModal({
                 </div>
               </div>
               <div className={page.form_group}>
-                <label>Nationality</label>
+                <label>Nationality *</label>
                 <input
                   type="text"
                   name="nationality"
                   value={formData.nationality}
                   onChange={handleChange}
+                  required
                 />
               </div>
+            </div>
+
+            <div className={page.form_group}>
+              <label>Passport Number *</label>
+              <input
+                type="text"
+                name="passportNumber"
+                value={formData.passportNumber}
+                onChange={handleChange}
+                required
+              />
             </div>
 
             <div className={page.form_group}>
@@ -218,28 +238,30 @@ export default function BookingModal({
             </div>
 
             <div className={page.form_group}>
-              <label>Phone</label>
+              <label>Phone *</label>
               <input
                 type="tel"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
+                required
               />
             </div>
 
             <div className={page.form_group}>
-              <label>What tour package are you interested in?</label>
+              <label>What tour package are you interested in? *</label>
               <input
                 type="text"
                 name="tourPackage"
                 value={formData.tourPackage}
                 onChange={handleChange}
                 readOnly
+                required
               />
             </div>
 
             <div className={page.form_group}>
-              <label>How many people will be going with you? (1 to 10)</label>
+              <label>How many people will be going with you? (1 to 10) *</label>
               <select
                 name="totalTourists"
                 min={MINIMUM_TOURISTS}
@@ -247,6 +269,7 @@ export default function BookingModal({
                 value={formData.totalTourists}
                 onChange={handleChange}
                 readOnly={Boolean(fixedTotalTourists)}
+                required
               >
                 {[...Array(10)].map((_, i) => (
                   <option key={i + 1} value={i + 1}>{i + 1}</option>
@@ -256,13 +279,14 @@ export default function BookingModal({
             {/* Participant details */}
             {formData.participants.map((p, idx) => (
               <div key={idx} className={page.form_group}>
-                <label>Participant {idx + 2} (optional)</label>
+                <label>Traveller {idx + 2} *</label>
                 <input
                   type="text"
                   name={`participants[${idx}].firstName`}
                   placeholder="First Name"
                   value={p.firstName}
                   onChange={handleParticipantChange}
+                  required
                 />
                 <input
                   type="text"
@@ -270,67 +294,74 @@ export default function BookingModal({
                   placeholder="Last Name"
                   value={p.lastName}
                   onChange={handleParticipantChange}
+                  required
                 />
                 <input
                   type="text"
                   name={`participants[${idx}].passport`}
-                  placeholder="Passport # (optional)"
+                  placeholder="Passport Number"
                   value={p.passport}
                   onChange={handleParticipantChange}
+                  required
                 />
               </div>
             ))}
 
             <div className={page.form_group}>
-              <label>Dates for your tour package</label>
+              <label>Dates for your tour package *</label>
               <input
                 type="date"
                 name="dates"
                 value={formData.dates}
                 onChange={handleChange}
+                required
               />
             </div>
 
             <div className={page.form_group}>
-              <label>Arrival Date/Time & Flight Number (optional)</label>
+              <label>Arrival Date/Time & Flight Number *</label>
               <input
                 type="text"
                 name="arrivalFlight"
                 placeholder="e.g. Oct 12, 10:30 AM - LA2233"
                 value={formData.arrivalFlight}
                 onChange={handleChange}
+                required
               />
             </div>
 
             <div className={page.form_group}>
-              <label>Departure Date/Time & Flight Number (optional)</label>
+              <label>Departure Date/Time & Flight Number *</label>
               <input
                 type="text"
                 name="departureFlight"
                 placeholder="e.g. Oct 18, 5:00 PM - LA2234"
                 value={formData.departureFlight}
                 onChange={handleChange}
+                required
               />
             </div>
 
             <div className={page.form_group}>
-              <label>Hotel Accommodation Address (optional)</label>
+              <label>Hotel Accommodation Address *</label>
               <input
                 type="text"
                 name="hotel"
                 placeholder="e.g. Wawazu Amazon Hotel"
                 value={formData.hotel}
                 onChange={handleChange}
+                required
               />
             </div>
 
             <div className={page.form_group}>
-              <label>Message</label>
+              <label>Message *</label>
               <input
                 type="text"
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
+                required
               />
             </div>
 

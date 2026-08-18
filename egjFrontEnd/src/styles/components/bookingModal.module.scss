@@ -102,9 +102,11 @@
     font-size: 0.85rem;
     color: #1f291e;
     margin-bottom: 0.5rem;
+    text-transform: uppercase;
   }
 
-  input {
+  input,
+  select {
     background: transparent;
     border: none;
     border-bottom: 1px solid #1f291e;
@@ -113,6 +115,11 @@
     color: #111509;
     outline: none;
     transition: border-color 0.2s ease;
+    text-transform: uppercase;
+
+    &::placeholder {
+      text-transform: uppercase;
+    }
 
     &:focus {
       border-bottom-color: #556b2f;
@@ -140,6 +147,7 @@
   color: white;
   font-weight: 600;
   font-size: 1rem;
+  text-transform: uppercase;
   cursor: pointer;
   transition: background 0.2s ease;
 
