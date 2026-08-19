@@ -17,27 +17,27 @@ const normalizeTourName = (name = "") =>
 const orderedTourMatchers = [
   {
     order: 0,
-    matches: ["AYAHUASCA"],
-  },
-  {
-    order: 1,
-    matches: ["GAMBOA", "SACAMBU"],
-  },
-  {
-    order: 2,
     matches: ["2 DAYS", "1 NIGHT"],
   },
   {
-    order: 3,
+    order: 1,
     matches: ["3 DAYS", "2 NIGHTS"],
   },
   {
-    order: 4,
+    order: 2,
     matches: ["4 DAYS", "3 NIGHTS"],
   },
   {
-    order: 5,
+    order: 3,
     matches: ["5 DAYS", "4 NIGHTS"],
+  },
+  {
+    order: 4,
+    matches: ["AYAHUASCA"],
+  },
+  {
+    order: 5,
+    matches: ["GAMBOA", "SACAMBU"],
   },
 ];
 

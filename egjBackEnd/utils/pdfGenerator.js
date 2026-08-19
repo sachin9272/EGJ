@@ -127,29 +127,20 @@ export function generateInvoicePDF(booking) {
       const departureFlight = booking.mainTourist?.flightInformation?.departure?.flightNumber || "";
       const hotelName = booking.mainTourist?.hotel || "N/A";
 
-      // Print Flight & Accommodation first
-      doc.fillColor("#444444")
-         .font("Helvetica-Bold")
-         .fontSize(10)
-         .text("Logistics Details:", 40, currentY, { lineGap: 4 })
-         .font("Helvetica")
-         .text(`• Arrival Time & Flight Number: ${arrivalFlight || "N/A"}`, { indent: 10, lineGap: 4 })
-         .text(`• Departure Time & Flight Number: ${departureFlight || "N/A"}`, { indent: 10, lineGap: 4 })
-         .text(`• Hotel Accommodation Address: ${hotelName}`, { indent: 10, lineGap: 10 });
-         
-      currentY = doc.y;
-
       const passportNo = booking.mainTourist?.passportNumber || "N/A";
       const nationalityName = booking.mainTourist?.nacionality || "Unknown";
       const firstName = booking.mainTourist?.firstName || "Unknown";
       const lastName = booking.mainTourist?.surname || "";
 
-      doc.font("Helvetica-Bold")
+      // Print Tourist List first
+      doc.fillColor("#444444")
+         .font("Helvetica-Bold")
+         .fontSize(10)
          .text("Tourist List:", 40, currentY, { lineGap: 4 })
          .font("Helvetica")
          .text(`1. Name: ${firstName} ${lastName}`, { indent: 10, lineGap: 4 })
          .text(`• Passport Number: ${passportNo}`, { indent: 20, lineGap: 6 });
-         
+
       currentY = doc.y;
 
       if (booking.additionalTourist && booking.additionalTourist.length > 0) {
@@ -160,7 +151,18 @@ export function generateInvoicePDF(booking) {
           currentY = doc.y;
         });
       }
-      
+
+      currentY += 10;
+
+      doc.font("Helvetica-Bold")
+         .text("Logistics Details:", 40, currentY, { lineGap: 4 })
+         .font("Helvetica")
+         .text(`• Arrival Time & Flight Number: ${arrivalFlight || "N/A"}`, { indent: 10, lineGap: 4 })
+         .text(`• Departure Time & Flight Number: ${departureFlight || "N/A"}`, { indent: 10, lineGap: 4 })
+         .text(`• Hotel Accommodation Address: ${hotelName}`, { indent: 10, lineGap: 10 });
+
+      currentY = doc.y;
+
       currentY += 15;
       
       // 7. Financial Summary
