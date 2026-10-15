@@ -43,10 +43,6 @@ const policySections = [
     text: "Booking Confirmation Fee: A 30% non-refundable fee applies to all bookings once completed. This fee covers the costs associated with reserving and preparing for your expedition and is non-negotiable.",
   },
   {
-    title: "Sitelock 911 - Trustee Fees",
-    text: "Once the trustee fee service is initiated, the fees become non-refundable, as the resources and time allocated to these services are considered expended.",
-  },
-  {
     title: "Strict No Refunds Policy",
     text: "Refunds will only be considered under the most severe and legitimate circumstances, specifically life or death situations. Such claims must be supported by irrefutable evidence, and even then, refunds are granted at the sole discretion of Expeditions George of the Jungle. We reserve the right to deny any refund request that does not meet our stringent criteria.",
   },

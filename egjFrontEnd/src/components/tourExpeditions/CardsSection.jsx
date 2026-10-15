@@ -105,8 +105,10 @@ const optimizeCloudinaryImage = (url) => {
   return url.replace("/image/upload/", "/image/upload/f_auto,q_auto,w_760,c_fill/");
 };
 
+import { VERIFIED_TOUR_CATALOG } from "../../constants/verifiedTours";
+
 function CardsSection() {
-  const [tours, setTours] = useState([]);
+  const [tours, setTours] = useState(VERIFIED_TOUR_CATALOG);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -114,13 +116,17 @@ function CardsSection() {
     const fetchTours = async () => {
       try {
         const data = await getTours();
-        const sortedTours = [...data]
-          .filter((tour) => !isPuertoNarinoTour(tour.name))
-          .sort((firstTour, secondTour) => {
-            return getTourOrder(firstTour.name) - getTourOrder(secondTour.name);
-          });
+        if (Array.isArray(data) && data.length > 0) {
+          const sortedTours = [...data]
+            .filter((tour) => !isPuertoNarinoTour(tour.name))
+            .sort((firstTour, secondTour) => {
+              return getTourOrder(firstTour.name) - getTourOrder(secondTour.name);
+            });
 
-        setTours(sortedTours);
+          if (sortedTours.length > 0) {
+            setTours(sortedTours);
+          }
+        }
       } catch (error) {
         console.error("Error fetching tours:", error);
       }
