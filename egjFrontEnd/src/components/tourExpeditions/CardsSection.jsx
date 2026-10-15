@@ -2,7 +2,7 @@ import Cards from "../../styles/components/tourExpeditions/cardsSection.module.s
 import { getTours } from "../../assets/API/Services/ToursService";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const normalizeTourName = (name = "") =>
   name
@@ -209,13 +209,22 @@ function CardsSection() {
                 {renderTourTitle(displayName)}
               </h2>
               <p className={Cards.card_description}>{tour.description}</p>
-              <button
-                className={Cards.card_button}
-                type="button"
-                onClick={() => detailsPath && navigate(detailsPath)}
-              >
-                View Details
-              </button>
+              {detailsPath ? (
+                <Link
+                  className={Cards.card_button}
+                  to={detailsPath}
+                  aria-label={`View details for ${displayName}`}
+                >
+                  View Details
+                </Link>
+              ) : (
+                <button
+                  className={Cards.card_button}
+                  type="button"
+                >
+                  View Details
+                </button>
+              )}
             </div>
           </motion.div>
           );
