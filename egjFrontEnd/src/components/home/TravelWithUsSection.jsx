@@ -80,7 +80,7 @@ export default function TravelWithUsSection() {
       className={travel.travel_container}
     >
       <header className={travel.travel_title}>
-        <h1>WHY TRAVEL WITH US?</h1>
+        <h2>WHY TRAVEL WITH US?</h2>
       </header>
       <hr className={travel.hr} />
 

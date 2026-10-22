@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   FaSquareInstagram,
   FaSquareFacebook,
@@ -33,31 +34,66 @@ function Footer() {
       <div className={footer.footer_content_top}>
         {/* LOGO */}
         <div className={`${footer.logo_container} notranslate`} translate="no">
-          <img
-            className={`${footer.logo_image} notranslate`}
-            src="/Logo.webp"
-            alt="Logo"
-            translate="no"
-          />
+          <Link to="/" aria-label="Expeditions George of the Jungle Home">
+            <img
+              className={`${footer.logo_image} notranslate`}
+              src="/Logo.webp"
+              alt="Expeditions George of the Jungle"
+              translate="no"
+            />
+          </Link>
         </div>
         <hr className={footer.separator} />
+        {/* Quick Links */}
         <div>
           <h4 className={footer.quick_links_title}>Quick Links</h4>
           <div className={footer.quick_links_container}>
             <ul className={footer.quick_links}>
               <li>
-                <a href="/about">About</a>
+                <Link to="/about">About Us</Link>
               </li>
               <li>
-                <a href="/tour">Tour Expeditions</a>
+                <Link to="/tour">Tour Packages</Link>
+              </li>
+              <li>
+                <Link to="/contact">Contact</Link>
               </li>
             </ul>
             <ul className={footer.quick_links}>
               <li>
-                <a href="/refund-policy">Refund Policy</a>
+                <Link to="/refund-policy">Refund Policy</Link>
               </li>
               <li>
-                <a href="/privacy-policy">Privacy Policy</a>
+                <Link to="/privacy-policy">Privacy Policy</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <hr className={footer.separator} />
+        {/* Tour Links */}
+        <div>
+          <h4 className={footer.quick_links_title}>Amazon Tours</h4>
+          <div className={footer.quick_links_container}>
+            <ul className={footer.quick_links}>
+              <li>
+                <Link to="/tour/gamboa-sacambu">Gamboa &amp; Sacambu (1D)</Link>
+              </li>
+              <li>
+                <Link to="/tour/2-days-1-night">2 Days &amp; 1 Night</Link>
+              </li>
+              <li>
+                <Link to="/tour/3-days-2-nights">3 Days &amp; 2 Nights</Link>
+              </li>
+            </ul>
+            <ul className={footer.quick_links}>
+              <li>
+                <Link to="/tour/4-days-3-nights">4 Days &amp; 3 Nights</Link>
+              </li>
+              <li>
+                <Link to="/tour/5-days-4-nights">5 Days &amp; 4 Nights</Link>
+              </li>
+              <li>
+                <Link to="/tour/ayahuasca">Ayahuasca Ceremony</Link>
               </li>
             </ul>
           </div>

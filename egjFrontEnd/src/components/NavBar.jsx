@@ -80,7 +80,7 @@ const Navbar = () => {
         >
           <img
             src="/Logo.webp"
-            alt="Logo"
+            alt="Expeditions George of the Jungle"
             className={`${navBar.logo_Image} notranslate`}
             translate="no"
           />
@@ -143,7 +143,7 @@ const Navbar = () => {
         >
           <img
             src="/Logo.webp"
-            alt="Logo"
+            alt="Expeditions George of the Jungle"
             className={`${navBar.logo_Image} notranslate`}
             translate="no"
           />

@@ -27,10 +27,22 @@ function BePartOfUs() {
   ];
 
   const imagesCard = [
-    "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138303/tours/irvfiutfwc1vbfnhu0sk.jpg",
-    "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138303/tours/jwguy81xnrmj0twhipnl.jpg",
-    "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138165/tours/g8oaqgk1i8vmovghdj2f.jpg",
-    "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138164/tours/m4dwczfbbn3evjqdsei5.jpg",
+    {
+      src: "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138303/tours/irvfiutfwc1vbfnhu0sk.jpg",
+      alt: "Amazon jungle trek and guided rainforest hike",
+    },
+    {
+      src: "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138303/tours/jwguy81xnrmj0twhipnl.jpg",
+      alt: "Amazon river boat expedition near Leticia",
+    },
+    {
+      src: "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138165/tours/g8oaqgk1i8vmovghdj2f.jpg",
+      alt: "Indigenous community cultural visit in the Amazon",
+    },
+    {
+      src: "https://res.cloudinary.com/dbuxt1ti8/image/upload/f_auto,q_auto,w_520,c_fill/v1755138164/tours/m4dwczfbbn3evjqdsei5.jpg",
+      alt: "Rainforest wildlife observation and botanical exploration",
+    },
   ];
 
   const [isMuted, setIsMuted] = useState(true);
@@ -96,11 +108,11 @@ function BePartOfUs() {
       >
         <h2 className={bePartOfUs.text_title}>JOIN US ON THIS ADVENTURE</h2>
         <div className={bePartOfUs.images_container}>
-          {imagesCard.map((image, index) => (
+          {imagesCard.map((item, index) => (
             <figure className={bePartOfUs.images_wrapper} key={index}>
               <img
-                src={image}
-                alt={`Image${index}`}
+                src={item.src}
+                alt={item.alt}
                 className={bePartOfUs.images}
                 loading="lazy"
                 decoding="async"

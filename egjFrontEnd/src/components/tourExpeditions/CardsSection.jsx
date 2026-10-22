@@ -165,7 +165,7 @@ function CardsSection() {
         }}
         className={Cards.cards_section_text_container}
       >
-        <h1 className={Cards.cards_section_title}>TIME TO PICK YOUR TOUR</h1>
+        <h2 className={Cards.cards_section_title}>TIME TO PICK YOUR TOUR</h2>
         <p className={Cards.cards_section_description}>
           From Brazil’s samba beats to Peru’s rich flavors and vibrant
           indigenous traditions, each expedition offers something unforgettable.
@@ -200,7 +200,11 @@ function CardsSection() {
                   optimizeCloudinaryImage(tour.images?.[0]?.url) ||
                   "https://res.cloudinary.com/default-placeholder.jpg"
                 }
-                alt={tour.name || "Tour Image"}
+                alt={
+                  tour.name
+                    ? `${tour.name} - Amazon Jungle Expedition`
+                    : "Amazon Jungle Expedition"
+                }
                 className={Cards.card_image}
                 loading="lazy"
                 decoding="async"

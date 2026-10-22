@@ -234,3 +234,105 @@ curl -s http://localhost:4173/tour/ayahuasca | grep -i "application/ld+json"
 curl -s http://localhost:4173/robots.txt | grep -i "Sitemap:"
 curl -s http://localhost:4173/sitemap.xml | grep -i "<loc>"
 ```
+
+---
+
+## 9. Implementation Status & Verification Register (Updated: 2026-10-23)
+
+### 9.1 Implemented and Locally Verified ✅
+
+1. **Static Pre-Rendering (SSG) Engine (`SEO-006`):**
+   - Implemented via `scripts/prerender.js` and `src/prerender-entry.jsx`.
+   - Verified: All 12 public routes (`/`, `/about`, `/tour`, `/tour/gamboa-sacambu`, `/tour/2-days-1-night`, `/tour/3-days-2-nights`, `/tour/4-days-3-nights`, `/tour/5-days-4-nights`, `/tour/ayahuasca`, `/contact`, `/refund-policy`, `/privacy-policy`) generate standalone populated `index.html` files in `dist/`.
+2. **Centralized Metadata Source of Truth (`src/constants/routeMetadata.js`):**
+   - Stores verified titles, meta descriptions, canonical URLs, OG tags, Twitter cards, and JSON-LD schemas.
+   - Used identically by build-time SSR pre-renderer and client-side runtime manager.
+3. **Route Titles & Meta Descriptions (`SEO-001`):**
+   - Verified: Every generated route HTML file contains its unique `<title>` and `<meta name="description">`.
+4. **Open Graph & Twitter Cards (`SEO-002`):**
+   - Verified: Every route HTML contains `og:title`, `og:description`, `og:url`, `og:image`, `og:type`, `og:site_name`, and `twitter:card`.
+5. **Canonical URLs (`SEO-010`):**
+   - Verified: Canonical `<link rel="canonical">` points to `https://www.expeditionsgeorgeofthejungle.com/...` on all 12 routes.
+6. **XML Sitemap (`SEO-003`):**
+   - Verified: `public/sitemap.xml` contains all 12 canonical routes with frequencies and priorities. Bundled to `dist/sitemap.xml`.
+7. **robots.txt Configuration (`SEO-004` & `SEO-007`):**
+   - Verified: `public/robots.txt` allows public routes, disallows `/success`, and points to `sitemap.xml`.
+8. **Structured Data / Schema.org (`SEO-005`):**
+   - Verified: Injected JSON-LD schemas for `TravelAgency`, `WebSite`, `TouristTrip`, `CollectionPage`, `AboutPage`, and `ContactPage`.
+9. **Tour Card Discovery Links:**
+   - Verified: Tour cards in `CardsSection.jsx` render semantic `<Link>` anchor elements in raw HTML.
+10. **Build-Time Fallback Catalog:**
+    - Verified: `src/constants/verifiedTours.js` ensures tour cards render on build even without live backend API.
+11. **Single H1 Heading Hierarchy (`SEO-008`):**
+    - Changed `TravelWithUsSection.jsx` secondary heading from `<h1>` to `<h2>`.
+    - Changed `Faq.jsx` heading from `<h1>` to `<h2>`.
+    - Changed `CardsSection.jsx` heading from `<h1>` to `<h2>`.
+    - Verified: Every single public route now has exactly one semantic `<h1>` tag in pre-rendered HTML.
+12. **Descriptive Image Alt Text (`SEO-009`):**
+    - Updated `NavBar.jsx` and `Footer.jsx` logo alt text from `"Logo"` to `"Expeditions George of the Jungle"`.
+    - Updated `BePartOfUs.jsx` images from placeholder `Image${index}` to descriptive ecotourism descriptions.
+    - Updated `CardsSection.jsx` tour images to descriptive tour titles.
+13. **Internal Linking & Footer Structure (`SEO-011`):**
+    - Updated `Footer.jsx` with direct links to all 6 individual tour routes.
+    - Updated `Footer.jsx` internal links to use React Router `Link` instead of full-page reload `<a>`.
+    - Created reusable `src/components/RelatedTours.jsx` and added "OTHER AMAZON EXPEDITIONS" to all 6 tour detail pages. Verified: zero self-links.
+14. **Client-Side SPA Metadata Sync (`src/components/SEOHeadManager.jsx`):**
+    - Updates `document.title`, description, canonical link, and Open Graph tags dynamically upon client-side route transitions.
+    - Applies `noindex, nofollow` to `/success` and `/404` pages.
+15. **Wildcard 404 Route (`src/pages/NotFound.jsx`):**
+    - Created custom 404 page for unmatched routes, preventing blank views during client navigation.
+
+---
+
+### 9.2 Implemented but Not Verified in Live Production ⚠️
+
+1. **Hostinger VPS / Nginx Deployment of Phase 2 Changes:**
+   - The Phase 2 changes (Related Tours, updated heading hierarchy, alt text, footer links, client metadata manager) have been built and verified locally in `dist/`.
+   - Deployment to the VPS host (`/var/www/html/EGJ/egjFrontEnd`) has NOT been run yet.
+2. **Nginx Apex Domain 301 Redirect:**
+   - Code verification revealed that both `https://expeditionsgeorgeofthejungle.com` and `https://www.expeditionsgeorgeofthejungle.com` respond with HTTP 200 OK.
+   - While canonical tags point to `www.`, an Nginx server redirect (`server_name expeditionsgeorgeofthejungle.com; return 301 https://www.expeditionsgeorgeofthejungle.com$request_uri;`) is pending server configuration.
+
+---
+
+### 9.3 Pending Code Changes (Awaiting User/Owner Decision) ⏳
+
+1. **Google AdSense Script Removal (`PERF-005`):**
+   - Script `<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7135146013353999" crossorigin="anonymous"></script>` in `index.html`.
+   - Verified that ZERO ad display units exist in the application.
+   - Removal proposed to improve Core Web Vitals and protect booking funnel; awaiting explicit approval.
+2. **Tour Card Starting Price Display (`CRO-001`):**
+   - Add visible starting prices (e.g., *"From $130 USD / person"*) on the tour cards in `CardsSection.jsx`.
+3. **WhatsApp Number Unification (`CRO-007`):**
+   - Two different WhatsApp numbers exist across Navbar, Footer, and Tour detail pages (`+57 320 899-6144` vs `+57 317 529-9539`). Awaiting business owner preference.
+
+---
+
+### 9.4 Requires External Access 🔑
+
+1. **Google Search Console Indexing:**
+   - Requires GSC account login.
+   - Submit `sitemap.xml` under **Sitemaps**.
+   - Request indexing for `/`, `/tour`, and the 6 tour pages via **URL Inspection**.
+2. **Google Analytics 4 (GA4) Tracking (`ANA-001`, `ANA-002`):**
+   - Requires GA4 Measurement ID creation.
+3. **VPS Nginx Configuration Update:**
+   - Requires SSH access to `root@srv1207816.hstgr.cloud` to apply the canonical 301 redirect from apex to `www`.
+
+---
+
+### 9.5 Requires Business-Owner Confirmation 📋
+
+1. **Colombian National Tourism Registry (RNT Number):**
+   - Official RNT license number must be provided by the owner to include in `Footer.jsx` and `RefundPolicy.jsx` as required by Colombian tourism law.
+2. **Official Primary Contact Phone & WhatsApp Number:**
+   - Confirmation of single primary business WhatsApp line.
+
+---
+
+### 9.6 Blocked / Security Incidents 🚨
+
+1. **Secret Credential Exposure (`SEC-001`):**
+   - Backend `.env` file credentials in public Git history.
+   - Status: Blocked pending owner rotation of MongoDB, Stripe, Clerk, and Cloudinary secrets.
+

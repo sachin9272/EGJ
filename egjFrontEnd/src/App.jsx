@@ -19,6 +19,8 @@ import Contact from "./pages/Contact";
 import RefundPolicy from "./pages/RefundPolicy";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import About from "./pages/About";
+import NotFound from "./pages/NotFound";
+import SEOHeadManager from "./components/SEOHeadManager";
 
 function ScrollToTop() {
   const location = useLocation();
@@ -110,6 +112,7 @@ function App() {
     <>
       <main className="min-h-[70vh]">
         <ScrollToTop />
+        <SEOHeadManager />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
@@ -125,8 +128,8 @@ function App() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           {/* Shared post-payment pages */}
           <Route path="/success" element={<BookingSuccess />} />
-
-
+          {/* Wildcard 404 route */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <DeferredGoogleReviews />
         <Footer />

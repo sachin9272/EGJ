@@ -13,6 +13,7 @@ import { GiCampCookingPot, GiMonkey, GiRiver, GiWalkingBoot } from "react-icons/
 import { IoCloseOutline } from "react-icons/io5";
 import BookingModal from "../components/BookingModal";
 import Navbar from "../components/NavBar";
+import RelatedTours from "../components/RelatedTours";
 import { TOUR_PRICES_2026 } from "../constants/tourPricing";
 import page from "../styles/pages/gamboaSacambu.module.scss";
 
@@ -271,6 +272,8 @@ function GamboaSacambu() {
             </a>
           </div>
         </motion.section>
+
+        <RelatedTours currentTourPath="/tour/gamboa-sacambu" />
       </main>
 
       <AnimatePresence>

@@ -54,7 +54,7 @@ function Faq() {
   return (
     <section className={FaqStyle.container}>
       <header className={FaqStyle.text_container}>
-        <h1 className={FaqStyle.text_title}>Frequent Ask Questions</h1>
+        <h2 className={FaqStyle.text_title}>Frequent Ask Questions</h2>
         <p className={FaqStyle.text_description}>
           We’re here to help you. Contact us anytime. Ready to explore the
           Amazon? Secure your spot with a booking deposit today.

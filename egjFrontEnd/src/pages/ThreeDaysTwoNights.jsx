@@ -6,6 +6,7 @@ import { GiCampCookingPot, GiCanoe, GiCrocJaws, GiNightSleep } from "react-icons
 import { IoCloseOutline } from "react-icons/io5";
 import BookingModal from "../components/BookingModal";
 import Navbar from "../components/NavBar";
+import RelatedTours from "../components/RelatedTours";
 import { TOUR_PRICES_2026 } from "../constants/tourPricing";
 import page from "../styles/pages/gamboaSacambu.module.scss";
 
@@ -145,6 +146,8 @@ function ThreeDaysTwoNights() {
             <a className={page.secondary_button} href={socialLinks.email} target="_blank" rel="noopener noreferrer"><FiMail /> Email us</a>
           </div>
         </motion.section>
+
+        <RelatedTours currentTourPath="/tour/3-days-2-nights" />
       </main>
 
       <AnimatePresence>

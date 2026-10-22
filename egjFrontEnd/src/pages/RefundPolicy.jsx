@@ -24,23 +24,15 @@ const lawItems = [
 const policySections = [
   {
     title: "Date of Transaction",
-    text: "The date of the transaction refers to the exact date on which any product or service is purchased, including renewals. This date marks the start of our contractual obligations, and all purchases made are final.",
+    text: "The date of the transaction refers to the exact date on which any expedition reservation is confirmed. This date marks the start of our contractual obligations, and all purchases made are final.",
   },
   {
-    title: "No Refund After Account Closure",
-    text: "Once a product or service is purchased, it is strictly non-refundable. Any attempt to close an account will void any eligibility for refunds. This policy is enforced to maintain the integrity of our operations and prevent fraudulent claims.",
-  },
-  {
-    title: "Additional Auction Categories",
-    text: "All sales are final. Once a booking confirmation is made, the transaction is irrevocable, and no refunds will be provided under any circumstances.",
+    title: "Booking Deposit (30%)",
+    text: "A 30% non-refundable fee applies to all bookings once completed. This fee covers the costs associated with reserving and preparing for your expedition and is non-negotiable.",
   },
   {
     title: "Tour Services",
     text: "If a tour service has been performed, it is absolutely non-refundable. Significant resources are allocated to each tour, and these cannot be recuperated. In rare cases where a tour has not yet been performed, a refund may be considered within 180 days of the transaction date. However, this is subject to strict review and approval, and the decision rests solely with Expeditions George of the Jungle.",
-  },
-  {
-    title: "Website Services",
-    text: "Booking Confirmation Fee: A 30% non-refundable fee applies to all bookings once completed. This fee covers the costs associated with reserving and preparing for your expedition and is non-negotiable.",
   },
   {
     title: "Strict No Refunds Policy",

@@ -1258,3 +1258,35 @@ The most important strategic investment is **SSR/SSG migration**. The site's bus
 **Major limitations:** No live browser testing was performed. Core Web Vitals measurements, search rankings, analytics data, admin route authorization review, and visual accessibility tests require external tools and live site access.
 
 **Confirmation:** No existing project file was read-write accessed, modified, created, deleted, renamed, or moved. The only new file created by this audit is `WEBSITE_AUDIT_REPORT.md` in the project root directory. No dependencies, environment variables, configurations, databases, or production services were changed.
+
+---
+
+## 21. Post-Audit Progress & Verification Addendum (October 2026)
+
+This addendum tracks the implementation of recommendations following the original 2026-10-15 audit. All historical findings above remain untouched as the official baseline.
+
+### 21.1 Implemented & Locally Verified Findings
+
+| Finding ID | Priority | Description | Implementation Status & Verification |
+|---|---|---|---|
+| **SEO-006** | P1 | CSR-only SPA; no SSR or pre-rendering | **RESOLVED**: Built a static pre-rendering (SSG) engine (`scripts/prerender.js`, `src/prerender-entry.jsx`, `npm run build:prerender`) that outputs populated static HTML for all 12 public routes into `dist/`. |
+| **SEO-001** | P1 | Single static title; no meta descriptions | **RESOLVED**: Unique `<title>` and `<meta name="description">` configured across all 12 routes via `src/constants/routeMetadata.js` and pre-rendered into HTML. |
+| **SEO-002** | P2 | No Open Graph or Twitter Card meta tags | **RESOLVED**: Injected full Open Graph (`og:*`) and Twitter Card metadata on all routes. |
+| **SEO-003** | P1 | No sitemap.xml | **RESOLVED**: Created `public/sitemap.xml` with 12 canonical routes, change frequencies, and crawl priorities. Automatically bundled to `dist/sitemap.xml`. |
+| **SEO-004** | P2 | No robots.txt | **RESOLVED**: Created `public/robots.txt` allowing public routes, disallowing `/success`, and pointing to canonical sitemap. |
+| **SEO-005** | P1 | No structured data (Schema.org) | **RESOLVED**: Injected valid JSON-LD schemas (`TravelAgency`, `WebSite`, `TouristTrip`, `CollectionPage`, `AboutPage`, `ContactPage`) into route HTML files. |
+| **SEO-007** | P3 | `/success` page indexable | **RESOLVED**: Excluded from sitemap, disallowed in `robots.txt`, and assigned runtime `noindex, nofollow` via `SEOHeadManager`. |
+| **SEO-008** | P2 | Multiple `<h1>` elements per page | **RESOLVED**: Changed secondary headers on `/` (`TravelWithUsSection`) and `/tour` (`CardsSection`, `Faq`) to `<h2>`. Verified exactly one primary `<h1>` per route. |
+| **SEO-009** | P3 | Non-descriptive image alt text | **RESOLVED**: Replaced generic logo alt text with `"Expeditions George of the Jungle"`, placeholder `Image${index}` with descriptive captions in `BePartOfUs.jsx`, and tour card images with descriptive titles. |
+| **SEO-010** | P3 | No canonical `<link>` tags | **RESOLVED**: Added `<link rel="canonical">` to all pre-rendered HTML and client metadata manager. |
+| **SEO-011** | P2 | Weak internal linking / no cross-linking | **RESOLVED**: Added direct links to all 6 tour packages in `Footer.jsx` using React Router `Link`. Created `RelatedTours.jsx` component and integrated cross-links to "OTHER AMAZON EXPEDITIONS" across all 6 tour detail pages (zero self-linking). |
+| **UX-001** | P2 | `<a href>` causing full page reloads in Footer | **RESOLVED**: Converted Footer navigation links to React Router `<Link to>` for instant SPA transitions. |
+| **CQ-009** | P3 | No 404 route in SPA | **RESOLVED**: Implemented custom `NotFound.jsx` with navigation back to Home and Tour Expeditions, and runtime `noindex` directive. |
+
+### 21.2 Pending Items & Next Steps
+
+1. **AdSense Investigation (`PERF-005` - P1)**: Verified script in `index.html` has zero active ad units in the codebase. Proposed for removal to improve Core Web Vitals and booking conversions; awaiting approval.
+2. **Server Apex 301 Redirect**: Nginx server on VPS serves 200 OK on both `expeditionsgeorgeofthejungle.com` and `www.expeditionsgeorgeofthejungle.com`. 301 redirect from apex to `www` should be added in Nginx configuration.
+3. **External Search Console Actions**: Submit `sitemap.xml` in GSC and request index inspection for key landing pages.
+4. **Owner Confirmations**: RNT Colombian Tourism Number, primary WhatsApp number consolidation, and backend `.env` secret rotation.
+
